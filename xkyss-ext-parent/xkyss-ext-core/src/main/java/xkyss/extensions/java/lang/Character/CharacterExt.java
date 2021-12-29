@@ -12,7 +12,6 @@ public class CharacterExt {
   }
 
   public static int intValue(@This Character self, Boolean b) {
-    return self.intValue();
-//    return self.intValue() + b.intValue();
+    return self.intValue() + b.intValue();
   }
 }

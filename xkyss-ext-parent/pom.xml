@@ -5,10 +5,6 @@
     <modelVersion>4.0.0</modelVersion>
     <name>xkyss-ext :: Parent</name>
 
-    <modules>
-        <module>xkyss-ext-core</module>
-    </modules>
-
     <artifactId>xkyss-ext-parent</artifactId>
     <packaging>pom</packaging>
 
@@ -17,6 +13,10 @@
         <groupId>com.xkyss</groupId>
         <version>2021.0.1</version>
     </parent>
+
+    <modules>
+        <module>xkyss-ext-core</module>
+    </modules>
 
     <dependencyManagement>
         <dependencies>
@@ -34,4 +34,22 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <!-- 很关键,没有这个,自定义manifold library总是找不到符号 -->
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <compilerArgs>
+                            <arg>-Xplugin:Manifold no-bootstrap</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
 </project>
