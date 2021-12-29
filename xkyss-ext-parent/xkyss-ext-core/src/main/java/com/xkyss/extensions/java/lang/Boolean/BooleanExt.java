@@ -3,6 +3,7 @@ package com.xkyss.extensions.java.lang.Boolean;
 import manifold.ext.rt.api.Extension;
 import manifold.ext.rt.api.This;
 
+@SuppressWarnings("ALL")
 @Extension
 public class BooleanExt {
     /**
