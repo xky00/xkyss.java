@@ -5,6 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
     <name>xkyss-ext :: Parent</name>
 
+    <modules>
+        <module>xkyss-ext-core</module>
+    </modules>
+
     <artifactId>xkyss-ext-parent</artifactId>
     <packaging>pom</packaging>
 
@@ -14,4 +18,20 @@
         <version>2021.0.1</version>
     </parent>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- manifold -->
+            <dependency>
+                <groupId>systems.manifold</groupId>
+                <artifactId>manifold-ext</artifactId>
+                <version>${manifold.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>systems.manifold</groupId>
+                <artifactId>manifold-ext-rt</artifactId>
+                <version>${manifold.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

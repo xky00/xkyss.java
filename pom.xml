@@ -28,7 +28,7 @@
         <jackson.version>2.11.4</jackson.version>
         <okhttp.version>4.9.1</okhttp.version>
         <commons-codec.version>1.10</commons-codec.version>
-        <manifold.version>2021.1.14</manifold.version>
+        <manifold.version>2021.1.34</manifold.version>
     </properties>
 
 </project>
