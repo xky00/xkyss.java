@@ -5,13 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <name>xkyss-core :: Parent</name>
+    <artifactId>xkyss-core-parent</artifactId>
+    <packaging>pom</packaging>
+
     <modules>
         <module>xkyss-core</module>
         <module>xkyss-json</module>
         <module>xkyss-weixin</module>
     </modules>
-    <artifactId>xkyss-core-parent</artifactId>
-    <packaging>pom</packaging>
 
     <parent>
         <artifactId>xkyss</artifactId>
@@ -21,7 +22,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- xkyss -->
+            <!-- xkyss-core -->
             <dependency>
                 <groupId>com.xkyss</groupId>
                 <artifactId>xkyss-core</artifactId>

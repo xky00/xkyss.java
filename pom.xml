@@ -13,6 +13,7 @@
     <modules>
         <module>xkyss-ext-parent</module>
         <module>xkyss-core-parent</module>
+        <module>xkyss-all</module>
     </modules>
 
     <properties>
@@ -44,6 +45,22 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- xkyss-core -->
+            <dependency>
+                <groupId>com.xkyss</groupId>
+                <artifactId>xkyss-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xkyss</groupId>
+                <artifactId>xkyss-json</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xkyss</groupId>
+                <artifactId>xkyss-weixin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
             <!-- xkyss-ext -->
             <dependency>
                 <groupId>com.xkyss</groupId>

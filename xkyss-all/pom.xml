@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>xkyss :: All</name>
+    <artifactId>xkyss-all</artifactId>
+    <packaging>jar</packaging>
+
+    <parent>
+        <artifactId>xkyss</artifactId>
+        <groupId>com.xkyss</groupId>
+        <version>2021.0.1</version>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.xkyss</groupId>
+            <artifactId>xkyss-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xkyss</groupId>
+            <artifactId>xkyss-json</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xkyss</groupId>
+            <artifactId>xkyss-weixin</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- 打包 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <artifactSet>
+                                <includes>
+                                    <include>${project.groupId}:*:*</include>
+                                    <include>systems.manifold:*</include>
+                                </includes>
+                            </artifactSet>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/maven/**</exclude>
+                                        <exclude>LICENSE.*</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <!-- merge all the services for a given interface file -->
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
