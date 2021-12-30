@@ -1,6 +1,6 @@
 package com.xkyss.core.lang.tree;
 
-import com.xkyii.xktool.core.lang.Assert;
+import com.xkyss.core.lang.Assert;
 
 import java.util.*;
 import java.util.function.Function;

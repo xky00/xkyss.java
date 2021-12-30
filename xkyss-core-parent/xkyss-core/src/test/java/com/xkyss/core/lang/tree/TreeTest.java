@@ -1,4 +1,4 @@
-package com.xkyii.xktool.core.lang.tree;
+package com.xkyss.core.lang.tree;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;

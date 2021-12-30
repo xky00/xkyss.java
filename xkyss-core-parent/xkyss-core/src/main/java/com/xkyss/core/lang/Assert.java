@@ -1,7 +1,7 @@
 package com.xkyss.core.lang;
 
-import com.xkyii.xktool.core.util.IterUtil;
-import com.xkyii.xktool.core.util.StringUtil;
+import com.xkyss.core.util.IterUtil;
+import com.xkyss.core.util.StringUtil;
 
 import java.util.function.Supplier;
 
