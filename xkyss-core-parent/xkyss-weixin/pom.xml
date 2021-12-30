@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>xkyss-core :: WeiXin</name>
+    <artifactId>xkyss-weixin</artifactId>
+
+    <parent>
+        <artifactId>xkyss-core-parent</artifactId>
+        <groupId>com.xkyss</groupId>
+        <version>2021.0.1</version>
+    </parent>
+
+    <dependencies>
+        <!-- xktool -->
+        <dependency>
+            <groupId>com.xkyss</groupId>
+            <artifactId>xkyss-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xkyss</groupId>
+            <artifactId>xkyss-json</artifactId>
+        </dependency>
+        <!-- okhttp -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+        <!-- jackson csv -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-csv</artifactId>
+        </dependency>
+    </dependencies>
+</project>
