@@ -7,7 +7,7 @@
     <name>xkyss :: Parent</name>
     <groupId>com.xkyss</groupId>
     <artifactId>xkyss</artifactId>
-    <version>2021.0.1</version>
+    <version>2021.0.2</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -30,7 +30,7 @@
         <jackson.version>2.11.4</jackson.version>
         <okhttp.version>4.9.1</okhttp.version>
         <commons-codec.version>1.10</commons-codec.version>
-        <manifold.version>2021.1.34</manifold.version>
+        <manifold.version>2021.1.36</manifold.version>
     </properties>
 
     <dependencies>
