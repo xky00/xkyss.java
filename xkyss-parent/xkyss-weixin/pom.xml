@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>xkyss-core :: WeiXin</name>
+    <name>xkyss :: WeiXin</name>
     <artifactId>xkyss-weixin</artifactId>
 
     <parent>
-        <artifactId>xkyss-core-parent</artifactId>
+        <artifactId>xkyss-parent</artifactId>
         <groupId>com.xkyss</groupId>
         <version>2021.0.2</version>
     </parent>
