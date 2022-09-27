@@ -11,6 +11,8 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>xkyss-core</module>
+        <module>xkyss-quarkus</module>
     </modules>
 
 </project>
