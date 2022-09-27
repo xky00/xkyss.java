@@ -7,91 +7,10 @@
     <name>xkyss</name>
     <groupId>com.xkyss</groupId>
     <artifactId>xkyss</artifactId>
-    <version>2021.0.2</version>
+    <version>2022.0.1</version>
     <packaging>pom</packaging>
 
     <modules>
-        <module>xkyss-ext-parent</module>
-        <module>xkyss-parent</module>
     </modules>
 
-    <properties>
-        <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <compile.version>8</compile.version>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-shade-plugin.version>3.2.1</maven-shade-plugin.version>
-        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
-        <maven-javadoc-plugin.version>3.1.1</maven-javadoc-plugin.version>
-        <junit.version>4.13.2</junit.version>
-        <jackson.version>2.11.4</jackson.version>
-        <okhttp.version>4.9.1</okhttp.version>
-        <commons-codec.version>1.10</commons-codec.version>
-        <manifold.version>2021.1.36</manifold.version>
-    </properties>
-
-    <dependencies>
-        <!-- 全局单元测试 -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- xkyss-core -->
-            <dependency>
-                <groupId>com.xkyss</groupId>
-                <artifactId>xkyss-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.xkyss</groupId>
-                <artifactId>xkyss-json</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.xkyss</groupId>
-                <artifactId>xkyss-weixin</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <!-- xkyss-ext -->
-            <dependency>
-                <groupId>com.xkyss</groupId>
-                <artifactId>xkyss-ext-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.xkyss</groupId>
-                <artifactId>xkyss-ext-web</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler-plugin.version}</version>
-                    <configuration>
-                        <source>${maven.compiler.source}</source>
-                        <target>${maven.compiler.target}</target>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>${maven-jar-plugin.version}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 </project>
