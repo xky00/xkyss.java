@@ -1,5 +1,5 @@
-name: Xkyss Quarkus Extension Codegen
-#description: Do something useful.
+name: Xkyss Quarkus Codegen
+description: 代码生成.
 metadata:
 #  keywords:
 #    - xkyss-quarkus-extension-codegen
