@@ -4,11 +4,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.xkyss</groupId>
-    <artifactId>xkyss-quarkus-extension-codegen-parent</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <artifactId>xkyss-quarkus-codegen-parent</artifactId>
+    <version>2022.0.1</version>
   </parent>
-  <artifactId>xkyss-quarkus-extension-codegen-integration-tests</artifactId>
-  <name>Xkyss Quarkus Extension Codegen - Integration Tests</name>
+  <artifactId>xkyss-quarkus-codegen-integration-tests</artifactId>
+  <name>Xkyss Quarkus Codegen - Integration Tests</name>
   <properties>
     <skipITs>true</skipITs>
   </properties>

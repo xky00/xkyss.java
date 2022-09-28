@@ -2,15 +2,15 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
-  <name>Xkyss Quarkus Extension Codegen - Parent</name>
+  <name>Xkyss Quarkus Codegen - Parent</name>
 
-  <artifactId>xkyss-quarkus-extension-codegen-parent</artifactId>
+  <artifactId>xkyss-quarkus-codegen-parent</artifactId>
   <version>2022.0.1</version>
   <packaging>pom</packaging>
 
   <parent>
     <groupId>com.xkyss</groupId>
-    <artifactId>xkyss-quarkus-extension</artifactId>
+    <artifactId>xkyss-quarkus-extensions</artifactId>
     <version>2022.0.1</version>
   </parent>
 

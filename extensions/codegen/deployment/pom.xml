@@ -4,11 +4,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.xkyss</groupId>
-    <artifactId>xkyss-quarkus-extension-codegen-parent</artifactId>
+    <artifactId>xkyss-quarkus-codegen-parent</artifactId>
     <version>2022.0.1</version>
   </parent>
-  <artifactId>xkyss-quarkus-extension-codegen-deployment</artifactId>
-  <name>Xkyss Quarkus Extension Codegen - Deployment</name>
+  <artifactId>xkyss-quarkus-codegen-deployment</artifactId>
+  <name>Xkyss Quarkus Codegen - Deployment</name>
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -16,7 +16,7 @@
     </dependency>
     <dependency>
       <groupId>com.xkyss</groupId>
-      <artifactId>xkyss-quarkus-extension-codegen</artifactId>
+      <artifactId>xkyss-quarkus-codegen</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

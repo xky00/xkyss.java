@@ -1,0 +1,38 @@
+{#include main}
+{#title}Managed Codegen{/title}
+{#body}
+<table class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Package</th>
+        <th scope="col">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+        {#for codegen in info:codegens}
+        <tr>
+            <td>{codegen.id}</td>
+            <td>{codegen.config.packageName}</td>
+            <td>
+                <div class="btn-group">
+                    <form method="post" enctype="application/x-www-form-urlencoded">
+                        <input type="hidden" name="id" value="{codegen.id}">
+                        <input type="hidden" name="operation" value="repository">
+                        <input id="Repository" type="submit" class="btn btn-primary btn-sm" value="Repository" />
+                    </form>
+                    &nbsp;
+                    <form method="post" enctype="application/x-www-form-urlencoded">
+                        <input type="hidden" name="id" value="{codegen.id}">
+                        <input type="hidden" name="operation" value="resource">
+                        <input id="Resource" type="submit" class="btn btn-primary btn-sm" value="Resource" />
+                    </form>
+                </div>
+            </td>
+        </tr>
+        {/for}
+    </tbody>
+</table>
+
+{/body}
+{/include}
