@@ -14,7 +14,6 @@ public class CodegenDevModeTest {
     @RegisterExtension
     static final QuarkusDevModeTest devModeTest = new QuarkusDevModeTest()
             .withApplicationRoot((jar) -> jar
-                    .addClasses(CodegensConfig.class, CodegenConfig.class)
                     .addAsResource("application.properties")
             );
 

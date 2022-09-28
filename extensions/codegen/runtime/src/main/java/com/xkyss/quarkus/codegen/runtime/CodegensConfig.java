@@ -6,7 +6,7 @@ import io.quarkus.runtime.annotations.*;
 import java.util.Collections;
 import java.util.Map;
 
-@ConfigRoot(name = "xkyss.codegen")
+@ConfigRoot(name = "codegen", prefix = "xkyss")
 public class CodegensConfig {
 
     /**

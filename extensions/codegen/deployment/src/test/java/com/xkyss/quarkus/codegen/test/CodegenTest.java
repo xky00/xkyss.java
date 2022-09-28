@@ -14,7 +14,6 @@ public class CodegenTest {
     @RegisterExtension
     static final QuarkusUnitTest unitTest = new QuarkusUnitTest()
             .withApplicationRoot((jar) -> jar
-                    .addClasses(CodegensConfig.class, CodegenConfig.class)
                     .addAsResource("application.properties")
             );
 
