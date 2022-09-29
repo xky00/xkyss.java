@@ -18,13 +18,23 @@
                 <div class="btn-group">
                     <form method="post" enctype="application/x-www-form-urlencoded">
                         <input type="hidden" name="id" value="{codegen.id}">
-                        <input type="hidden" name="operation" value="repository">
+                        <!-- 模板名字 -->
+                        <input type="hidden" name="template" value="repository">
+                        <!-- 路径名字 -->
+                        <input type="hidden" name="pathname" value="repository">
+                        <!-- 文件后缀 -->
+                        <input type="hidden" name="postfix" value="Repository.java">
                         <input id="Repository" type="submit" class="btn btn-primary btn-sm" value="Repository" />
                     </form>
                     &nbsp;
                     <form method="post" enctype="application/x-www-form-urlencoded">
                         <input type="hidden" name="id" value="{codegen.id}">
-                        <input type="hidden" name="operation" value="resource">
+                        <!-- 模板名字 -->
+                        <input type="hidden" name="template" value="resource">
+                        <!-- 路径名字 -->
+                        <input type="hidden" name="pathname" value="resource">
+                        <!-- 文件后缀 -->
+                        <input type="hidden" name="postfix" value="Resource.java">
                         <input id="Resource" type="submit" class="btn btn-primary btn-sm" value="Resource" />
                     </form>
                 </div>

@@ -1,18 +1,14 @@
 package com.xkyss.quarkus.codegen.runtime;
 
 import io.quarkus.datasource.common.runtime.DataSourceUtil;
-import org.jboss.logging.Logger;
 
 import java.util.*;
 import java.util.function.Supplier;
 
 public class CodegenContainersSupplier implements Supplier<Collection<CodegenContainer>> {
-    private static final Logger log = Logger.getLogger(CodegenContainersSupplier.class);
 
     @Override
     public Collection<CodegenContainer> get() {
-        log.infof("CodegenRecorder.CODEGEN_CONTAINERS.size(): %d", CodegenRecorder.CODEGEN_CONTAINERS.size());
-
         if (CodegenRecorder.CODEGEN_CONTAINERS.isEmpty()) {
             return Collections.emptySet();
         }
