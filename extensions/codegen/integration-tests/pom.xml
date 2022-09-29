@@ -2,16 +2,19 @@
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
+  <name>Xkyss Quarkus Codegen - Integration Tests</name>
+  <artifactId>xkyss-quarkus-codegen-integration-tests</artifactId>
+
   <parent>
     <groupId>com.xkyss</groupId>
     <artifactId>xkyss-quarkus-codegen-parent</artifactId>
-    <version>2022.0.1</version>
+    <version>2022.0.3</version>
   </parent>
-  <artifactId>xkyss-quarkus-codegen-integration-tests</artifactId>
-  <name>Xkyss Quarkus Codegen - Integration Tests</name>
+
   <properties>
     <skipITs>true</skipITs>
   </properties>
+
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>

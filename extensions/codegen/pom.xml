@@ -3,20 +3,19 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <name>Xkyss Quarkus Codegen - Parent</name>
-
   <artifactId>xkyss-quarkus-codegen-parent</artifactId>
-  <version>2022.0.2</version>
   <packaging>pom</packaging>
 
   <parent>
     <groupId>com.xkyss</groupId>
     <artifactId>xkyss-quarkus-extensions</artifactId>
-    <version>2022.0.2</version>
+    <version>2022.0.3</version>
   </parent>
 
   <modules>
     <module>deployment</module>
     <module>runtime</module>
+    <module>integration-tests</module>
   </modules>
 
   <properties>
