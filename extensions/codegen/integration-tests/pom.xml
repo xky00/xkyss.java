@@ -19,7 +19,7 @@
     </dependency>
     <dependency>
       <groupId>com.xkyss</groupId>
-      <artifactId>xkyss-quarkus-extension-codegen</artifactId>
+      <artifactId>xkyss-quarkus-codegen</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>

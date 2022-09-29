@@ -5,7 +5,7 @@
   <parent>
     <groupId>com.xkyss</groupId>
     <artifactId>xkyss-quarkus-codegen-parent</artifactId>
-    <version>2022.0.1</version>
+    <version>2022.0.2</version>
   </parent>
   <artifactId>xkyss-quarkus-codegen</artifactId>
   <name>Xkyss Quarkus Codegen - Runtime</name>
@@ -17,6 +17,10 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-qute</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

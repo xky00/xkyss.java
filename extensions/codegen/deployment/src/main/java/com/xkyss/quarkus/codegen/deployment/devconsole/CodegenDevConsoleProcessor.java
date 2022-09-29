@@ -15,6 +15,8 @@ import io.quarkus.deployment.logging.LoggingSetupBuildItem;
 import io.quarkus.deployment.pkg.builditem.CurateOutcomeBuildItem;
 import io.quarkus.devconsole.spi.DevConsoleRouteBuildItem;
 import io.quarkus.devconsole.spi.DevConsoleRuntimeTemplateInfoBuildItem;
+import io.quarkus.qute.Engine;
+import io.quarkus.qute.runtime.devmode.QuteDevConsoleRecorder;
 
 import java.util.Map;
 
@@ -41,7 +43,8 @@ public class CodegenDevConsoleProcessor {
      */
     @BuildStep
     @Record(value = RUNTIME_INIT, optional = true)
-    DevConsoleRouteBuildItem invokeEndpoint(CodegenRecorder recorder) {
+    DevConsoleRouteBuildItem invokeEndpoint(CodegenRecorder recorder, QuteDevConsoleRecorder quteRecorder) {
+        quteRecorder.setupRenderer();
         // codegen需与resources/dev-templates/codegen.html中的codegen一致
         return new DevConsoleRouteBuildItem("codegen", "POST", recorder.handler());
     }

@@ -32,6 +32,5 @@ public class CodegenRecorderTest {
         config.entityDir = "entity";
         CodegenContainer container = new CodegenContainer(DataSourceUtil.DEFAULT_DATASOURCE_NAME, config);
 
-        recorder.genSource(container);
     }
 }

@@ -5,13 +5,13 @@
   <name>Xkyss Quarkus Codegen - Parent</name>
 
   <artifactId>xkyss-quarkus-codegen-parent</artifactId>
-  <version>2022.0.1</version>
+  <version>2022.0.2</version>
   <packaging>pom</packaging>
 
   <parent>
     <groupId>com.xkyss</groupId>
     <artifactId>xkyss-quarkus-extensions</artifactId>
-    <version>2022.0.1</version>
+    <version>2022.0.2</version>
   </parent>
 
   <modules>
