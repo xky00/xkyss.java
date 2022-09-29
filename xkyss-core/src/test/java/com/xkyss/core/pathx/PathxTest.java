@@ -1,5 +1,6 @@
 package com.xkyss.core.pathx;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedWriter;
@@ -47,5 +48,16 @@ public class PathxTest {
         } catch(IOException e){
             System.err.format("IOException：%s%n", e);
         }
+    }
+
+    @Test
+    public void test_02() {
+        // 包名
+        String binaryName = "com.aj.frame.yfty.platform.entity.User";
+        String rpackage = binaryName.substring(0, binaryName.lastIndexOf("."));
+        rpackage = rpackage.substring(0, rpackage.lastIndexOf("."));
+        rpackage = String.format("%s.%s", rpackage, "repository");
+
+        Assertions.assertEquals("com.aj.frame.yfty.platform.repository", rpackage);
     }
 }
