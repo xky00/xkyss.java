@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,6 +16,9 @@ public class PathxTest {
      */
     @Test
     public void path_test_01() throws IOException {
+        String pathname = "repository";
+        String postfix = "Repository.java";
+
         // 包名
         String binaryName = "com.aj.frame.yfty.platform.entity.User";
         // System.getProperty("user.dir")
@@ -26,21 +28,21 @@ public class PathxTest {
         String p0 = binaryName.replace('.', '\\');
         String p1 = String.format("%s\\src\\main\\java\\%s", filepath, p0);
 
-        // 转换位Path
+        // 转换为Path
         Path path = Paths.get(p1);
         String entityName = path.getFileName().toString();
         path = path.getParent().getParent();
 
-        // 确保Repository目录存在
-        path = path.resolve("repository");
-        Files.createDirectories(path);
-
-        // Repository java文件
-        Path repositoryFile = path.resolve(String.format("%sRepository.java", entityName));
+        // R目录
+        Path rpath = path.resolve(pathname);
+        Files.createDirectories(rpath);
+        // R文件
+        Path rfile = rpath.resolve(String.format("%s%s", entityName, postfix));
+        System.out.println(rfile.toString());
 
         // 写入文本
         String s = "Hello";
-        try (BufferedWriter writer = Files.newBufferedWriter(repositoryFile, StandardCharsets.UTF_8)){
+        try (BufferedWriter writer = Files.newBufferedWriter(rfile, StandardCharsets.UTF_8)){
             writer.write(s,0, s.length());
         } catch(IOException e){
             System.err.format("IOException：%s%n", e);
