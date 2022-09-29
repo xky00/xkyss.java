@@ -68,6 +68,10 @@ public class CodegenPostHandler extends DevConsolePostHandler {
                 log.infof("当前Entity为: %s", binaryName);
                 String filepath=System.getProperty("user.dir");
                 log.infof("当前目录为: %s", filepath);
+                String rpackage = binaryName.substring(0, binaryName.lastIndexOf("."));
+                rpackage = rpackage.substring(0, rpackage.lastIndexOf("."));
+                rpackage = String.format("%s.%s", rpackage, pathname);
+                log.infof("R包名为: %s", filepath);
 
                 // 组合新路径
                 String p0 = binaryName.replace('.', '\\');
@@ -81,19 +85,25 @@ public class CodegenPostHandler extends DevConsolePostHandler {
                 // R目录
                 Path rpath = path.resolve(pathname);
                 Files.createDirectories(rpath);
+                log.infof("rpath: %s", rpath.toString());
+
                 // R文件
                 Path rfile = rpath.resolve(String.format("%s%s", entityName, postfix));
                 log.infof("rfile: %s", rfile.toString());
 
                 try {
                     BiFunction<String, Object, String> renderer = DevConsoleManager.getGlobal(QuteDevConsoleRecorder.RENDER_HANDLER);
-                    String s = renderer.apply(template, Map.of("entity", entityName));
-                    log.info(s);
+                    String s = renderer.apply(template, Map.ofEntries(
+                            Map.entry("package", rpackage),
+                            Map.entry("entityPackage", entityPackageName),
+                            Map.entry("entity", entityName)
+                    ));
+                    // log.info(s);
                     BufferedWriter writer = Files.newBufferedWriter(rfile, StandardCharsets.UTF_8);
                     writer.write(s,0, s.length());
                     writer.flush();
                 } catch (Throwable e) {
-                    //flashMessage(context, String.format("Render %s failed", operation), FlashScopeUtil.FlashMessageStatus.ERROR);
+                    // flashMessage(context, String.format("Render %s failed", operation), FlashScopeUtil.FlashMessageStatus.ERROR);
                     context.fail(e);
                 }
 
