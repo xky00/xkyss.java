@@ -41,15 +41,6 @@ public class CodegenRecorder {
                 String operation = form.get("operation");
                 log.infof("id: %s, operation: %s", id, operation);
 
-                // 好像并没有起到刷新Integrator的作用
-//                HotReplacementContext hotReplacementContext = DevConsoleManager.getHotReplacementContext();
-//                log.infof("context.isTest(): %b", hotReplacementContext.isTest());
-//                boolean restarted = hotReplacementContext.doScan(true);
-//                log.infof("restarted: %b", restarted);
-//                if (hotReplacementContext.getDeploymentProblem() != null) {
-//                    log.info("restart failed", hotReplacementContext.getDeploymentProblem());
-//                }
-
                 Collection<CodegenContainer> containers = new CodegenContainersSupplier().get();
                 for (CodegenContainer container: containers) {
                     if (container.getId().equals(id)) {
