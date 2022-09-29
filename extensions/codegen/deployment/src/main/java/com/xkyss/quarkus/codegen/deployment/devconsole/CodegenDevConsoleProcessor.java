@@ -20,7 +20,6 @@ import java.util.Map;
 
 import static io.quarkus.deployment.annotations.ExecutionTime.RUNTIME_INIT;
 
-
 public class CodegenDevConsoleProcessor {
 
     /**
@@ -37,6 +36,9 @@ public class CodegenDevConsoleProcessor {
         );
     }
 
+    /**
+     * 调用Record中的接口
+     */
     @BuildStep
     @Record(value = RUNTIME_INIT, optional = true)
     DevConsoleRouteBuildItem invokeEndpoint(CodegenRecorder recorder) {

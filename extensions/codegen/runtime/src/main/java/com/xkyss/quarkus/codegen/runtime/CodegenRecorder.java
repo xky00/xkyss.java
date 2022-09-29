@@ -1,5 +1,7 @@
 package com.xkyss.quarkus.codegen.runtime;
 
+import io.quarkus.dev.console.DevConsoleManager;
+import io.quarkus.dev.spi.HotReplacementContext;
 import io.quarkus.devconsole.runtime.spi.DevConsolePostHandler;
 import io.quarkus.devconsole.runtime.spi.FlashScopeUtil;
 import io.quarkus.runtime.annotations.Recorder;
@@ -38,6 +40,15 @@ public class CodegenRecorder {
                 String id = form.get("id");
                 String operation = form.get("operation");
                 log.infof("id: %s, operation: %s", id, operation);
+
+                // 好像并没有起到刷新Integrator的作用
+//                HotReplacementContext hotReplacementContext = DevConsoleManager.getHotReplacementContext();
+//                log.infof("context.isTest(): %b", hotReplacementContext.isTest());
+//                boolean restarted = hotReplacementContext.doScan(true);
+//                log.infof("restarted: %b", restarted);
+//                if (hotReplacementContext.getDeploymentProblem() != null) {
+//                    log.info("restart failed", hotReplacementContext.getDeploymentProblem());
+//                }
 
                 Collection<CodegenContainer> containers = new CodegenContainersSupplier().get();
                 for (CodegenContainer container: containers) {
