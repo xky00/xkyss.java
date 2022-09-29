@@ -1,9 +1,6 @@
 package com.xkyss.quarkus.codegen.deployment.devconsole;
 
-import com.xkyss.quarkus.codegen.runtime.CodegenConfig;
-import com.xkyss.quarkus.codegen.runtime.CodegenContainersSupplier;
-import com.xkyss.quarkus.codegen.runtime.CodegenRecorder;
-import com.xkyss.quarkus.codegen.runtime.CodegensConfig;
+import com.xkyss.quarkus.codegen.runtime.*;
 import io.quarkus.arc.deployment.SyntheticBeansRuntimeInitBuildItem;
 import io.quarkus.datasource.common.runtime.DataSourceUtil;
 import io.quarkus.deployment.IsDevelopment;
@@ -15,7 +12,6 @@ import io.quarkus.deployment.logging.LoggingSetupBuildItem;
 import io.quarkus.deployment.pkg.builditem.CurateOutcomeBuildItem;
 import io.quarkus.devconsole.spi.DevConsoleRouteBuildItem;
 import io.quarkus.devconsole.spi.DevConsoleRuntimeTemplateInfoBuildItem;
-import io.quarkus.qute.Engine;
 import io.quarkus.qute.runtime.devmode.QuteDevConsoleRecorder;
 
 import java.util.Map;
@@ -47,6 +43,8 @@ public class CodegenDevConsoleProcessor {
         quteRecorder.setupRenderer();
         // codegen需与resources/dev-templates/codegen.html中的codegen一致
         return new DevConsoleRouteBuildItem("codegen", "POST", recorder.handler());
+        // 这句会导致后面CodegenContainersSupplier读到CodegenRecorder.CODEGEN_CONTAINERS为空,原因未知
+        // return new DevConsoleRouteBuildItem("codegen", "POST", new CodegenPostHandler());
     }
 
     /**
