@@ -1,6 +1,8 @@
-package com.xkyss.core;
+package com.xkyss.core.util;
 
-public class CharSequencex {
+import com.xkyss.core.constant.StringPool;
+
+public class CharSequencex implements StringPool {
     /**
      * 判断对象是否null或者空字符串
      * @param s 目标对象

@@ -1,4 +1,4 @@
-package com.xkyss.core;
+package com.xkyss.core.util;
 
 public class Stringx extends CharSequencex {
 
