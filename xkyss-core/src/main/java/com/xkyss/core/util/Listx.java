@@ -1,6 +1,5 @@
 package com.xkyss.core.util;
 
-
-public class Listx {
+public class Listx extends Collectionx {
 
 }
