@@ -1,7 +1,7 @@
 package com.xkyss.core.util;
 import java.util.*;
 
-public class ArrayListx extends Collectionx {
+public class ArrayListx extends Listx {
 
     @SafeVarargs
     public static <T> ArrayList<T> of(T... values) {

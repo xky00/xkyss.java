@@ -2,7 +2,7 @@ package com.xkyss.core.util;
 
 import java.util.*;
 
-public class LinkedListx extends Collectionx {
+public class LinkedListx extends Listx {
 
     @SafeVarargs
     public static <T> LinkedList<T> of(T... values) {
