@@ -1,7 +1,5 @@
 package com.xkyss.quarkus.codegen.test;
 
-import com.xkyss.quarkus.codegen.runtime.CodegenConfig;
-import com.xkyss.quarkus.codegen.runtime.CodegensConfig;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
