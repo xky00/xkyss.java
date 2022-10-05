@@ -16,11 +16,12 @@
             <td>{source.config.packageName}</td>
             <td>
                 <div class="btn-group">
-                    {#for target in info:target}
+                    {#for target in info:targets}
                     <form method="post" enctype="application/x-www-form-urlencoded">
                         <input type="hidden" name="sourceId" value="{source.id}">
                         <input type="hidden" name="targetId" value="{target.id}">
-                        <input id="{target.name}" type="submit" class="btn btn-primary btn-sm" value="{target.name}" />
+                        <input id="{target.config.name}" type="submit" class="btn btn-primary btn-sm" value="{target.config.name}" />
+                        &nbsp;
                     </form>
                     {/for}
                 </div>

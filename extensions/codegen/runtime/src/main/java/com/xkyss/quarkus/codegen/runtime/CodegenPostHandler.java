@@ -16,10 +16,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.BiFunction;
 
 public class CodegenPostHandler extends DevConsolePostHandler {
@@ -27,22 +24,81 @@ public class CodegenPostHandler extends DevConsolePostHandler {
     private static final Logger log = Logger.getLogger(CodegenPostHandler.class);
 
     @Override
-    protected void handlePost(RoutingContext context, MultiMap form) throws Exception {
-        String id = form.get("id");
-        String template = form.get("template");
-        String pathname = form.get("pathname");
-        String postfix = form.get("postfix");
-        log.infof("id: %s, template: %s, pathname: %s, postfix: %s", id, template, pathname, postfix);
+    protected void handlePost(RoutingContext context, MultiMap form) {
+        String sourceId = Objects.requireNonNull(form.get("sourceId"));
+        String targetId = Objects.requireNonNull(form.get("targetId"));
+        log.infof("sourceId: %s, sourceId: %s", sourceId, targetId);
 
-//        Collection<CodegenContainer> containers = new CodegenContainersSupplier().get();
+        Optional<SourceContainer> sourceOptional = new SourceContainerSupplier().get().stream().filter(x -> x.getId().equals(sourceId)).findFirst();
+        if (!sourceOptional.isPresent()) {
+            flashMessage(context, String.format("Source config NOT found: %s", sourceId), FlashScopeUtil.FlashMessageStatus.ERROR);
+            return;
+        }
+
+        Optional<TargetContainer> targetOptional = new TargetContainerSupplier().get().stream().filter(x -> x.getId().equals(targetId)).findFirst();
+        if (!targetOptional.isPresent()) {
+            flashMessage(context, String.format("Target config NOT found: %s", sourceId), FlashScopeUtil.FlashMessageStatus.ERROR);
+            return;
+        }
+
+        gen(context, sourceOptional.get(), targetOptional.get());
+    }
+
+    private void gen(RoutingContext context, SourceContainer sourceContainer, TargetContainer targetContainer) {
+        PackageHelper ph = new PackageHelper(Thread.currentThread().getContextClassLoader());
+
+        try {
+            SourceConfig source = Objects.requireNonNull(sourceContainer.getConfig());
+            TargetConfig target = Objects.requireNonNull(targetContainer.getConfig());
+            log.infof("遍历包: %s", source.packageName);
+
+            List<JavaFileObject> javaFileObjects = Objects.requireNonNull(ph.find(source.packageName));
+            if (javaFileObjects.isEmpty()) {
+                log.info("没有找到包下面的类.");
+                return;
+            }
+
+            for (JavaFileObject o: javaFileObjects) {
+                log.info(o.getName());
+                if (o.getKind() != JavaFileObject.Kind.CLASS && o.getKind() != JavaFileObject.Kind.SOURCE) {
+                    continue;
+                }
+                if (o.getName().contains("$")) {
+                    continue;
+                }
+
+                String binaryName = ((CustomJavaFileObject) o).binaryName();
+                log.infof("当前Entity为: %s", binaryName);
+                String filepath=System.getProperty("user.dir");
+                log.infof("当前目录为: %s", filepath);
 //
-//        for (CodegenContainer container: containers) {
-//            if (container.getId().equals(id)) {
-//                genSource(context, container, template, pathname, postfix);
-//                return;
-//            }
-//        }
-        flashMessage(context, String.format("Generate Id not found: %s", id), FlashScopeUtil.FlashMessageStatus.ERROR);
+//                // R目录
+//                Path rpath = path.resolve(pathname);
+//                Files.createDirectories(rpath);
+//                log.infof("rpath: %s", rpath.toString());
+//
+//                // R文件
+//                Path rfile = rpath.resolve(String.format("%s%s", entityName, postfix));
+//                log.infof("rfile: %s", rfile.toString());
+//
+//                BiFunction<String, Object, String> renderer = DevConsoleManager.getGlobal(QuteDevConsoleRecorder.RENDER_HANDLER);
+//                String s = renderer.apply(target.template, Map.ofEntries(
+//                        Map.entry("package", rpackage),
+//                        Map.entry("entityPackage", entityPackageName),
+//                        Map.entry("entity", entityName)
+//                ));
+//
+//                // log.info(s);
+//                try (BufferedWriter writer = Files.newBufferedWriter(rfile, StandardCharsets.UTF_8)) {
+//                    writer.write(s, 0, s.length());
+//                    writer.flush();
+//                }
+            }
+
+        }
+        catch (Throwable t) {
+            context.fail(t);
+        }
     }
 
 //    public void genSource(RoutingContext context, CodegenContainer container, String template, String pathname, String postfix) {

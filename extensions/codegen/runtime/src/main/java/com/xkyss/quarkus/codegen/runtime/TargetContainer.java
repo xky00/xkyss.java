@@ -14,7 +14,7 @@ public class TargetContainer {
         return id;
     }
 
-    public TargetConfig getCOnfig() {
+    public TargetConfig getConfig() {
         return config;
     }
 }

@@ -84,7 +84,7 @@ public class CodegenDevConsoleProcessor {
     DevConsoleRouteBuildItem invokeEndpoint(CodegenRecorder recorder, QuteDevConsoleRecorder quteRecorder) {
         quteRecorder.setupRenderer();
         // codegen需与resources/dev-templates/codegen.html中的codegen一致
-        return new DevConsoleRouteBuildItem("source", "POST", recorder.handler());
+        return new DevConsoleRouteBuildItem("codegen", "POST", recorder.handler());
     }
 
 }

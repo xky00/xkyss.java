@@ -18,6 +18,12 @@ public class TargetConfig {
     @ConfigItem
     public String template;
 
+    /**
+     * Package name of generated files
+     */
+    @ConfigItem
+    public String packageName;
+
     public static TargetConfig defaultConfig() {
         return new TargetConfig();
     }
