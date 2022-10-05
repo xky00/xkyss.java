@@ -10,33 +10,19 @@
     </tr>
     </thead>
     <tbody>
-        {#for codegen in info:codegens}
+        {#for source in info:sources}
         <tr>
-            <td>{codegen.id}</td>
-            <td>{codegen.config.packageName}</td>
+            <td>{source.id}</td>
+            <td>{source.config.packageName}</td>
             <td>
                 <div class="btn-group">
+                    {#for target in info:target}
                     <form method="post" enctype="application/x-www-form-urlencoded">
-                        <input type="hidden" name="id" value="{codegen.id}">
-                        <!-- 模板名字 -->
-                        <input type="hidden" name="template" value="repository">
-                        <!-- 路径名字 -->
-                        <input type="hidden" name="pathname" value="repository">
-                        <!-- 文件后缀 -->
-                        <input type="hidden" name="postfix" value="Repository.java">
-                        <input id="Repository" type="submit" class="btn btn-primary btn-sm" value="Repository" />
+                        <input type="hidden" name="sourceId" value="{source.id}">
+                        <input type="hidden" name="targetId" value="{target.id}">
+                        <input id="{target.name}" type="submit" class="btn btn-primary btn-sm" value="{target.name}" />
                     </form>
-                    &nbsp;
-                    <form method="post" enctype="application/x-www-form-urlencoded">
-                        <input type="hidden" name="id" value="{codegen.id}">
-                        <!-- 模板名字 -->
-                        <input type="hidden" name="template" value="resource">
-                        <!-- 路径名字 -->
-                        <input type="hidden" name="pathname" value="resource">
-                        <!-- 文件后缀 -->
-                        <input type="hidden" name="postfix" value="Resource.java">
-                        <input id="Resource" type="submit" class="btn btn-primary btn-sm" value="Resource" />
-                    </form>
+                    {/for}
                 </div>
             </td>
         </tr>

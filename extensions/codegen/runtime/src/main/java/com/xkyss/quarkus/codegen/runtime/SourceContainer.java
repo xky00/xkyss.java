@@ -1,10 +1,12 @@
-package com.xkyss.quarkus.codegen.runtime.config;
+package com.xkyss.quarkus.codegen.runtime;
 
-public class ConfigContainer {
+public class SourceContainer {
+
     private final String id;
+
     private final SourceConfig config;
 
-    public ConfigContainer(String id, SourceConfig config) {
+    public SourceContainer(String id, SourceConfig config) {
         this.id = id;
         this.config = config;
     }

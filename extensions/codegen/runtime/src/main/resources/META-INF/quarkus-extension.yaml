@@ -1,9 +1,14 @@
-name: Xkyss Quarkus Codegen
-description: 代码生成.
+---
+name: Xkyss Codegen
+description: 代码生成
 metadata:
-#  keywords:
-#    - xkyss-quarkus-extension-codegen
-#  guide: ...
-#  categories:
-#    - "miscellaneous"
-#  status: "preview"
+  keywords:
+  - "xkyss"
+  - "codegen"
+  config:
+  - "xkyss.codegen.source."
+  - "xkyss.codegen.target."
+  guide: "http://xkyss.com/quarkus/codegen"
+  categories:
+  - "quarkus"
+  status: "preview"

@@ -1,4 +1,4 @@
-package com.xkyss.quarkus.codegen.runtime.config;
+package com.xkyss.quarkus.codegen.runtime;
 
 import io.quarkus.runtime.annotations.ConfigGroup;
 import io.quarkus.runtime.annotations.ConfigItem;
@@ -7,7 +7,7 @@ import io.quarkus.runtime.annotations.ConfigItem;
 public class SourceConfig {
 
     /**
-     * 包名
+     * Package name (base, parent of Entity)
      */
     @ConfigItem
     public String packageName;

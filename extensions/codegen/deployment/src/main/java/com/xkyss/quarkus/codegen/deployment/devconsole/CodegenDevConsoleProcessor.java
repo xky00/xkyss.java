@@ -1,7 +1,6 @@
 package com.xkyss.quarkus.codegen.deployment.devconsole;
 
 import com.xkyss.quarkus.codegen.runtime.*;
-import com.xkyss.quarkus.codegen.runtime.config.*;
 import io.quarkus.arc.deployment.SyntheticBeansRuntimeInitBuildItem;
 import io.quarkus.datasource.common.runtime.DataSourceUtil;
 import io.quarkus.deployment.IsDevelopment;
@@ -15,7 +14,6 @@ import io.quarkus.devconsole.spi.DevConsoleRouteBuildItem;
 import io.quarkus.devconsole.spi.DevConsoleRuntimeTemplateInfoBuildItem;
 import io.quarkus.qute.runtime.devmode.QuteDevConsoleRecorder;
 
-import javax.xml.transform.Source;
 import java.util.Map;
 
 import static io.quarkus.deployment.annotations.ExecutionTime.RUNTIME_INIT;
@@ -24,16 +22,58 @@ public class CodegenDevConsoleProcessor {
 
     /**
      * 给Qute模板传入参数
-     * info:codegens
+     * info:sources
      */
     @BuildStep(onlyIf = IsDevelopment.class)
-    public DevConsoleRuntimeTemplateInfoBuildItem codegenUnits(CurateOutcomeBuildItem curateOutcomeBuildItem, SourcesConfig sourcesConfig) {
+    public DevConsoleRuntimeTemplateInfoBuildItem sourceUnits(
+            CurateOutcomeBuildItem curateOutcomeBuildItem) {
         return new DevConsoleRuntimeTemplateInfoBuildItem(
                 "sources",
-                new ConfigContainerSupplier(sourcesConfig),
+                new SourceContainerSupplier(),
                 this.getClass(),
                 curateOutcomeBuildItem
         );
+    }
+    /**
+     * 给Qute模板传入参数
+     * info:targets
+     */
+    @BuildStep(onlyIf = IsDevelopment.class)
+    public DevConsoleRuntimeTemplateInfoBuildItem targetUnits(
+            CurateOutcomeBuildItem curateOutcomeBuildItem) {
+        return new DevConsoleRuntimeTemplateInfoBuildItem(
+                "targets",
+                new TargetContainerSupplier(),
+                this.getClass(),
+                curateOutcomeBuildItem
+        );
+    }
+
+    /**
+     * 初始化Recorder
+     */
+    @BuildStep
+    @Produce(SyntheticBeansRuntimeInitBuildItem.class)
+    @Consume(LoggingSetupBuildItem.class)
+    @Record(RUNTIME_INIT)
+    void init(CodegenRecorder recorder, SourcesConfig sources, TargetsConfig targets) {
+        recorder.resetContainers();
+
+        // source configs
+        recorder.addSource(DataSourceUtil.DEFAULT_DATASOURCE_NAME, sources.defaultConfig);
+        if (!sources.namedConfigs.isEmpty()) {
+            for (Map.Entry<String, SourceConfig> entry: sources.namedConfigs.entrySet()) {
+                recorder.addSource(entry.getKey(), entry.getValue());
+            }
+        }
+
+        // target configs
+        recorder.addTarget(DataSourceUtil.DEFAULT_DATASOURCE_NAME, targets.defaultConfig);
+        if (!targets.namedConfigs.isEmpty()) {
+            for (Map.Entry<String, TargetConfig> entry: targets.namedConfigs.entrySet()) {
+                recorder.addTarget(entry.getKey(), entry.getValue());
+            }
+        }
     }
 
     /**
