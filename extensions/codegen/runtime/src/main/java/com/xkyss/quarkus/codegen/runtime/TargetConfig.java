@@ -19,10 +19,17 @@ public class TargetConfig {
     public String template;
 
     /**
-     * Package name of generated files
+     * Relative package to source base package
+     * separator: '.'
      */
     @ConfigItem
-    public String packageName;
+    public String relative;
+
+    /**
+     * Post fix for target file
+     */
+    @ConfigItem
+    public String postfix;
 
     public static TargetConfig defaultConfig() {
         return new TargetConfig();

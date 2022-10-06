@@ -12,6 +12,7 @@ import org.jboss.logging.Logger;
 
 import javax.tools.JavaFileObject;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -59,7 +60,6 @@ public class CodegenPostHandler extends DevConsolePostHandler {
             }
 
             for (JavaFileObject o: javaFileObjects) {
-                log.info(o.getName());
                 if (o.getKind() != JavaFileObject.Kind.CLASS && o.getKind() != JavaFileObject.Kind.SOURCE) {
                     continue;
                 }
@@ -67,32 +67,42 @@ public class CodegenPostHandler extends DevConsolePostHandler {
                     continue;
                 }
 
-                String binaryName = ((CustomJavaFileObject) o).binaryName();
-                log.infof("当前Entity为: %s", binaryName);
-                String filepath=System.getProperty("user.dir");
-                log.infof("当前目录为: %s", filepath);
-//
-//                // R目录
-//                Path rpath = path.resolve(pathname);
-//                Files.createDirectories(rpath);
-//                log.infof("rpath: %s", rpath.toString());
-//
-//                // R文件
-//                Path rfile = rpath.resolve(String.format("%s%s", entityName, postfix));
-//                log.infof("rfile: %s", rfile.toString());
-//
-//                BiFunction<String, Object, String> renderer = DevConsoleManager.getGlobal(QuteDevConsoleRecorder.RENDER_HANDLER);
-//                String s = renderer.apply(target.template, Map.ofEntries(
+                Path basePath = Paths.get(System.getProperty("user.dir"));
+                log.infof("基础目录为: %s", basePath.toString());
+
+                // Source 文件
+                Path sourceFile = Paths.get(o.getName());
+                log.infof("Source文件: %s", sourceFile.toString());
+                String entityName = sourceFile.getFileName().toString();
+                log.infof("Entity: %s", entityName);
+                String relativePackage = source.getRelativePackage();
+
+                // Target 目录
+                Path targetPath = basePath
+                        .resolve("src/main/java")
+                        .resolve(relativePackage.replace('.', File.separatorChar))
+                        .resolve(target.relative.replace('.', File.separatorChar))
+                        ;
+                log.infof("Target目录: %s", targetPath.toString());
+
+                // Target 文件
+                Path targetFile = targetPath.resolve(entityName);
+                log.infof("Target文件: %s", targetFile.toString());
+
+                // 渲染模板
+                BiFunction<String, Object, String> renderer = DevConsoleManager.getGlobal(QuteDevConsoleRecorder.RENDER_HANDLER);
+                String s = renderer.apply(target.template, Map.ofEntries(
 //                        Map.entry("package", rpackage),
 //                        Map.entry("entityPackage", entityPackageName),
 //                        Map.entry("entity", entityName)
-//                ));
-//
-//                // log.info(s);
-//                try (BufferedWriter writer = Files.newBufferedWriter(rfile, StandardCharsets.UTF_8)) {
-//                    writer.write(s, 0, s.length());
-//                    writer.flush();
-//                }
+                ));
+
+                // 写入Target文件
+                // log.info(s);
+                try (BufferedWriter writer = Files.newBufferedWriter(targetFile, StandardCharsets.UTF_8)) {
+                    writer.write(s, 0, s.length());
+                    writer.flush();
+                }
             }
 
         }

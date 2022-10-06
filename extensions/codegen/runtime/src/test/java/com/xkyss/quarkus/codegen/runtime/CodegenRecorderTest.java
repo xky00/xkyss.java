@@ -10,5 +10,6 @@ public class CodegenRecorderTest {
 
     @Test
     public void test_01() throws IOException {
+
     }
 }
