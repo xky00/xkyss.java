@@ -1,4 +1,4 @@
-package com.xkyss.core;
+package com.xkyss.core.util;
 
 import com.xkyss.core.util.CharSequencex;
 import org.junit.jupiter.api.Assertions;

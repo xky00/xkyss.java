@@ -1,4 +1,4 @@
-package com.xkyss.core.pathx;
+package com.xkyss.core.util;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -105,5 +105,19 @@ public class PathxTest {
         }
 
         return ret;
+    }
+
+    @Test
+    public void test_get() {
+        Assertions.assertEquals(Paths.get("a/b/c/d"), Pathx.get("a.b.c.d", '.'));
+        Assertions.assertEquals(
+                Paths.get("a/b/c/d", "e/f", "g"),
+                Pathx.get("a.b.c.d", '.', "e.f", "g"));
+    }
+
+    @Test
+    public void test_extension()
+    {
+        Assertions.assertEquals(Paths.get("a/b/c/d.txt"), Pathx.extension(Paths.get("a/b/c/d"), "txt"));
     }
 }

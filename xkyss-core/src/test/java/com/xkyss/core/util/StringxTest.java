@@ -1,4 +1,4 @@
-package com.xkyss.core;
+package com.xkyss.core.util;
 
 import com.xkyss.core.util.Stringx;
 import org.junit.jupiter.api.Assertions;
