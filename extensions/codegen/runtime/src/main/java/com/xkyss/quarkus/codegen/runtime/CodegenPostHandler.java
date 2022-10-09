@@ -84,18 +84,21 @@ public class CodegenPostHandler extends DevConsolePostHandler {
                         .resolve(relativePackage.replace('.', File.separatorChar))
                         .resolve(target.relative.replace('.', File.separatorChar))
                         ;
+                Files.createDirectories(targetPath);
                 log.infof("Target目录: %s", targetPath.toString());
 
                 // Target 文件
-                Path targetFile = targetPath.resolve(entityName).resolve(target.postfix);
+                Path targetFile = targetPath.resolve(String.format("%s%s", entityName, target.postfix));
                 log.infof("Target文件: %s", targetFile.toString());
 
                 // 渲染模板
                 BiFunction<String, Object, String> renderer = DevConsoleManager.getGlobal(QuteDevConsoleRecorder.RENDER_HANDLER);
                 String s = renderer.apply(target.template, Map.ofEntries(
-//                        Map.entry("package", rpackage),
-//                        Map.entry("entityPackage", entityPackageName),
-//                        Map.entry("entity", entityName)
+                        Map.entry("item", new TemplateItem(
+                                source.packageName,
+                                String.format("%s.%s", relativePackage, target.relative),
+                                entityName
+                        ))
                 ));
 
                 // 写入Target文件
