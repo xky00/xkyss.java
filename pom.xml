@@ -14,10 +14,21 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <xkyss.version>2022.0.1</xkyss.version>
     </properties>
 
     <modules>
         <module>extensions</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.xkyss</groupId>
+                <artifactId>xkyss-core</artifactId>
+                <version>${xkyss.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

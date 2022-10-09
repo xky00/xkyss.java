@@ -1,5 +1,6 @@
 package com.xkyss.quarkus.codegen.runtime;
 
+import com.xkyss.core.util.Pathx;
 import io.quarkus.dev.console.DevConsoleManager;
 import io.quarkus.devconsole.runtime.spi.DevConsolePostHandler;
 import io.quarkus.devconsole.runtime.spi.FlashScopeUtil;
@@ -28,7 +29,7 @@ public class CodegenPostHandler extends DevConsolePostHandler {
     protected void handlePost(RoutingContext context, MultiMap form) {
         String sourceId = Objects.requireNonNull(form.get("sourceId"));
         String targetId = Objects.requireNonNull(form.get("targetId"));
-        log.infof("sourceId: %s, sourceId: %s", sourceId, targetId);
+        log.infof("sourceId: %s, targetId: %s", sourceId, targetId);
 
         Optional<SourceContainer> sourceOptional = new SourceContainerSupplier().get().stream().filter(x -> x.getId().equals(sourceId)).findFirst();
         if (!sourceOptional.isPresent()) {
@@ -71,9 +72,9 @@ public class CodegenPostHandler extends DevConsolePostHandler {
                 log.infof("基础目录为: %s", basePath.toString());
 
                 // Source 文件
-                Path sourceFile = Paths.get(o.getName());
+                Path sourceFile = Paths.get(o.toUri());
                 log.infof("Source文件: %s", sourceFile.toString());
-                String entityName = sourceFile.getFileName().toString();
+                String entityName = Pathx.getFileRawName(sourceFile);
                 log.infof("Entity: %s", entityName);
                 String relativePackage = source.getRelativePackage();
 
@@ -86,7 +87,7 @@ public class CodegenPostHandler extends DevConsolePostHandler {
                 log.infof("Target目录: %s", targetPath.toString());
 
                 // Target 文件
-                Path targetFile = targetPath.resolve(entityName);
+                Path targetFile = targetPath.resolve(entityName).resolve(target.postfix);
                 log.infof("Target文件: %s", targetFile.toString());
 
                 // 渲染模板

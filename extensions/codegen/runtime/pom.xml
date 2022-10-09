@@ -12,6 +12,11 @@
   </parent>
 
   <dependencies>
+    <!-- xkyss -->
+    <dependency>
+      <groupId>com.xkyss</groupId>
+      <artifactId>xkyss-core</artifactId>
+    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
