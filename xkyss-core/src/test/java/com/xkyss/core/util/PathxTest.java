@@ -120,4 +120,11 @@ public class PathxTest {
     {
         Assertions.assertEquals(Paths.get("a/b/c/d.txt"), Pathx.extension(Paths.get("a/b/c/d"), "txt"));
     }
+
+    @Test
+    public void test_fileName() {
+        Path path = Paths.get("a/b/c/name.txt");
+        Assertions.assertEquals("name", Pathx.getFileRawName(path));
+        Assertions.assertEquals("txt", Pathx.getFileExt(path));
+    }
 }

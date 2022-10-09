@@ -28,6 +28,34 @@ public class Pathx {
         return Paths.get(String.format("%s.%s", p.toString(), ext));
     }
 
+    public static String getFileRawName(Path p) {
+        if (p == null) {
+            return "";
+        }
+
+        String filename = p.getFileName().toString();
+        int i = filename.lastIndexOf('.');
+        if (i < 0) {
+            return filename;
+        }
+
+        return filename.substring(0, i);
+    }
+
+    public static String getFileExt(Path p) {
+        if (p == null) {
+            return "";
+        }
+
+        String filename = p.getFileName().toString();
+        int i = filename.lastIndexOf('.');
+        if (i < 0) {
+            return filename;
+        }
+
+        return filename.substring(i+1);
+    }
+
     private static String replaceSeparator(String s, char separator) {
         return emptyIfNull(s).replace(separator, File.separatorChar);
     }
