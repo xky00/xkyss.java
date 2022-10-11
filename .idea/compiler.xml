@@ -57,18 +57,25 @@
           <entry name="$MAVEN_REPOSITORY$/io/quarkus/quarkus-bom/2.12.3.Final/quarkus-bom-2.12.3.Final.pom" />
         </processorPath>
         <module name="xkyss-quarkus-extension-codegen-deployment" />
+        <module name="xkyss-quarkus-codegen" />
         <module name="xkyss-quarkus-extension-codegen" />
+        <module name="xkyss-quarkus-codegen-deployment" />
       </profile>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="xkyss-quarkus-extension-codebe" />
         <module name="xkyss-quarkus-codegen-integration-tests" />
+        <module name="xkyss-quarkus-extension-codebe-integration-tests" />
+        <module name="xkyss-quarkus-extension-codebe-deployment" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="xkyss-quarkus-codegen" options="-parameters" />
+      <module name="xkyss-quarkus-codegen-deployment" options="-parameters" />
       <module name="xkyss-quarkus-codegen-integration-tests" options="-parameters" />
       <module name="xkyss-quarkus-extension-codegen" options="-parameters" />
       <module name="xkyss-quarkus-extension-codegen-deployment" options="-parameters" />

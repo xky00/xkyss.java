@@ -3,6 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/extension/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/extension/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/extensions/codebe/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/extensions/codebe/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/extensions/codegen/deployment/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/extensions/codegen/deployment/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/extensions/codegen/integration-tests/src/main/java" charset="UTF-8" />
