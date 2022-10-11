@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <name>Xkyss Quarkus Codebe - Runtime</name>
-  <artifactId>xkyss-quarkus-extension-codebe</artifactId>
+  <artifactId>xkyss-quarkus-codebe</artifactId>
 
   <parent>
     <groupId>com.xkyss</groupId>
@@ -15,6 +15,10 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-orm</artifactId>
     </dependency>
   </dependencies>
   <build>

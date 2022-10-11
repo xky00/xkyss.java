@@ -3,7 +3,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <name>Xkyss Quarkus Codebe - Integration Tests</name>
-  <artifactId>xkyss-quarkus-extension-codebe-integration-tests</artifactId>
+  <artifactId>xkyss-quarkus-codebe-integration-tests</artifactId>
 
   <parent>
     <groupId>com.xkyss</groupId>
@@ -20,8 +20,12 @@
       <artifactId>quarkus-resteasy</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-mysql</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.xkyss</groupId>
-      <artifactId>xkyss-quarkus-extension-codebe</artifactId>
+      <artifactId>xkyss-quarkus-codebe</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
