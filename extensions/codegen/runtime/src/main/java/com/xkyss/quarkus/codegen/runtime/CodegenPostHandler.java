@@ -6,7 +6,6 @@ import io.quarkus.devconsole.runtime.spi.DevConsolePostHandler;
 import io.quarkus.devconsole.runtime.spi.FlashScopeUtil;
 import io.quarkus.qute.runtime.devmode.QuteDevConsoleRecorder;
 import io.vertx.core.MultiMap;
-import io.vertx.core.impl.verticle.CustomJavaFileObject;
 import io.vertx.core.impl.verticle.PackageHelper;
 import io.vertx.ext.web.RoutingContext;
 import org.jboss.logging.Logger;
@@ -18,7 +17,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.BiFunction;
 
 public class CodegenPostHandler extends DevConsolePostHandler {
