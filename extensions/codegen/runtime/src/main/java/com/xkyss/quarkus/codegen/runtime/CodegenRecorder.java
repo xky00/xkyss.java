@@ -27,8 +27,12 @@ public class CodegenRecorder {
 
     }
 
-    public Handler<RoutingContext> handler() {
-        return new CodegenPostHandler();
+    public Handler<RoutingContext> fromEntity() {
+        return new EntityPostHandler();
+    }
+
+    public Handler<RoutingContext> fromDatabase() {
+        return new DatabasePostHandler();
     }
 
 }

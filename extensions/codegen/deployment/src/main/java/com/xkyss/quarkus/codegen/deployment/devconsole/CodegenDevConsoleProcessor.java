@@ -4,16 +4,14 @@ import com.xkyss.quarkus.codegen.runtime.*;
 import io.quarkus.arc.deployment.SyntheticBeansRuntimeInitBuildItem;
 import io.quarkus.datasource.common.runtime.DataSourceUtil;
 import io.quarkus.deployment.IsDevelopment;
-import io.quarkus.deployment.annotations.BuildStep;
-import io.quarkus.deployment.annotations.Consume;
-import io.quarkus.deployment.annotations.Produce;
-import io.quarkus.deployment.annotations.Record;
+import io.quarkus.deployment.annotations.*;
 import io.quarkus.deployment.logging.LoggingSetupBuildItem;
 import io.quarkus.deployment.pkg.builditem.CurateOutcomeBuildItem;
 import io.quarkus.devconsole.spi.DevConsoleRouteBuildItem;
 import io.quarkus.devconsole.spi.DevConsoleRuntimeTemplateInfoBuildItem;
 import io.quarkus.qute.runtime.devmode.QuteDevConsoleRecorder;
 
+import javax.enterprise.inject.spi.Producer;
 import java.util.Map;
 
 import static io.quarkus.deployment.annotations.ExecutionTime.RUNTIME_INIT;
@@ -57,7 +55,7 @@ public class CodegenDevConsoleProcessor {
     @Produce(SyntheticBeansRuntimeInitBuildItem.class)
     @Consume(LoggingSetupBuildItem.class)
     @Record(RUNTIME_INIT)
-    void init(CodegenRecorder recorder, SourcesConfig sources, TargetsConfig targets) {
+    public void init(CodegenRecorder recorder, SourcesConfig sources, TargetsConfig targets) {
         recorder.resetContainers();
 
         // source configs
@@ -82,10 +80,16 @@ public class CodegenDevConsoleProcessor {
      */
     @BuildStep
     @Record(value = RUNTIME_INIT, optional = true)
-    DevConsoleRouteBuildItem invokeEndpoint(CodegenRecorder recorder, QuteDevConsoleRecorder quteRecorder) {
+    public void invokeEndpoint(CodegenRecorder recorder,
+                               QuteDevConsoleRecorder quteRecorder,
+                               BuildProducer<DevConsoleRouteBuildItem> devConsoleRouteProducer) {
         quteRecorder.setupRenderer();
-        // codegen需与resources/dev-templates/codegen.html中的codegen一致
-        return new DevConsoleRouteBuildItem("codegen", "POST", recorder.handler());
+
+        // 与resources/dev-templates/from-entity.html一致
+        devConsoleRouteProducer.produce(new DevConsoleRouteBuildItem("from-entity", "POST", recorder.fromEntity()));
+
+        // 与resources/dev-templates/from-database.html一致
+        devConsoleRouteProducer.produce(new DevConsoleRouteBuildItem("from-database", "POST", recorder.fromDatabase()));
     }
 
 }

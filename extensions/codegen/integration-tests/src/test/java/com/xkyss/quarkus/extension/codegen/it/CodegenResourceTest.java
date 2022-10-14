@@ -1,22 +1,23 @@
-package com.xkyss.quarkus.extension.codebe.it;
+package com.xkyss.quarkus.extension.codegen.it;
+
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
 
 import io.agroal.api.AgroalDataSource;
-import io.quarkus.test.junit.QuarkusTest;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Test;
+
+import io.quarkus.test.junit.QuarkusTest;
 
 import javax.inject.Inject;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.is;
-
 @QuarkusTest
-public class CodebeResourceTest {
+public class CodegenResourceTest {
 
-    private static final Logger log = Logger.getLogger(CodebeResourceTest.class);
+    private static final Logger log = Logger.getLogger(CodegenResourceTest.class);
 
     @Inject
     AgroalDataSource dataSource;
@@ -24,10 +25,10 @@ public class CodebeResourceTest {
     @Test
     public void testHelloEndpoint() {
         given()
-                .when().get("/xkyss-quarkus-extension-codebe")
-                .then()
-                .statusCode(200)
-                .body(is("Hello xkyss-quarkus-extension-codebe"));
+            .when().get("/xkyss-quarkus-extension-codegen")
+            .then()
+            .statusCode(200)
+            .body(is("Hello xkyss-quarkus-extension-codegen"));
     }
 
     @Test

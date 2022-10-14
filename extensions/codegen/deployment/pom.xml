@@ -25,6 +25,10 @@
       <artifactId>quarkus-qute-deployment</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-agroal-deployment</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.xkyss</groupId>
       <artifactId>xkyss-quarkus-codegen</artifactId>
       <version>${project.version}</version>

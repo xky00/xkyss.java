@@ -23,9 +23,9 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-public class CodegenPostHandler extends DevConsolePostHandler {
+public class EntityPostHandler extends DevConsolePostHandler {
 
-    private static final Logger log = Logger.getLogger(CodegenPostHandler.class);
+    private static final Logger log = Logger.getLogger(EntityPostHandler.class);
 
     @Override
     protected void handlePost(RoutingContext context, MultiMap form) {

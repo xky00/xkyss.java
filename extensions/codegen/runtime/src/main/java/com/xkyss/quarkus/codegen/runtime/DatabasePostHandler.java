@@ -1,4 +1,5 @@
-package com.xkyss.quarkus.extension.codebe.runtime;
+package com.xkyss.quarkus.codegen.runtime;
+
 
 import io.agroal.api.AgroalDataSource;
 import io.quarkus.agroal.runtime.DataSources;
@@ -11,8 +12,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class CodebePostHandler extends DevConsolePostHandler {
-    private static final Logger log = Logger.getLogger(CodebePostHandler.class);
+public class DatabasePostHandler extends DevConsolePostHandler {
+    private static final Logger log = Logger.getLogger(DatabasePostHandler.class);
 
     protected void handlePost(RoutingContext context, MultiMap form) throws SQLException {
         String source = form.get("source");
@@ -25,7 +26,7 @@ public class CodebePostHandler extends DevConsolePostHandler {
                 return;
             }
 
-            ResultSet rs = connection.getMetaData().getTables(null, "yfty_platform", "%", null);
+            ResultSet rs = connection.getMetaData().getTables(connection.getSchema(), null, "%", null);
             while (rs.next()) {
                 String tableName = rs.getString(3);
             }

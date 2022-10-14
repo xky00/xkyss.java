@@ -22,7 +22,7 @@ import javax.ws.rs.Path;
 
 @Path("/xkyss-quarkus-extension-codegen")
 @ApplicationScoped
-public class XkyssQuarkusExtensionCodegenResource {
+public class CodegenResource {
     // add some rest methods here
 
     @GET
