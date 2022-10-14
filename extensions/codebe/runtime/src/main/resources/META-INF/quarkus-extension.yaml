@@ -1,8 +1,8 @@
 name: Xkyss Quarkus Extension Codebe
-#description: Do something useful.
+description: Generate Code with Database Tables (DB first).
 metadata:
-#  keywords:
-#    - xkyss-quarkus-extension-codebe
+  keywords:
+    - xkyss-quarkus-codebe
 #  guide: ...
 #  categories:
 #    - "miscellaneous"

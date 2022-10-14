@@ -1,7 +1,7 @@
 package com.xkyss.quarkus.extension.codebe.deployment.devconsole;
 
+import com.xkyss.quarkus.extension.codebe.runtime.CodebeRecorder;
 import io.quarkus.datasource.runtime.DataSourcesBuildTimeConfig;
-import io.quarkus.datasource.runtime.DatabaseRecorder;
 import io.quarkus.deployment.IsDevelopment;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.Record;
@@ -28,7 +28,7 @@ public class CodebeDevConsoleProcessor {
 
     @BuildStep(onlyIf = IsDevelopment.class)
     @Record(value = STATIC_INIT, optional = true)
-    DevConsoleRouteBuildItem devConsoleCleanDatabaseHandler(DatabaseRecorder recorder) {
-        return new DevConsoleRouteBuildItem("reset", "POST", recorder.devConsoleResetDatabaseHandler());
+    DevConsoleRouteBuildItem devConsoleCleanDatabaseHandler(CodebeRecorder recorder) {
+        return new DevConsoleRouteBuildItem("reset", "POST", recorder.test());
     }
 }
