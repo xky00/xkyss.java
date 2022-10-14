@@ -29,6 +29,6 @@ public class CodebeDevConsoleProcessor {
     @BuildStep(onlyIf = IsDevelopment.class)
     @Record(value = STATIC_INIT, optional = true)
     DevConsoleRouteBuildItem devConsoleCleanDatabaseHandler(CodebeRecorder recorder) {
-        return new DevConsoleRouteBuildItem("reset", "POST", recorder.test());
+        return new DevConsoleRouteBuildItem("codebe", "POST", recorder.handler());
     }
 }

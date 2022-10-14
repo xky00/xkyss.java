@@ -110,7 +110,6 @@ public class CodegenPostHandler extends DevConsolePostHandler {
                     writer.flush();
                 }
             }
-
         }
         catch (Throwable t) {
             context.fail(t);

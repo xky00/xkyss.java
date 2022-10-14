@@ -34,6 +34,7 @@ public class CodegenDevConsoleProcessor {
                 curateOutcomeBuildItem
         );
     }
+
     /**
      * 给Qute模板传入参数
      * info:targets
