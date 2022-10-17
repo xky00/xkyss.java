@@ -3,6 +3,7 @@ package com.xkyss.quarkus.extension.codegen.it;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
+import com.xkyss.quarkus.codegen.runtime.config.CodegenConfig;
 import io.agroal.api.AgroalDataSource;
 import org.jboss.logging.Logger;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,9 @@ public class CodegenResourceTest {
 
     @Inject
     AgroalDataSource dataSource;
+
+    @Inject
+    CodegenConfig config;
 
     @Test
     public void testHelloEndpoint() {
