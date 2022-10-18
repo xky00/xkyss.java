@@ -23,6 +23,11 @@ public class CodegenResourceTest {
     AgroalDataSource dataSource;
 
     @Test
+    public void test() {
+        log.info("test nothing");
+    }
+
+    @Test
     public void testHelloEndpoint() {
         given()
             .when().get("/xkyss-quarkus-extension-codegen")

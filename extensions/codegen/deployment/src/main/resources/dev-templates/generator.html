@@ -1,22 +1,24 @@
 {#include main}
-{#title}Generate Code From Database{/title}
+{#title}Generators{/title}
 {#body}
+
 <table class="table table-striped">
     <thead class="thead-dark">
     <tr>
-        <th scope="col">Table</th>
-        <th scope="col">---</th>
+        <th scope="col">Id</th>
+        <th scope="col">Actions</th>
     </tr>
     </thead>
     <tbody>
-    {#for source in info:sources}
+    {#for c in info:container}
     <tr>
-        <td>{source}</td>
+        <td>{c.name}</td>
         <td>
             <div class="btn-group">
                 <form method="post" enctype="application/x-www-form-urlencoded">
-                    <input type="hidden" name="source" value="{source}">
-                    <input id="reset" type="submit" class="btn btn-primary btn-sm" value="Test" />
+                    <input type="hidden" name="sourceId" value="{c.name}">
+                    <input type="hidden" name="targetId" value="{c.name}">
+                    <input id="{c.name}" type="submit" class="btn btn-primary btn-sm" value="{c.name}" />
                     &nbsp;
                 </form>
             </div>
