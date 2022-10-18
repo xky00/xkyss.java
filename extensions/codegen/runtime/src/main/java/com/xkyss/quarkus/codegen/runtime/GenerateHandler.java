@@ -1,4 +1,4 @@
-package com.xkyss.quarkus.codegen.runtime.handler;
+package com.xkyss.quarkus.codegen.runtime;
 
 import io.quarkus.devconsole.runtime.spi.DevConsolePostHandler;
 import io.vertx.core.MultiMap;

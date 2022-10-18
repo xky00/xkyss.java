@@ -1,6 +1,5 @@
 package com.xkyss.quarkus.codegen.runtime;
 
-import com.xkyss.quarkus.codegen.runtime.config.CodegenConfig;
 import io.vertx.core.impl.verticle.PackageHelper;
 import org.junit.jupiter.api.Test;
 

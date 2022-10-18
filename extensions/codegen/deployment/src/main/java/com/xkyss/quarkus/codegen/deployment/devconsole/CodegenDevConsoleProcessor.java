@@ -2,8 +2,7 @@ package com.xkyss.quarkus.codegen.deployment.devconsole;
 
 import com.xkyss.quarkus.codegen.runtime.CodegenContainerSupplier;
 import com.xkyss.quarkus.codegen.runtime.CodegenRecorder;
-import com.xkyss.quarkus.codegen.runtime.config.CodegenConfig;
-import com.xkyss.quarkus.codegen.runtime.config.ServerCollections;
+import com.xkyss.quarkus.codegen.runtime.CodegenConfig;
 import io.quarkus.deployment.IsDevelopment;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
@@ -42,7 +41,6 @@ public class CodegenDevConsoleProcessor {
     public void invokeEndpoint(CodegenRecorder recorder,
                                QuteDevConsoleRecorder quteRecorder,
                                CodegenConfig config,
-                               ServerCollections sc,
                                BuildProducer<DevConsoleRouteBuildItem> devConsoleRouteProducer) {
         quteRecorder.setupRenderer();
 
