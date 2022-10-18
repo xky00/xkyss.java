@@ -6,8 +6,7 @@ metadata:
   - "xkyss"
   - "codegen"
   config:
-  - "xkyss.codegen.source."
-  - "xkyss.codegen.target."
+  - "xkyss.codegen."
   guide: "http://xkyss.com/quarkus/codegen"
   categories:
   - "quarkus"
