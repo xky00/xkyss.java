@@ -38,7 +38,6 @@
     <orderEntry type="library" name="Maven: io.netty:netty-resolver-dns:4.1.82.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-codec-dns:4.1.82.Final" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.4" level="project" />
-    <orderEntry type="library" name="Maven: io.smallrye.common:smallrye-common-constraint:1.13.1" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-vertx-http-dev-console-runtime-spi:2.13.2.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus.security:quarkus-security:1.1.4.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-vertx:2.13.2.Final" level="project" />
@@ -80,8 +79,16 @@
     <orderEntry type="library" name="Maven: jakarta.transaction:jakarta.transaction-api:1.3.3" level="project" />
     <orderEntry type="library" name="Maven: org.eclipse.microprofile.context-propagation:microprofile-context-propagation-api:1.2" level="project" />
     <orderEntry type="library" name="Maven: mysql:mysql-connector-java:8.0.30" level="project" />
-    <orderEntry type="module" module-name="xkyss-quarkus-codegen" />
-    <orderEntry type="library" name="Maven: com.xkyss:xkyss-core:2022.0.1" level="project" />
+    <orderEntry type="library" name="Maven: io.quarkus:quarkus-config-yaml:2.13.2.Final" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.config:smallrye-config-source-yaml:2.12.0" level="project" />
+    <orderEntry type="library" name="Maven: org.yaml:snakeyaml:1.33" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.config:smallrye-config-common:2.12.0" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.common:smallrye-common-classloader:1.13.1" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.config:smallrye-config:2.12.0" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.config:smallrye-config-core:2.12.0" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.common:smallrye-common-expression:1.13.1" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.common:smallrye-common-function:1.13.1" level="project" />
+    <orderEntry type="library" name="Maven: io.smallrye.common:smallrye-common-constraint:1.13.1" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-core:2.13.2.Final" level="project" />
     <orderEntry type="library" name="Maven: jakarta.annotation:jakarta.annotation-api:1.3.5" level="project" />
     <orderEntry type="library" name="Maven: jakarta.enterprise:jakarta.enterprise.cdi-api:2.0.2" level="project" />
@@ -90,13 +97,6 @@
     <orderEntry type="library" name="Maven: jakarta.inject:jakarta.inject-api:1.0" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-ide-launcher:2.13.2.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-development-mode-spi:2.13.2.Final" level="project" />
-    <orderEntry type="library" name="Maven: io.smallrye.config:smallrye-config:2.12.0" level="project" />
-    <orderEntry type="library" name="Maven: io.smallrye.config:smallrye-config-core:2.12.0" level="project" />
-    <orderEntry type="library" name="Maven: org.eclipse.microprofile.config:microprofile-config-api:2.0.1" level="project" />
-    <orderEntry type="library" name="Maven: io.smallrye.common:smallrye-common-expression:1.13.1" level="project" />
-    <orderEntry type="library" name="Maven: io.smallrye.common:smallrye-common-function:1.13.1" level="project" />
-    <orderEntry type="library" name="Maven: io.smallrye.common:smallrye-common-classloader:1.13.1" level="project" />
-    <orderEntry type="library" name="Maven: io.smallrye.config:smallrye-config-common:2.12.0" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging:3.5.0.Final" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.logmanager:jboss-logmanager-embedded:1.0.10" level="project" />
     <orderEntry type="library" name="Maven: org.jboss.logging:jboss-logging-annotations:2.2.1.Final" level="project" />
@@ -107,6 +107,9 @@
     <orderEntry type="library" name="Maven: org.wildfly.common:wildfly-common:1.5.4.Final-format-001" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-bootstrap-runner:2.13.2.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-fs-util:0.0.9" level="project" />
+    <orderEntry type="library" name="Maven: org.eclipse.microprofile.config:microprofile-config-api:2.0.1" level="project" />
+    <orderEntry type="module" module-name="xkyss-quarkus-codegen" />
+    <orderEntry type="library" name="Maven: com.xkyss:xkyss-core:2022.0.1" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-qute:2.13.2.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus.qute:qute-core:2.13.2.Final" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-datasource-common:2.13.2.Final" level="project" />

@@ -10,4 +10,8 @@ public class CodegenRecorder {
     public Handler<RoutingContext> generateHandler() {
         return new GenerateHandler();
     }
+
+    public void setupContainer(CodegenConfig config) {
+        CodegenContainerSupplier.initWith(config);
+    }
 }

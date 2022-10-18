@@ -20,11 +20,11 @@ public class CodegenDevConsoleProcessor {
 
     /**
      * 给Qute模板传入参数
-     * info:sources
+     * info:container
      */
     @BuildStep(onlyIf = IsDevelopment.class)
-    public DevConsoleRuntimeTemplateInfoBuildItem sourceUnits(
-        CurateOutcomeBuildItem curateOutcomeBuildItem) {
+    public DevConsoleRuntimeTemplateInfoBuildItem devConsoleContainer(CurateOutcomeBuildItem curateOutcomeBuildItem) {
+
         return new DevConsoleRuntimeTemplateInfoBuildItem(
             "container",
             new CodegenContainerSupplier(),
@@ -39,10 +39,11 @@ public class CodegenDevConsoleProcessor {
     @BuildStep
     @Record(value = RUNTIME_INIT, optional = true)
     public void invokeEndpoint(CodegenRecorder recorder,
-                               QuteDevConsoleRecorder quteRecorder,
+                               QuteDevConsoleRecorder qute,
                                CodegenConfig config,
                                BuildProducer<DevConsoleRouteBuildItem> devConsoleRouteProducer) {
-        quteRecorder.setupRenderer();
+        qute.setupRenderer();
+        recorder.setupContainer(config);
 
         // 与resources/dev-templates/generator.html一致
         devConsoleRouteProducer.produce(
