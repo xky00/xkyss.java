@@ -47,6 +47,6 @@ public class CodegenDevConsoleProcessor {
 
         // 与resources/dev-templates/generator.html一致
         devConsoleRouteProducer.produce(
-            new DevConsoleRouteBuildItem("generator", "POST", recorder.generateHandler()));
+            new DevConsoleRouteBuildItem("generate", "POST", recorder.generateHandler()));
     }
 }

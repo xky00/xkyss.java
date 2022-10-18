@@ -1,5 +1,5 @@
 {#include main}
-{#title}Generators{/title}
+{#title}Generate{/title}
 {#body}
 
 <table class="table table-striped">
@@ -19,7 +19,9 @@
             {#for t in info:container.targets}
             <div class="btn-group">
                 <form method="post" enctype="application/x-www-form-urlencoded">
-                    <input id="{t.key}" type="submit" class="btn btn-primary btn-sm" value="{t.key}" />
+                    <input type="hidden" name="sourceId" value="{gen.source}">
+                    <input type="hidden" name="targetId" value="{t.key}">
+                    <input type="submit" class="btn btn-primary btn-sm" value="{t.key}" />
                     &nbsp;
                 </form>
             </div>
