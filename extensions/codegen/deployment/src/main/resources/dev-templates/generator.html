@@ -5,23 +5,25 @@
 <table class="table table-striped">
     <thead class="thead-dark">
     <tr>
-        <th scope="col">Id</th>
-        <th scope="col">Actions</th>
+        <th scope="col">Sources</th>
+        <th scope="col">Targets</th>
     </tr>
     </thead>
     <tbody>
-    {#for c in info:container}
+    {#for gen in info:container.generators}
     <tr>
-        <td>{c.name}</td>
         <td>
+            <span class="badge badge-secondary larger-badge">{gen.source}</span>
+        </td>
+        <td>
+            {#for t in info:container.targets}
             <div class="btn-group">
                 <form method="post" enctype="application/x-www-form-urlencoded">
-                    <input type="hidden" name="sourceId" value="{c.name}">
-                    <input type="hidden" name="targetId" value="{c.name}">
-                    <input id="{c.name}" type="submit" class="btn btn-primary btn-sm" value="{c.name}" />
+                    <input id="{t.key}" type="submit" class="btn btn-primary btn-sm" value="{t.key}" />
                     &nbsp;
                 </form>
             </div>
+            {/for}
         </td>
     </tr>
     {/for}

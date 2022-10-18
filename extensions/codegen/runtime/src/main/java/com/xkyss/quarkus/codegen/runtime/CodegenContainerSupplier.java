@@ -31,19 +31,18 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
                 INSTANCE.sources.put(c.name(), c);
             }
         }
-        log.infof("Source size: %d", INSTANCE.sources.size());
 
         if (!Listx.isNullOrEmpty(config.target())) {
             for (CodegenConfig.TargetConfig c: config.target()) {
                 INSTANCE.targets.put(c.name(), c);
             }
         }
-        log.infof("Target size: %d", INSTANCE.targets.size());
 
         if (!Listx.isNullOrEmpty(config.generate())) {
-            INSTANCE.gens.addAll(config.generate());
+            INSTANCE.generators.addAll(config.generate());
         }
-        log.infof("Gens size: %d", INSTANCE.gens.size());
+        log.infof("Source: %d, Source: %d, Generators: %d",
+            INSTANCE.sources.size(), INSTANCE.targets.size(), INSTANCE.generators.size());
     }
 
 
@@ -52,6 +51,6 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
 
         public Map<String, CodegenConfig.TargetConfig> targets = new HashMap<>();
 
-        public List<CodegenConfig.GenerateConfig> gens = new ArrayList<>();
+        public List<CodegenConfig.GenerateConfig> generators = new ArrayList<>();
     }
 }
