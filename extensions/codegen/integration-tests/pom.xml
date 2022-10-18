@@ -25,6 +25,10 @@
       <artifactId>quarkus-jdbc-mysql</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-config-yaml</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.xkyss</groupId>
       <artifactId>xkyss-quarkus-codegen</artifactId>
       <version>${project.version}</version>

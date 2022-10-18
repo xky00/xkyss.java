@@ -2,13 +2,15 @@ package com.xkyss.quarkus.codegen.runtime.config;
 
 import io.quarkus.runtime.annotations.ConfigDocSection;
 import io.quarkus.runtime.annotations.ConfigItem;
+import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
+import io.smallrye.config.ConfigMapping;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-@ConfigRoot(name = "codegen", prefix = "xkyss")
+@ConfigRoot(name = "codegen", prefix = "xkyss", phase = ConfigPhase.BUILD_AND_RUN_TIME_FIXED)
 public class CodegenConfig {
 
     /**
@@ -30,5 +32,5 @@ public class CodegenConfig {
      */
     @ConfigItem
     @ConfigDocSection
-    public List<String> generate = List.of();
+    public List<GenerateConfig> generate = List.of();
 }

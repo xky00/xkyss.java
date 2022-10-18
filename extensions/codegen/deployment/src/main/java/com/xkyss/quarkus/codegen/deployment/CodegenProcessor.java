@@ -1,7 +1,10 @@
 package com.xkyss.quarkus.codegen.deployment;
 
-import com.xkyss.quarkus.codegen.runtime.config.CodegenConfig;
+import com.xkyss.quarkus.codegen.runtime.config.ServerCollections;
+import io.quarkus.builder.item.EmptyBuildItem;
+import io.quarkus.builder.item.SimpleBuildItem;
 import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.deployment.annotations.Produce;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import org.jboss.logging.Logger;
 

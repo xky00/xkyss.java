@@ -3,7 +3,7 @@ package com.xkyss.quarkus.codegen.deployment.devconsole;
 import com.xkyss.quarkus.codegen.runtime.CodegenContainerSupplier;
 import com.xkyss.quarkus.codegen.runtime.CodegenRecorder;
 import com.xkyss.quarkus.codegen.runtime.config.CodegenConfig;
-import io.quarkus.arc.runtime.BeanLookupSupplier;
+import com.xkyss.quarkus.codegen.runtime.config.ServerCollections;
 import io.quarkus.deployment.IsDevelopment;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
@@ -24,7 +24,8 @@ public class CodegenDevConsoleProcessor {
      * info:sources
      */
     @BuildStep(onlyIf = IsDevelopment.class)
-    public DevConsoleRuntimeTemplateInfoBuildItem sourceUnits(CurateOutcomeBuildItem curateOutcomeBuildItem, CodegenConfig config) {
+    public DevConsoleRuntimeTemplateInfoBuildItem sourceUnits(
+        CurateOutcomeBuildItem curateOutcomeBuildItem) {
         return new DevConsoleRuntimeTemplateInfoBuildItem(
             "container",
             new CodegenContainerSupplier(),
@@ -40,6 +41,8 @@ public class CodegenDevConsoleProcessor {
     @Record(value = RUNTIME_INIT, optional = true)
     public void invokeEndpoint(CodegenRecorder recorder,
                                QuteDevConsoleRecorder quteRecorder,
+                               CodegenConfig config,
+                               ServerCollections sc,
                                BuildProducer<DevConsoleRouteBuildItem> devConsoleRouteProducer) {
         quteRecorder.setupRenderer();
 
