@@ -1,0 +1,3 @@
+package com.aj.admin.resources;
+
+import com.aj.admin.entities.{item.catalog};

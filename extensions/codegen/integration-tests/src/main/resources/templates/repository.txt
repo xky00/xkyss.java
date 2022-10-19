@@ -1,0 +1,10 @@
+
+package {generator.packageName}.{target.relativePackage};
+
+import {generator.packageName}.entity;
+import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import javax.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class {table.name}{target.postfix} implements PanacheRepository<{table.name}> {
+}

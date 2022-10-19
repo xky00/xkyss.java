@@ -57,6 +57,21 @@ public interface CodegenConfig {
          * Template name (qute)
          */
         String template();
+
+        /**
+         * relative package
+         */
+        String relativePackage();
+
+        /**
+         * postfix
+         */
+        String postfix();
+
+        /**
+         * output file extension
+         */
+        String fileExt();
     }
 
     interface GenerateConfig {
@@ -69,5 +84,10 @@ public interface CodegenConfig {
          * Target name
          */
         List<String> target();
+
+        /**
+         * Package name
+         */
+        String packageName();
     }
 }

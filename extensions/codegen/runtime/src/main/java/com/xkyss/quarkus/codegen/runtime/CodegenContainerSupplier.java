@@ -26,6 +26,8 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
             return;
         }
 
+        INSTANCE.clear();
+
         if (!Listx.isNullOrEmpty(config.source())) {
             for (CodegenConfig.SourceConfig c: config.source()) {
                 INSTANCE.sources.put(c.name(), c);
@@ -52,5 +54,11 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
         public Map<String, CodegenConfig.TargetConfig> targets = new HashMap<>();
 
         public List<CodegenConfig.GenerateConfig> generators = new ArrayList<>();
+
+        public void clear() {
+            sources.clear();
+            targets.clear();
+            generators.clear();
+        }
     }
 }

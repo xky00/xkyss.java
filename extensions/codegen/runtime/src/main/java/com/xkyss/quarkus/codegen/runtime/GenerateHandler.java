@@ -7,17 +7,29 @@ import com.xkyss.quarkus.codegen.runtime.model.ColumnType;
 import com.xkyss.quarkus.codegen.runtime.model.Table;
 import io.agroal.api.AgroalDataSource;
 import io.quarkus.agroal.runtime.DataSources;
+import io.quarkus.dev.console.DevConsoleManager;
 import io.quarkus.devconsole.runtime.spi.DevConsolePostHandler;
+import io.quarkus.qute.runtime.devmode.QuteDevConsoleRecorder;
 import io.vertx.core.MultiMap;
+import io.vertx.core.impl.verticle.PackageHelper;
 import io.vertx.core.json.Json;
 import io.vertx.ext.web.RoutingContext;
 import org.jboss.logging.Logger;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiFunction;
 
 public class GenerateHandler extends DevConsolePostHandler {
 
@@ -56,7 +68,7 @@ public class GenerateHandler extends DevConsolePostHandler {
                 List<Table> tables = generateUseDb(source, target);
                 for (Table table: tables) {
                     // log.info(Json.encodePrettily(t));
-                    write(table, generator, target);
+                    write(table, generator, source, target);
                 }
             }
             catch (Throwable t) {
@@ -65,8 +77,40 @@ public class GenerateHandler extends DevConsolePostHandler {
         }
     }
 
-    private void write(Table table, CodegenConfig.GenerateConfig generator, CodegenConfig.TargetConfig target) {
-        log.info("write Table");
+    private void write(Table table, CodegenConfig.GenerateConfig generator, CodegenConfig.SourceConfig source, CodegenConfig.TargetConfig target) throws IOException {
+        log.infof("write Table: %s", table.getName());
+
+        Path basePath = Paths.get(System.getProperty("user.dir"));
+        log.infof("基础目录为: %s", basePath.toString());
+
+        // Target 目录
+        Path targetPath = basePath
+            .resolve("src/main/java")
+            .resolve(generator.packageName().replace('.', File.separatorChar))
+            .resolve(target.relativePackage().replace('.', File.separatorChar))
+            ;
+        Files.createDirectories(targetPath);
+        log.infof("Target目录: %s", targetPath.toString());
+
+        // Target 文件
+        Path targetFile = targetPath.resolve(String.format("%s%s", table.getName(), target.postfix()));
+        log.infof("Target文件: %s", targetFile.toString());
+
+        // 渲染模板
+        BiFunction<String, Object, String> renderer = DevConsoleManager.getGlobal(QuteDevConsoleRecorder.RENDER_HANDLER);
+        String s = renderer.apply(target.template(), Map.ofEntries(
+            Map.entry("table", table),
+            Map.entry("generator", generator),
+            Map.entry("source", source),
+            Map.entry("target", target)
+        ));
+
+        // 写入Target文件
+        log.info(s);
+//        try (BufferedWriter writer = Files.newBufferedWriter(targetFile, StandardCharsets.UTF_8)) {
+//            writer.write(s, 0, s.length());
+//            writer.flush();
+//        }
     }
 
     private List<Table> generateUseDb(CodegenConfig.SourceConfig source, CodegenConfig.TargetConfig target) throws SQLException {
