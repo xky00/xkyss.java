@@ -16,12 +16,12 @@
             <span class="badge badge-secondary larger-badge">{gen.source}</span>
         </td>
         <td>
-            {#for t in gen.target}
+            {#for target in gen.target}
             <div class="btn-group">
                 <form method="post" enctype="application/x-www-form-urlencoded">
-                    <input type="hidden" name="sourceId" value="{gen.source}">
-                    <input type="hidden" name="targetId" value="{t}">
-                    <input type="submit" class="btn btn-primary btn-sm" value="{t}" />
+                    <input type="hidden" name="target_index" value="{target_index}">
+                    <input type="hidden" name="gen_index" value="{gen_index}">
+                    <input type="submit" class="btn btn-primary btn-sm" value="{target}" />
                     &nbsp;
                 </form>
             </div>

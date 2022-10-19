@@ -1,5 +1,6 @@
 package com.xkyss.quarkus.codegen.runtime;
 
+import com.xkyss.core.util.Listx;
 import com.xkyss.core.util.Stringx;
 import com.xkyss.quarkus.codegen.runtime.model.Column;
 import com.xkyss.quarkus.codegen.runtime.model.ColumnType;
@@ -24,11 +25,18 @@ public class GenerateHandler extends DevConsolePostHandler {
 
     @Override
     protected void handlePost(RoutingContext context, MultiMap form) {
-        String sourceId = form.get("sourceId");
-        String targetId = form.get("targetId");
-        log.infof("handlePost, sourceId: %s, targetId: %s", sourceId, targetId);
+        int genIndex = Integer.parseInt(form.get("gen_index"));
+        CodegenConfig.GenerateConfig generator = Listx.get(CodegenContainerSupplier.INSTANCE.generators, genIndex);
+        if (generator == null) {
+            log.infof("Generator %d is NULL.", genIndex);
+            return;
+        }
 
-        CodegenConfig.SourceConfig source = CodegenContainerSupplier.INSTANCE.sources.getOrDefault(sourceId, null);
+        int targetIndex = Integer.parseInt(form.get("target_index"));
+        String targetId = Listx.get(generator.target(), targetIndex);
+        log.infof("handlePost, index: %d, sourceId: %s, targetId: %s", genIndex, generator.source(), targetId);
+
+        CodegenConfig.SourceConfig source = CodegenContainerSupplier.INSTANCE.sources.getOrDefault(generator.source(), null);
         if (source == null) {
             log.info("Source is NULL.");
             return;
@@ -46,14 +54,19 @@ public class GenerateHandler extends DevConsolePostHandler {
         else if (source.kind().equalsIgnoreCase("DB")) {
             try {
                 List<Table> tables = generateUseDb(source, target);
-                for (Table t: tables) {
-                    log.info(Json.encodePrettily(t));
+                for (Table table: tables) {
+                    // log.info(Json.encodePrettily(t));
+                    write(table, generator, target);
                 }
             }
             catch (Throwable t) {
                 context.fail(t);
             }
         }
+    }
+
+    private void write(Table table, CodegenConfig.GenerateConfig generator, CodegenConfig.TargetConfig target) {
+        log.info("write Table");
     }
 
     private List<Table> generateUseDb(CodegenConfig.SourceConfig source, CodegenConfig.TargetConfig target) throws SQLException {
