@@ -1,5 +1,9 @@
 package com.xkyss.quarkus.codegen.runtime;
 
+import com.xkyss.core.util.Stringx;
+import com.xkyss.quarkus.codegen.runtime.model.Column;
+import com.xkyss.quarkus.codegen.runtime.model.ColumnType;
+import com.xkyss.quarkus.codegen.runtime.model.Table;
 import io.agroal.api.AgroalDataSource;
 import io.quarkus.agroal.runtime.DataSources;
 import io.quarkus.devconsole.runtime.spi.DevConsolePostHandler;
@@ -52,16 +56,44 @@ public class GenerateHandler extends DevConsolePostHandler {
         AgroalDataSource dataSource = DataSources.fromName(source.dsName());
         Connection connection = dataSource.getConnection();
 
-        ResultSet rs = connection.getMetaData().getTables(connection.getCatalog(), null, "%", new String[] {"TABLE", "VIEW"});
-
+        // 表信息
         List<Table> tables = new ArrayList<>();
-        while (rs.next()) {
-            Table table = new Table();
-            table.setCategory(rs.getString("TABLE_CAT"));
-            table.setName(rs.getString("TABLE_NAME"));
-            table.setRemarks(rs.getString("REMARKS"));
-            tables.add(table);
-            log.info(table);
+        {
+            ResultSet rs = connection.getMetaData().getTables(connection.getCatalog(), null, "%", new String[] {"TABLE", "VIEW"});
+            while (rs.next()) {
+                Table table = new Table();
+                table.setCatalog(rs.getString("TABLE_CAT"));
+                table.setSchema(rs.getString("TABLE_SCHEM"));
+                table.setName(rs.getString("TABLE_NAME"));
+                table.setRemarks(rs.getString("REMARKS"));
+
+                // 保存
+                tables.add(table);
+            }
+        }
+
+        // 字段信息
+        for (Table table: tables) {
+            ResultSet rs = connection.getMetaData().getColumns(connection.getCatalog(), table.getSchema(), table.getName(), "%");
+            while (rs.next()) {
+                String name = rs.getString("COLUMN_NAME");
+                if (Stringx.isNullOrEmpty(name)) {
+                    continue;
+                }
+                Column column = table.getColumn(name);
+                column.setName(name);
+                column.setNullable(rs.getInt("NULLABLE") > 0);
+                column.setRemarks(rs.getString("REMARKS"));
+                column.setSize(rs.getInt("COLUMN_SIZE"));
+                column.setPrimary(false);
+                column.setType(ColumnType.ofSqlType(rs.getInt("DATA_TYPE")));
+                table.addColumn(column);
+            }
+        }
+
+        // 主键信息
+        for (Table table: tables) {
+
         }
 
         return tables;
