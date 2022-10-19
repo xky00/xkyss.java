@@ -56,12 +56,16 @@ public interface CodegenConfig {
         /**
          * Template name (qute)
          */
-        String template();
+        default String template() {
+            return name();
+        }
 
         /**
          * relative package
          */
-        String relativePackage();
+        default String relativePackage() {
+            return name();
+        }
 
         /**
          * postfix
