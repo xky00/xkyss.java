@@ -30,15 +30,6 @@ public class Table {
      */
     private List<Column> columns = new ArrayList<>();
 
-    @Override
-    public String toString() {
-        return "Table{" +
-            "name='" + name + '\'' +
-            ", category='" + catalog + '\'' +
-            ", remarks='" + remarks + '\'' +
-            '}';
-    }
-
     public String getCatalog() {
         return catalog;
     }
