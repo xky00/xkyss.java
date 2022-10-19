@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 public class CodegenContainerSupplier implements Supplier<CodegenContainerSupplier.Container> {
 
-    private static Container INSTANCE = new Container();
+    static Container INSTANCE = new Container();
 
     private static final Logger log = Logger.getLogger(CodegenContainerSupplier.class);
 
@@ -41,7 +41,7 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
         if (!Listx.isNullOrEmpty(config.generate())) {
             INSTANCE.generators.addAll(config.generate());
         }
-        log.infof("Source: %d, Source: %d, Generators: %d",
+        log.infof("Source: %d, Target: %d, Generators: %d",
             INSTANCE.sources.size(), INSTANCE.targets.size(), INSTANCE.generators.size());
     }
 

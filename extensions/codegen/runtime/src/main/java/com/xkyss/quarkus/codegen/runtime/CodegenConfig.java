@@ -35,6 +35,11 @@ public interface CodegenConfig {
         String name();
 
         /**
+         * DataSource name
+         */
+        String dsName();
+
+        /**
          * Source kind:
          *  db / sql / insert-sql / json
          */
@@ -63,6 +68,6 @@ public interface CodegenConfig {
         /**
          * Target name
          */
-        String target();
+        List<String> target();
     }
 }
