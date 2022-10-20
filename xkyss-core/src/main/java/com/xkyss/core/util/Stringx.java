@@ -292,10 +292,8 @@ public class Stringx extends CharSequencex {
     }
 
     private static String[] splitWorker(final String str, final char separatorChar, final boolean preserveAllTokens) {
-        // Performance tuned for 2.0 (JDK1.4)
-
         if (str == null) {
-            return null;
+            return Arrayx.EMPTY_STRING_ARRAY;
         }
         final int len = str.length();
         if (len == 0) {

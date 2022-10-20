@@ -1,6 +1,7 @@
 package com.xkyss.experimental.naming;
 
 import com.xkyss.core.stream.Collectorx;
+import com.xkyss.core.util.Arrayx;
 import com.xkyss.core.util.Stringx;
 
 import java.util.Arrays;
@@ -16,6 +17,8 @@ import java.util.stream.IntStream;
 @SuppressWarnings("ALL")
 public class Converter {
 
+    public static Converter EMPTY = new Converter();
+
     public static final char SEPARATOR_UNDERSCORE = '_';
     public static final char SEPARATOR_DASH = '-';
     public static final char SEPARATOR_DOT = '.';
@@ -24,9 +27,9 @@ public class Converter {
     /**
      * 原始字符串
      */
-    private String original;
+    private String original = "";
 
-    private String[] words;
+    private String[] words = {};
 
     public static Converter fromAuto(String original) {
         Converter c = new Converter();
