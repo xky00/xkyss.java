@@ -29,12 +29,19 @@ public class StringxTest {
     @Test
     public void test_splitByCharacterTypeCamelCase() {
         Assertions.assertArrayEquals(
-            null, Stringx.splitByCharacterTypeCamelCase(null));
+            new String[]{}, Stringx.splitByCharacterTypeCamelCase(null));
         Assertions.assertArrayEquals(
             new String[]{}, Stringx.splitByCharacterTypeCamelCase(""));
         Assertions.assertArrayEquals(
             new String[]{"Are", "You", "Ok"}, Stringx.splitByCharacterTypeCamelCase("AreYouOk"));
         Assertions.assertArrayEquals(
             new String[]{"are", "You", "Ok"}, Stringx.splitByCharacterTypeCamelCase("areYouOk"));
+    }
+
+    @Test
+    public void test_capitalize() {
+        Assertions.assertEquals("Cat", Stringx.capitalize("cat"));
+        Assertions.assertEquals("CAt", Stringx.capitalize("cAt"));
+        Assertions.assertEquals("CAt", Stringx.capitalize("CAt"));
     }
 }

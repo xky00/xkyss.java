@@ -1,7 +1,6 @@
 package com.xkyss.experimental.naming;
 
 import com.xkyss.core.stream.Collectorx;
-import com.xkyss.core.util.Arrayx;
 import com.xkyss.core.util.Stringx;
 
 import java.util.Arrays;
@@ -14,6 +13,7 @@ import java.util.stream.IntStream;
  * @date 2022-10-20
  * @see "https://github.com/jawira/case-converter"
  */
+@SuppressWarnings("ALL")
 public class Converter {
 
     public static final char SEPARATOR_UNDERSCORE = '_';
@@ -150,6 +150,7 @@ public class Converter {
      */
     public String toAda() {
         return Arrays.stream(this.words)
+            .map(Stringx::toLowerCase)
             .map(Stringx::capitalize)
             .collect(Collectorx.joining(SEPARATOR_UNDERSCORE));
     }
@@ -161,9 +162,10 @@ public class Converter {
      * </pre>
      */
     public String toCamel() {
-        IntStream.range(0, this.words.length)
-        return Arrays.stream(this.words)
-            .map(Stringx::capitalize)
+        return IntStream.range(0, this.words.length)
+            .mapToObj(i -> (i == 0)
+                ? Stringx.toLowerCase(this.words[i])
+                : Stringx.capitalize(Stringx.toLowerCase(this.words[i])))
             .collect(Collectors.joining());
     }
 
@@ -177,6 +179,18 @@ public class Converter {
         return Arrays.stream(this.words)
             .map(Stringx::toUpperCase)
             .collect(Collectorx.joining(SEPARATOR_DASH));
+    }
+
+    /**
+     * 全大写, {code '_'}连接
+     * <pre>
+     *     lower_case_name
+     * </pre>
+     */
+    public String toMacro() {
+        return Arrays.stream(this.words)
+            .map(Stringx::toUpperCase)
+            .collect(Collectorx.joining(SEPARATOR_UNDERSCORE));
     }
 
     /**
@@ -194,7 +208,7 @@ public class Converter {
     /**
      * 全小写, {code '-'}连接
      * <pre>
-     *     dot.case.name
+     *     dot-case-name
      * </pre>
      */
     public String toKebab() {
@@ -216,18 +230,6 @@ public class Converter {
     }
 
     /**
-     * 全大写, {code '_'}连接
-     * <pre>
-     *     lower case name
-     * </pre>
-     */
-    public String toMacro() {
-        return Arrays.stream(this.words)
-            .map(Stringx::toUpperCase)
-            .collect(Collectorx.joining(SEPARATOR_UNDERSCORE));
-    }
-
-    /**
      * 首字母大写
      * <pre>
      *     CamelCaseName
@@ -235,6 +237,7 @@ public class Converter {
      */
     public String toPascal() {
         return Arrays.stream(this.words)
+            .map(Stringx::toLowerCase)
             .map(Stringx::capitalize)
             .collect(Collectors.joining());
     }
@@ -246,9 +249,10 @@ public class Converter {
      * </pre>
      */
     public String toSentence() {
-        // TODO:
-        return Arrays.stream(this.words)
-            .map(Stringx::uncapitalize)
+        return IntStream.range(0, this.words.length)
+            .mapToObj(i -> (i == 0)
+                ? Stringx.capitalize(Stringx.toLowerCase(this.words[i]))
+                : Stringx.toLowerCase(this.words[i]))
             .collect(Collectorx.joining(SEPARATOR_SPACE));
     }
 
@@ -272,6 +276,7 @@ public class Converter {
      */
     public String toTitle() {
         return Arrays.stream(this.words)
+            .map(Stringx::toLowerCase)
             .map(Stringx::capitalize)
             .collect(Collectorx.joining(SEPARATOR_SPACE));
     }
@@ -279,11 +284,12 @@ public class Converter {
     /**
      * 全部单词首字母大写, {@code '-'}连接
      * <pre>
-     *     Title Case Name
+     *     Title-Case-Name
      * </pre>
      */
     public String toTrain() {
         return Arrays.stream(this.words)
+            .map(Stringx::toLowerCase)
             .map(Stringx::capitalize)
             .collect(Collectorx.joining(SEPARATOR_DASH));
     }
