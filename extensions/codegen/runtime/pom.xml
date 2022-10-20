@@ -18,6 +18,10 @@
       <artifactId>xkyss-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.xkyss</groupId>
+      <artifactId>xkyss-experimental</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
     </dependency>

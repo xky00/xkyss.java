@@ -1,5 +1,7 @@
 package com.xkyss.quarkus.codegen.runtime.model;
 
+import com.xkyss.experimental.naming.Converter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,11 @@ public class Table {
      */
     private List<Column> columns = new ArrayList<>();
 
+    /**
+     * 表名转换器
+     */
+    private Converter nameConverter = Converter.EMPTY;
+
     public String getCatalog() {
         return catalog;
     }
@@ -50,8 +57,13 @@ public class Table {
         return name;
     }
 
+    public String getNamePascal() {
+        return this.nameConverter.toPascal();
+    }
+
     public void setName(String name) {
         this.name = name;
+        this.nameConverter = Converter.fromAuto(this.name);
     }
 
     public String getRemarks() {

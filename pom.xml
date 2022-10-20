@@ -28,6 +28,11 @@
                 <artifactId>xkyss-core</artifactId>
                 <version>${xkyss.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.xkyss</groupId>
+                <artifactId>xkyss-experimental</artifactId>
+                <version>${xkyss.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
