@@ -58,7 +58,7 @@ public class Table {
     }
 
     public String getNamePascal() {
-        return this.nameConverter.toPascal();
+        return nameConverter.toPascal();
     }
 
     public void setName(String name) {

@@ -1,5 +1,6 @@
 package com.xkyss.quarkus.codegen.runtime;
 
+import com.xkyss.core.util.Stringx;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 import io.smallrye.config.ConfigMapping;
@@ -70,7 +71,9 @@ public interface CodegenConfig {
         /**
          * postfix
          */
-        String postfix();
+        default String postfix() {
+            return Stringx.capitalize(name());
+        }
 
         /**
          * output file extension
