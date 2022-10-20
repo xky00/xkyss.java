@@ -15,4 +15,26 @@ public class StringxTest {
         Assertions.assertEquals("43010", Stringx.postSub("430100000", "00"));
         Assertions.assertEquals("4301", Stringx.postSub("430100000", "0"));
     }
+
+    @Test
+    public void test_splitByLength() {
+        Assertions.assertArrayEquals(
+            new String[]{"aa", "bb", "cc", "dd", "e"}, Stringx.splitByLength("aabbccdde", 2));
+        Assertions.assertArrayEquals(
+            new String[]{"E", "A", "P"}, Stringx.splitByLength("EAP", 1));
+        Assertions.assertArrayEquals(
+            new String[]{"Are", "You", "Ok"}, Stringx.splitByLength("AreYouOk", 3));
+    }
+
+    @Test
+    public void test_splitByCharacterTypeCamelCase() {
+        Assertions.assertArrayEquals(
+            null, Stringx.splitByCharacterTypeCamelCase(null));
+        Assertions.assertArrayEquals(
+            new String[]{}, Stringx.splitByCharacterTypeCamelCase(""));
+        Assertions.assertArrayEquals(
+            new String[]{"Are", "You", "Ok"}, Stringx.splitByCharacterTypeCamelCase("AreYouOk"));
+        Assertions.assertArrayEquals(
+            new String[]{"are", "You", "Ok"}, Stringx.splitByCharacterTypeCamelCase("areYouOk"));
+    }
 }

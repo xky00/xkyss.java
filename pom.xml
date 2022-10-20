@@ -19,6 +19,7 @@
 
     <modules>
         <module>xkyss-core</module>
+        <module>xkyss-experimental</module>
     </modules>
 
     <dependencies>
@@ -30,5 +31,20 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.xkyss</groupId>
+                <artifactId>xkyss-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xkyss</groupId>
+                <artifactId>xkyss-experimental</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>
