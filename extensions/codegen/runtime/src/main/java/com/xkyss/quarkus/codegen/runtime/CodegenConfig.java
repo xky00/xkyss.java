@@ -45,6 +45,11 @@ public interface CodegenConfig {
          *  db / sql / insert-sql / json
          */
         String kind();
+
+        /**
+         * Package name
+         */
+        String packageName();
     }
 
     interface TargetConfig {
