@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 
 import io.agroal.api.AgroalDataSource;
 import org.jboss.logging.Logger;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -15,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @QuarkusTest
 public class CodegenResourceTest {
@@ -120,6 +122,12 @@ public class CodegenResourceTest {
             }
             rs.close();
         }
+    }
+
+    @Test
+    public void test_match() {
+        Pattern p = Pattern.compile("^[tT]_.*");
+        Assertions.assertTrue(p.matcher("t_user").matches());
     }
 
     class Table {

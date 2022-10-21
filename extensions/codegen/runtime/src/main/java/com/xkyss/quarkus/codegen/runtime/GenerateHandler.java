@@ -1,6 +1,5 @@
 package com.xkyss.quarkus.codegen.runtime;
 
-import com.xkyss.core.util.ArrayListx;
 import com.xkyss.core.util.Listx;
 import com.xkyss.core.util.Stringx;
 import com.xkyss.quarkus.codegen.runtime.model.Column;
@@ -12,15 +11,11 @@ import io.quarkus.dev.console.DevConsoleManager;
 import io.quarkus.devconsole.runtime.spi.DevConsolePostHandler;
 import io.quarkus.qute.runtime.devmode.QuteDevConsoleRecorder;
 import io.vertx.core.MultiMap;
-import io.vertx.core.impl.verticle.PackageHelper;
-import io.vertx.core.json.Json;
 import io.vertx.ext.web.RoutingContext;
 import org.jboss.logging.Logger;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.regex.Pattern;
 
 public class GenerateHandler extends DevConsolePostHandler {
 
@@ -82,6 +78,11 @@ public class GenerateHandler extends DevConsolePostHandler {
     private void write(Table table, CodegenConfig.GenerateConfig generator, CodegenConfig.SourceConfig source, CodegenConfig.TargetConfig target) throws IOException {
         log.infof("write Table: %s", table.getName());
 
+        if (filter(table, source)) {
+            log.infof("Table %s is filtered", table.getName());
+            return;
+        }
+
         Path basePath = Paths.get(System.getProperty("user.dir"));
         log.infof("基础目录为: %s", basePath.toString());
 
@@ -131,6 +132,46 @@ public class GenerateHandler extends DevConsolePostHandler {
 //            writer.write(s, 0, s.length());
 //            writer.flush();
 //        }
+    }
+
+    /**
+     * 是否应该被过滤调
+     */
+    private boolean filter(Table table, CodegenConfig.SourceConfig source) {
+        // 如果配置了matchPatterns, 先看下是否匹配
+        boolean matches = false;
+        if (source.matchPatterns().isPresent()) {
+            for (String r: source.matchPatterns().get()) {
+                Pattern p = Pattern.compile(r);
+                if (p.matcher(table.getName()).matches()) {
+                    matches = true;
+                    break;
+                }
+            }
+        }
+        else {
+            // 没配置就算匹配上了
+            matches = true;
+        }
+
+        // 如果没匹配上,就应该被过滤掉
+        if (!matches) {
+            return true;
+        }
+
+        // 如果配置了ignorePatterns, 看看是否被忽略
+        if (source.ignorePatterns().isPresent()) {
+            for (String r: source.ignorePatterns().get()) {
+                Pattern p = Pattern.compile(r);
+                // 如果匹配到被忽略
+                if (p.matcher(table.getName()).matches()) {
+                    return true;
+                }
+            }
+        }
+
+        // 不要被过滤
+        return false;
     }
 
     private List<Table> generateUseDb(CodegenConfig.SourceConfig source, CodegenConfig.TargetConfig target) throws SQLException {

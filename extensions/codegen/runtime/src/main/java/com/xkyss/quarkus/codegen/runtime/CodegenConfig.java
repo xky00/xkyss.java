@@ -45,6 +45,16 @@ public interface CodegenConfig {
          *  db / sql / insert-sql / json
          */
         String kind();
+
+        /**
+         * {@code ','}分隔的多个正则表达式(匹配列表)
+         */
+        Optional<List<String>> matchPatterns();
+
+        /**
+         * {@code ','}分隔的多个正则表达式(忽略列表)
+         */
+        Optional<List<String>> ignorePatterns();
     }
 
     interface TargetConfig {
