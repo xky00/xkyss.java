@@ -1,5 +1,6 @@
 package com.xkyss.quarkus.codegen.runtime;
 
+import com.xkyss.core.util.ArrayListx;
 import com.xkyss.core.util.Listx;
 import com.xkyss.core.util.Stringx;
 import com.xkyss.quarkus.codegen.runtime.model.Column;
@@ -27,6 +28,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -87,7 +89,7 @@ public class GenerateHandler extends DevConsolePostHandler {
         Path targetPath = basePath
             .resolve("src/main/java")
             .resolve(generator.packageName().replace('.', File.separatorChar))
-            .resolve(target.relativePackage().replace('.', File.separatorChar))
+            .resolve(target.relativePackage().get().replace('.', File.separatorChar))
             ;
         Files.createDirectories(targetPath);
         log.infof("Target目录: %s", targetPath.toString());
@@ -96,14 +98,32 @@ public class GenerateHandler extends DevConsolePostHandler {
         Path targetFile = targetPath.resolve(String.format("%s%s", table.getName(), target.postfix()));
         log.infof("Target文件: %s", targetFile.toString());
 
+        // 渲染参数
+        Map<String, Object> templateItems = new HashMap<>();
+
+        // Target 依赖
+        if (target.dependencies().isPresent()) {
+            List<String> dependencies = target.dependencies().get();
+            if (!Listx.isNullOrEmpty(dependencies)) {
+                for (String key: dependencies) {
+                    CodegenConfig.TargetConfig d = CodegenContainerSupplier.INSTANCE.targets.getOrDefault(key, null);
+                    if (d == null) {
+                        log.errorf("Target [%s] 的依赖项 [%s] 没有找到", target.name(), key);
+                        return;
+                    }
+
+                    templateItems.put(key, d);
+                }
+            }
+        }
+
         // 渲染模板
         BiFunction<String, Object, String> renderer = DevConsoleManager.getGlobal(QuteDevConsoleRecorder.RENDER_HANDLER);
-        String s = renderer.apply(target.template(), Map.ofEntries(
-            Map.entry("table", table),
-            Map.entry("generator", generator),
-            Map.entry("source", source),
-            Map.entry("target", target)
-        ));
+        templateItems.put("table", table);
+        templateItems.put("generator", generator);
+        templateItems.put("source", source);
+        templateItems.put("target", target);
+        String s = renderer.apply(target.template().get(), templateItems);
 
         // 写入Target文件
         log.info(s);

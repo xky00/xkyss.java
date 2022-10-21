@@ -1,12 +1,10 @@
 package com.xkyss.quarkus.codegen.runtime;
 
 import com.xkyss.core.util.Listx;
+import com.xkyss.experimental.naming.Converter;
 import org.jboss.logging.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class CodegenContainerSupplier implements Supplier<CodegenContainerSupplier.Container> {
@@ -36,7 +34,7 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
 
         if (!Listx.isNullOrEmpty(config.target())) {
             for (CodegenConfig.TargetConfig c: config.target()) {
-                INSTANCE.targets.put(c.name(), c);
+                INSTANCE.targets.put(c.name(), new TargetConfigProxy(c));
             }
         }
 
@@ -47,6 +45,45 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
             INSTANCE.sources.size(), INSTANCE.targets.size(), INSTANCE.generators.size());
     }
 
+    public static class TargetConfigProxy implements CodegenConfig.TargetConfig {
+        private CodegenConfig.TargetConfig config;
+
+        TargetConfigProxy(CodegenConfig.TargetConfig config) {
+            this.config = Objects.requireNonNull(config);
+        }
+
+        @Override
+        public String name() {
+            return config.name();
+        }
+
+        @Override
+        public Optional<String> template() {
+            return config.template().isPresent() ? config.template() : Optional.of(config.name());
+        }
+
+        @Override
+        public Optional<String> relativePackage() {
+            return config.relativePackage().isPresent() ? config.relativePackage() : Optional.of(config.name());
+        }
+
+        @Override
+        public Optional<String> postfix() {
+            return config.postfix().isPresent()
+                ? config.postfix()
+                : Optional.of(Converter.fromAuto(config.name()).toPascal());
+        }
+
+        @Override
+        public String fileExt() {
+            return config.fileExt();
+        }
+
+        @Override
+        public Optional<List<String>> dependencies() {
+            return config.dependencies();
+        }
+    }
 
     public static class Container {
         public Map<String, CodegenConfig.SourceConfig> sources = new HashMap<>();

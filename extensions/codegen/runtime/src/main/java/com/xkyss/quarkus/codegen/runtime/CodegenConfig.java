@@ -1,11 +1,11 @@
 package com.xkyss.quarkus.codegen.runtime;
 
-import com.xkyss.core.util.Stringx;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 import io.smallrye.config.ConfigMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @ConfigMapping(prefix = "xkyss.codegen")
@@ -45,11 +45,6 @@ public interface CodegenConfig {
          *  db / sql / insert-sql / json
          */
         String kind();
-
-        /**
-         * Package name
-         */
-        String packageName();
     }
 
     interface TargetConfig {
@@ -62,28 +57,27 @@ public interface CodegenConfig {
         /**
          * Template name (qute)
          */
-        default String template() {
-            return name();
-        }
+        Optional<String> template();
 
         /**
          * relative package
          */
-        default String relativePackage() {
-            return name();
-        }
+        Optional<String> relativePackage();
 
         /**
          * postfix
          */
-        default String postfix() {
-            return Stringx.capitalize(name());
-        }
+        Optional<String> postfix();
 
         /**
          * output file extension
          */
         String fileExt();
+
+        /**
+         * targets which depends on
+         */
+        Optional<List<String>> dependencies();
     }
 
     interface GenerateConfig {

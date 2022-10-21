@@ -1,8 +1,8 @@
 
 package {generator.packageName}.{target.relativePackage};
 
-import {source.packageName}.{table.namePascal};
-import {generator.packageName}.{target.relativePackage}.{table.namePascal}{target.postfix};
+import {generator.packageName}.{entity.relativePackage}.{table.namePascal}{entity.postfix};
+import {generator.packageName}.{repository.relativePackage}.{table.namePascal}{repository.postfix};
 
 import io.quarkus.hibernate.reactive.panache.common.runtime.ReactiveTransactional;
 import io.quarkus.panache.common.Sort;
@@ -25,7 +25,7 @@ import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 public class {table.namePascal}Resource {
 
     @Inject
-    {table.namePascal}Repository repository;
+    {table.namePascal}{repository.postfix} repository;
 
     @GET
     public Uni<List<{table.namePascal}>> get() {
