@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GenerateHandler extends DevConsolePostHandler {
@@ -171,23 +172,24 @@ public class GenerateHandler extends DevConsolePostHandler {
      */
     private boolean filter(Table table, CodegenConfig.SourceConfig source) {
         // 如果配置了matchPatterns, 先看下是否匹配
-        boolean matches = false;
+        String matchedName = null;
         if (source.matchPatterns().isPresent()) {
             for (String r: source.matchPatterns().get()) {
                 Pattern p = Pattern.compile(r);
-                if (p.matcher(table.getName()).matches()) {
-                    matches = true;
+                Matcher m = p.matcher(table.getName());
+                if (m.matches()) {
+                    matchedName = m.group((m.groupCount() > 0) ? 1 : 0);
                     break;
                 }
             }
         }
         else {
             // 没配置就算匹配上了
-            matches = true;
+            matchedName = table.getName();
         }
 
         // 如果没匹配上,就应该被过滤掉
-        if (!matches) {
+        if (matchedName == null) {
             return true;
         }
 
@@ -203,6 +205,7 @@ public class GenerateHandler extends DevConsolePostHandler {
         }
 
         // 不要被过滤
+        table.setMatchedName(matchedName);
         return false;
     }
 

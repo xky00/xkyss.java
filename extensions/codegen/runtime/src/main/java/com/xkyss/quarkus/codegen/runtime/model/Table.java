@@ -23,6 +23,11 @@ public class Table {
     private String name;
 
     /**
+     * 匹配后的表名
+     */
+    private String matchedName;
+
+    /**
      * 备注(注释)
      */
     private String remarks;
@@ -63,7 +68,23 @@ public class Table {
 
     public void setName(String name) {
         this.name = name;
-        this.nameConverter = Converter.fromAuto(this.name);
+    }
+
+    public String getMatchedName() {
+        return matchedName;
+    }
+
+    public void setMatchedName(String matchedName) {
+        this.matchedName = matchedName;
+        this.nameConverter = Converter.fromAuto(this.matchedName);
+    }
+
+    public Converter getNameConverter() {
+        return nameConverter;
+    }
+
+    public void setNameConverter(Converter nameConverter) {
+        this.nameConverter = nameConverter;
     }
 
     public String getRemarks() {
