@@ -122,25 +122,20 @@ public class GenerateHandler extends DevConsolePostHandler {
 
     private List<Path> getPaths(Table table, CodegenConfig.GenerateConfig generator, CodegenConfig.TargetConfig target) {
 
-        Path basePath = Paths.get(System.getProperty("user.dir"));
-        log.infof("基础目录为: %s", basePath.toString());
+        Path userPath = Paths.get(System.getProperty("user.dir"));
+        Path basePath = userPath.getParent();
 
         String packagePath = generator.packageName().replace('.', File.separatorChar);
         String relativePath = target.relativePackage().get().replace('.', File.separatorChar);
 
-        Path targetPath = basePath
-            .resolve("src/main/java")
-            .resolve(generator.packageName().replace('.', File.separatorChar))
-            .resolve(target.relativePackage().get().replace('.', File.separatorChar))
-            ;
-
         List<Path> paths = new ArrayList<>();
         if (generator.output().isEmpty()) {
-            Path p = basePath.resolve("src/main/java").resolve(packagePath).resolve(relativePath);
+            log.infof("基础目录为: %s", basePath.toString());
+            Path p = userPath.resolve("src/main/java").resolve(packagePath).resolve(relativePath);
             //noinspection DuplicatedCode
             try {
                 Files.createDirectories(p);
-                Path f = targetPath.resolve(String.format("%s%s", table.getName(), target.postfix().get()));
+                Path f = p.resolve(String.format("%s%s", table.getNamePascal(), target.postfix().get()));
                 log.infof("Target文件: %s", f.toString());
                 paths.add(f);
             }
@@ -149,8 +144,9 @@ public class GenerateHandler extends DevConsolePostHandler {
             }
         }
         else {
+            log.infof("基础目录为: %s", basePath.toString());
             for (String s: generator.output().get()) {
-                Path p = basePath.getParent().resolve(s).resolve(packagePath).resolve(relativePath);
+                Path p = basePath.resolve(s).resolve(packagePath).resolve(relativePath);
                 //noinspection DuplicatedCode
                 try {
                     Files.createDirectories(p);
@@ -160,7 +156,7 @@ public class GenerateHandler extends DevConsolePostHandler {
                     continue;
                 }
 
-                Path f = targetPath.resolve(String.format("%s%s", table.getName(), target.postfix()));
+                Path f = p.resolve(String.format("%s%s", table.getNamePascal(), target.postfix().get()));
                 log.infof("Target文件: %s", f.toString());
                 paths.add(f);
             }
