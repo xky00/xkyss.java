@@ -83,22 +83,6 @@ public class GenerateHandler extends DevConsolePostHandler {
             return;
         }
 
-        Path basePath = Paths.get(System.getProperty("user.dir"));
-        log.infof("基础目录为: %s", basePath.toString());
-
-        // Target 目录
-        Path targetPath = basePath
-            .resolve("src/main/java")
-            .resolve(generator.packageName().replace('.', File.separatorChar))
-            .resolve(target.relativePackage().get().replace('.', File.separatorChar))
-            ;
-        Files.createDirectories(targetPath);
-        log.infof("Target目录: %s", targetPath.toString());
-
-        // Target 文件
-        Path targetFile = targetPath.resolve(String.format("%s%s", table.getName(), target.postfix()));
-        log.infof("Target文件: %s", targetFile.toString());
-
         // 渲染参数
         Map<String, Object> templateItems = new HashMap<>();
 
@@ -126,12 +110,64 @@ public class GenerateHandler extends DevConsolePostHandler {
         templateItems.put("target", target);
         String s = renderer.apply(target.template().get(), templateItems);
 
+        List<Path> targetPaths = getPaths(table, generator, target);
+
         // 写入Target文件
         log.info(s);
 //        try (BufferedWriter writer = Files.newBufferedWriter(targetFile, StandardCharsets.UTF_8)) {
 //            writer.write(s, 0, s.length());
 //            writer.flush();
 //        }
+    }
+
+    private List<Path> getPaths(Table table, CodegenConfig.GenerateConfig generator, CodegenConfig.TargetConfig target) {
+
+        Path basePath = Paths.get(System.getProperty("user.dir"));
+        log.infof("基础目录为: %s", basePath.toString());
+
+        String packagePath = generator.packageName().replace('.', File.separatorChar);
+        String relativePath = target.relativePackage().get().replace('.', File.separatorChar);
+
+        Path targetPath = basePath
+            .resolve("src/main/java")
+            .resolve(generator.packageName().replace('.', File.separatorChar))
+            .resolve(target.relativePackage().get().replace('.', File.separatorChar))
+            ;
+
+        List<Path> paths = new ArrayList<>();
+        if (generator.output().isEmpty()) {
+            Path p = basePath.resolve("src/main/java").resolve(packagePath).resolve(relativePath);
+            //noinspection DuplicatedCode
+            try {
+                Files.createDirectories(p);
+                Path f = targetPath.resolve(String.format("%s%s", table.getName(), target.postfix().get()));
+                log.infof("Target文件: %s", f.toString());
+                paths.add(f);
+            }
+            catch (Throwable t) {
+                log.warnf("解析输出路径失败: %s", p.toString());
+            }
+        }
+        else {
+            for (String s: generator.output().get()) {
+                Path p = basePath.getParent().resolve(s).resolve(packagePath).resolve(relativePath);
+                //noinspection DuplicatedCode
+                try {
+                    Files.createDirectories(p);
+                }
+                catch (Throwable t) {
+                    log.warnf("解析输出路径失败: %s", p.toString());
+                    continue;
+                }
+
+                Path f = targetPath.resolve(String.format("%s%s", table.getName(), target.postfix()));
+                log.infof("Target文件: %s", f.toString());
+                paths.add(f);
+            }
+
+        }
+
+        return paths;
     }
 
     /**

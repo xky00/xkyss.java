@@ -144,6 +144,7 @@
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-smallrye-health-spi:2.13.2.Final" level="project" />
     <orderEntry type="module" module-name="xkyss-quarkus-codegen" />
     <orderEntry type="library" name="Maven: com.xkyss:xkyss-core:2022.0.1" level="project" />
+    <orderEntry type="library" name="Maven: com.xkyss:xkyss-experimental:2022.0.1" level="project" />
     <orderEntry type="library" name="Maven: io.quarkus:quarkus-datasource-common:2.13.2.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: io.quarkus:quarkus-junit5-internal:2.13.2.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.jboss.shrinkwrap:shrinkwrap-api:1.2.6" level="project" />

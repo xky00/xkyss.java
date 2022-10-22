@@ -11,6 +11,10 @@ import org.junit.jupiter.api.Test;
 import io.quarkus.test.junit.QuarkusTest;
 
 import javax.inject.Inject;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -128,6 +132,15 @@ public class CodegenResourceTest {
     public void test_match() {
         Pattern p = Pattern.compile("^[tT]_.*");
         Assertions.assertTrue(p.matcher("t_user").matches());
+    }
+
+    @Test
+    public void test_path() throws IOException {
+        Path b = Paths.get(System.getProperty("user.dir"));
+        Path p = b.resolve("a").resolve("b").resolve("c").resolve("..");
+        Files.createDirectories(p);
+        Path q = b.resolve("x/y/z").resolve("..");
+        Files.createDirectories(q);
     }
 
     class Table {

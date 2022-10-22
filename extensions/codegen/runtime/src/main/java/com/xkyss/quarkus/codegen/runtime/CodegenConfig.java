@@ -105,5 +105,12 @@ public interface CodegenConfig {
          * Package name
          */
         String packageName();
+
+        /**
+         * Output path that files write to.
+         *  if not configured, path will be $basePath/src/main/java/$packagePath
+         *  if configured, path will be $output/$packagePath
+         */
+        Optional<List<String>> output();
     }
 }
