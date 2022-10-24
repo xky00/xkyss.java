@@ -53,4 +53,19 @@
         </dependencies>
     </dependencyManagement>
 
+    <profiles>
+        <profile>
+            <id>nexus</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>maven-snapshots</id>
+                    <url>http://192.168.0.54:8899/ajco/repository/maven-snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>maven-releases</id>
+                    <url>http://192.168.0.54:8899/ajco/repository/maven-releases/</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 </project>
