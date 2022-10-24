@@ -1,7 +1,6 @@
 package com.xkyss.experimental.naming;
 
 import com.xkyss.core.stream.Collectorx;
-import com.xkyss.core.util.Arrayx;
 import com.xkyss.core.util.Stringx;
 
 import java.util.Arrays;

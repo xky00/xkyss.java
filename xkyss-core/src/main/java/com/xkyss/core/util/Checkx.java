@@ -8,7 +8,13 @@ import java.util.function.Supplier;
  * @author xkyii
  * Create on 2021/07/29.
  */
+@SuppressWarnings("ALL")
 public class Checkx {
+
+    private static final String DEFAULT_EXCLUSIVE_BETWEEN_EX_MESSAGE =
+        "The value %s is not in the specified exclusive range of %s to %s";
+    private static final String DEFAULT_INCLUSIVE_BETWEEN_EX_MESSAGE =
+        "The value %s is not in the specified inclusive range of %s to %s";
 
     /**
      * 断言是否为真，如果为 {@code false} 抛出给定的异常<br>
@@ -340,5 +346,161 @@ public class Checkx {
      */
     public static <E, T extends Iterable<E>> T notEmpty(T collection) throws IllegalArgumentException {
         return notEmpty(collection, "[Assertion failed] - this collection must not be empty: it must contain at least 1 element");
+    }
+
+    /**
+     * 断言给定数组非空
+     * 并使用指定的函数获取错误信息返回
+     * <pre class="code">
+     * Assert.notEmpty(collection, ()-&gt;{
+     *      // to query relation message
+     *      return new IllegalArgumentException("relation message to return");
+     *  });
+     * </pre>
+     *
+     * @param <E>           集合元素类型
+     * @param <X>           异常类型
+     * @param collection    被检查的集合
+     * @param errorSupplier 错误抛出异常附带的消息生产接口
+     * @return 非空集合
+     * @throws X if the collection is {@code null} or has no elements
+     */
+    public static <E, X extends Throwable> int[] notEmpty(int[] collection, Supplier<X> errorSupplier) throws X {
+        if (Arrayx.isEmpty(collection)) {
+            throw errorSupplier.get();
+        }
+        return collection;
+    }
+
+    /**
+     * 断言给定数组非空
+     *
+     * <pre class="code">
+     * Assert.notEmpty(collection, "Collection must have elements");
+     * </pre>
+     *
+     * @param <E>              集合元素类型
+     * @param collection       被检查的集合
+     * @param errorMsgTemplate 异常时的消息模板
+     * @param params           参数列表
+     * @return 非空集合
+     * @throws IllegalArgumentException if the collection is {@code null} or has no elements
+     */
+    public static <E> int[] notEmpty(int[] collection, String errorMsgTemplate, Object... params) throws IllegalArgumentException {
+        return notEmpty(collection, () -> new IllegalArgumentException(String.format(errorMsgTemplate, params)));
+    }
+
+    /**
+     * 断言给定数组非空
+     *
+     * <pre class="code">
+     * Assert.notEmpty(collection);
+     * </pre>
+     *
+     * @param <E>        集合元素类型
+     * @param collection 被检查的集合
+     * @return 被检查集合
+     * @throws IllegalArgumentException if the collection is {@code null} or has no elements
+     */
+    public static <E> int[] notEmpty(int[] collection) throws IllegalArgumentException {
+        return notEmpty(collection, "[Assertion failed] - this collection must not be empty: it must contain at least 1 element");
+    }
+
+    public static <T> void inclusiveBetween(final T start, final T end, final Comparable<T> value) {
+        // TODO when breaking BC, consider returning value
+        if (value.compareTo(start) < 0 || value.compareTo(end) > 0) {
+            throw new IllegalArgumentException(String.format(DEFAULT_INCLUSIVE_BETWEEN_EX_MESSAGE, value, start, end));
+        }
+    }
+
+    public static <T> void inclusiveBetween(final T start, final T end, final Comparable<T> value, final String message, final Object... values) {
+        // TODO when breaking BC, consider returning value
+        if (value.compareTo(start) < 0 || value.compareTo(end) > 0) {
+            throw new IllegalArgumentException(getMessage(message, values));
+        }
+    }
+
+    @SuppressWarnings("boxing")
+    public static void inclusiveBetween(final long start, final long end, final long value) {
+        // TODO when breaking BC, consider returning value
+        if (value < start || value > end) {
+            throw new IllegalArgumentException(String.format(DEFAULT_INCLUSIVE_BETWEEN_EX_MESSAGE, value, start, end));
+        }
+    }
+
+    public static void inclusiveBetween(final long start, final long end, final long value, final String message) {
+        // TODO when breaking BC, consider returning value
+        if (value < start || value > end) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    @SuppressWarnings("boxing")
+    public static void inclusiveBetween(final double start, final double end, final double value) {
+        // TODO when breaking BC, consider returning value
+        if (value < start || value > end) {
+            throw new IllegalArgumentException(String.format(DEFAULT_INCLUSIVE_BETWEEN_EX_MESSAGE, value, start, end));
+        }
+    }
+
+    public static void inclusiveBetween(final double start, final double end, final double value, final String message) {
+        // TODO when breaking BC, consider returning value
+        if (value < start || value > end) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static <T> void exclusiveBetween(final T start, final T end, final Comparable<T> value) {
+        // TODO when breaking BC, consider returning value
+        if (value.compareTo(start) <= 0 || value.compareTo(end) >= 0) {
+            throw new IllegalArgumentException(String.format(DEFAULT_EXCLUSIVE_BETWEEN_EX_MESSAGE, value, start, end));
+        }
+    }
+
+    public static <T> void exclusiveBetween(final T start, final T end, final Comparable<T> value, final String message, final Object... values) {
+        // TODO when breaking BC, consider returning value
+        if (value.compareTo(start) <= 0 || value.compareTo(end) >= 0) {
+            throw new IllegalArgumentException(getMessage(message, values));
+        }
+    }
+
+    @SuppressWarnings("boxing")
+    public static void exclusiveBetween(final long start, final long end, final long value) {
+        // TODO when breaking BC, consider returning value
+        if (value <= start || value >= end) {
+            throw new IllegalArgumentException(String.format(DEFAULT_EXCLUSIVE_BETWEEN_EX_MESSAGE, value, start, end));
+        }
+    }
+
+    public static void exclusiveBetween(final long start, final long end, final long value, final String message) {
+        // TODO when breaking BC, consider returning value
+        if (value <= start || value >= end) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    @SuppressWarnings("boxing")
+    public static void exclusiveBetween(final double start, final double end, final double value) {
+        // TODO when breaking BC, consider returning value
+        if (value <= start || value >= end) {
+            throw new IllegalArgumentException(String.format(DEFAULT_EXCLUSIVE_BETWEEN_EX_MESSAGE, value, start, end));
+        }
+    }
+
+    public static void exclusiveBetween(final double start, final double end, final double value, final String message) {
+        // TODO when breaking BC, consider returning value
+        if (value <= start || value >= end) {
+            throw new IllegalArgumentException(message);
+        }
+    }
+
+    public static void isFinite(Double value) {
+        if (Double.isNaN(value) || Double.isInfinite(value)) {
+            throw new IllegalArgumentException(String.format("Number %d should be finite (non-infinite, non-nan).", value));
+        }
+    }
+
+    private static String getMessage(final String message, final Object... values) {
+        return Arrayx.isEmpty(values) ? message : String.format(message, values);
     }
 }
