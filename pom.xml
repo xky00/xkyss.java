@@ -21,6 +21,7 @@
         <module>xkyss-core</module>
         <module>xkyss-experimental</module>
         <module>xkyss-mocky</module>
+        <module>xkyss-json</module>
     </modules>
 
     <dependencies>
