@@ -1,4 +1,4 @@
-package com.xkyss.mocky.units.types;
+package com.xkyss.mocky.unit.types;
 
 import com.xkyss.core.util.Checkx;
 import com.xkyss.mocky.abstraction.MockUnit;
