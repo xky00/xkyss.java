@@ -36,7 +36,6 @@
             <artifactId>jackson-databind</artifactId>
             <!--suppress MavenPackageUpdate -->
             <version>${jackson-version}</version>
-            <optional>true</optional>
         </dependency>
     </dependencies>
 
