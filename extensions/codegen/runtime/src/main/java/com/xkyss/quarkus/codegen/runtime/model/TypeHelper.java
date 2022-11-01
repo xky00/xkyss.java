@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.Date;
 
+@SuppressWarnings("DuplicateBranchesInSwitch")
 public class TypeHelper {
 
     public static String javaTypeOf(ColumnType type) {
@@ -26,8 +27,11 @@ public class TypeHelper {
             case VarChar: return String.class.getName();
 //            case LongVarChar: return LongVarChar;
             case Date: return Date.class.getName();
-            case Time: return Time.class.getName();
-            case TimeStamp: return Timestamp.class.getName();
+            // 与常规的Mysql-Java类型对应不一致
+            case Time: return Date.class.getName();
+            case TimeStamp: return Date.class.getName();
+//            case Time: return Time.class.getName();
+//            case TimeStamp: return Timestamp.class.getName();
             default: return "Unknown";
         }
     }
@@ -50,8 +54,11 @@ public class TypeHelper {
             case VarChar: return String.class.getSimpleName();
 //            case LongVarChar: return LongVarChar;
             case Date: return Date.class.getSimpleName();
-            case Time: return Time.class.getSimpleName();
-            case TimeStamp: return Timestamp.class.getSimpleName();
+            // 与常规的Mysql-Java类型对应不一致
+            case Time: return Date.class.getSimpleName();
+            case TimeStamp: return Date.class.getSimpleName();
+//            case Time: return Time.class.getSimpleName();
+//            case TimeStamp: return Timestamp.class.getSimpleName();
             default: return "Unknown";
         }
     }

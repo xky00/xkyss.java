@@ -76,7 +76,7 @@ public class Table {
 
     public void setMatchedName(String matchedName) {
         this.matchedName = matchedName;
-        this.nameConverter = Converter.fromAuto(this.matchedName);
+        this.nameConverter = Converter.fromMacro(this.matchedName);
     }
 
     public Converter getNameConverter() {

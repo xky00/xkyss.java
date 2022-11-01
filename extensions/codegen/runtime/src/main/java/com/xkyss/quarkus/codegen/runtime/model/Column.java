@@ -63,10 +63,10 @@ public class Column {
     }
 
     public String nameCamel() {
-        return Converter.fromAuto(name).toCamel();
+        return Converter.fromMacro(name).toCamel();
     }
 
     public String namePascal() {
-        return Converter.fromAuto(name).toPascal();
+        return Converter.fromMacro(name).toPascal();
     }
 }
