@@ -59,18 +59,18 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
 
         @Override
         public Optional<String> template() {
-            return config.template().isPresent() ? config.template() : Optional.of(config.name());
+            return config.template().isPresent() ? fixDefault(config.template()) : Optional.of(config.name());
         }
 
         @Override
         public Optional<String> relativePackage() {
-            return config.relativePackage().isPresent() ? config.relativePackage() : Optional.of(config.name());
+            return config.relativePackage().isPresent() ? fixDefault(config.relativePackage()) : Optional.of(config.name());
         }
 
         @Override
         public Optional<String> postfix() {
             return config.postfix().isPresent()
-                ? config.postfix()
+                ? fixDefault(config.postfix())
                 : Optional.of(Converter.fromAuto(config.name()).toPascal());
         }
 
@@ -82,6 +82,17 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
         @Override
         public Optional<List<String>> dependencies() {
             return config.dependencies();
+        }
+
+        private Optional<String> fixDefault(Optional<String> op) {
+            if (op.isEmpty()) {
+                return op;
+            }
+            String value = op.get();
+            if (value.equals(DEFAULT)) {
+                return Optional.of(DEFAULT);
+            }
+            return op;
         }
     }
 

@@ -59,6 +59,8 @@ public interface CodegenConfig {
 
     interface TargetConfig {
 
+        String DEFAULT = "<default>";
+
         /**
          * Target name
          */
