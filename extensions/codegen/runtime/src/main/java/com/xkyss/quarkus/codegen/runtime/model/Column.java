@@ -58,15 +58,23 @@ public class Column {
         this.remarks = remarks;
     }
 
-    public String javaType() {
+    public String getJavaType() {
+        return TypeHelper.javaTypeOf(type);
+    }
+
+    public String getJavaSimpleType() {
         return TypeHelper.javaSimpleTypeOf(type);
     }
 
-    public String nameCamel() {
+    public String getNameCamel() {
         return Converter.fromMacro(name).toCamel();
     }
 
-    public String namePascal() {
+    public String getNamePascal() {
         return Converter.fromMacro(name).toPascal();
+    }
+
+    public String getNameMacro() {
+        return Converter.fromMacro(name).toMacro();
     }
 }

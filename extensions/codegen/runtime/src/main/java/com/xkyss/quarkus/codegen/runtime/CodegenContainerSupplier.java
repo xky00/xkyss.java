@@ -70,7 +70,7 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
 
         @Override
         public Optional<String> postfix() {
-            return config.postfix().isPresent() ? config.postfix() : Optional.of(Converter.fromAuto(config.name()).toPascal());
+            return config.postfix().isPresent() ? config.postfix() : Optional.of("");
         }
 
         @Override

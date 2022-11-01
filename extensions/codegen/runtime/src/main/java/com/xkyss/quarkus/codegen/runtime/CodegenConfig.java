@@ -78,7 +78,6 @@ public interface CodegenConfig {
         /**
          * postfix
          */
-        @WithConverter(StringConverter.class)
         Optional<String> postfix();
 
         /**
@@ -125,18 +124,4 @@ public interface CodegenConfig {
          */
         Optional<List<String>> output();
     }
-
-
-    final class StringConverter implements Converter<Optional<String>> {
-
-        @Override
-        public Optional<String> convert(String s) {
-            if (s == null) {
-                return Optional.empty();
-            }
-
-            return Optional.of(s.trim());
-        }
-    }
-
 }

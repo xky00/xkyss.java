@@ -37,11 +37,6 @@ public class Table {
      */
     private List<Column> columns = new ArrayList<>();
 
-    /**
-     * 表名转换器
-     */
-    private Converter nameConverter = Converter.EMPTY;
-
     public String getCatalog() {
         return catalog;
     }
@@ -62,8 +57,16 @@ public class Table {
         return name;
     }
 
+    public String getNameCamel() {
+        return Converter.fromMacro(matchedName).toCamel();
+    }
+
     public String getNamePascal() {
-        return nameConverter.toPascal();
+        return Converter.fromMacro(matchedName).toPascal();
+    }
+
+    public String getNameMacro() {
+        return Converter.fromMacro(matchedName).toMacro();
     }
 
     public void setName(String name) {
@@ -76,15 +79,6 @@ public class Table {
 
     public void setMatchedName(String matchedName) {
         this.matchedName = matchedName;
-        this.nameConverter = Converter.fromMacro(this.matchedName);
-    }
-
-    public Converter getNameConverter() {
-        return nameConverter;
-    }
-
-    public void setNameConverter(Converter nameConverter) {
-        this.nameConverter = nameConverter;
     }
 
     public String getRemarks() {
