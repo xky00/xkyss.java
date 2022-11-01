@@ -1,5 +1,7 @@
 package com.xkyss.quarkus.codegen.runtime.model;
 
+import com.xkyss.experimental.naming.Converter;
+
 public class Column {
     private String name;
     private ColumnType type;
@@ -54,5 +56,17 @@ public class Column {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String javaType() {
+        return TypeHelper.javaSimpleTypeOf(type);
+    }
+
+    public String nameCamel() {
+        return Converter.fromAuto(name).toCamel();
+    }
+
+    public String namePascal() {
+        return Converter.fromAuto(name).toPascal();
     }
 }
