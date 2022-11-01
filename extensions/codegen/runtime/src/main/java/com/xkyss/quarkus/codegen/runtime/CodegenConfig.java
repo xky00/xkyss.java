@@ -3,6 +3,8 @@ package com.xkyss.quarkus.codegen.runtime;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.WithConverter;
+import org.eclipse.microprofile.config.spi.Converter;
 
 import java.util.List;
 import java.util.Optional;
@@ -58,9 +60,6 @@ public interface CodegenConfig {
     }
 
     interface TargetConfig {
-
-        String DEFAULT = "<default>";
-
         /**
          * Target name
          */
@@ -79,6 +78,7 @@ public interface CodegenConfig {
         /**
          * postfix
          */
+        @WithConverter(StringConverter.class)
         Optional<String> postfix();
 
         /**
@@ -115,4 +115,18 @@ public interface CodegenConfig {
          */
         Optional<List<String>> output();
     }
+
+
+    final class StringConverter implements Converter<Optional<String>> {
+
+        @Override
+        public Optional<String> convert(String s) {
+            if (s == null) {
+                return Optional.empty();
+            }
+
+            return Optional.of(s.trim());
+        }
+    }
+
 }

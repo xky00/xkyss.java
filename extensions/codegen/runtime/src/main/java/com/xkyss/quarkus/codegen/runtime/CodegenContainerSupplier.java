@@ -2,6 +2,7 @@ package com.xkyss.quarkus.codegen.runtime;
 
 import com.xkyss.core.util.Listx;
 import com.xkyss.experimental.naming.Converter;
+import io.smallrye.config.common.AbstractDelegatingConverter;
 import org.jboss.logging.Logger;
 
 import java.util.*;
@@ -59,19 +60,17 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
 
         @Override
         public Optional<String> template() {
-            return config.template().isPresent() ? fixDefault(config.template()) : Optional.of(config.name());
+            return config.template().isPresent() ? config.template() : Optional.of(config.name());
         }
 
         @Override
         public Optional<String> relativePackage() {
-            return config.relativePackage().isPresent() ? fixDefault(config.relativePackage()) : Optional.of(config.name());
+            return config.relativePackage().isPresent() ? config.relativePackage() : Optional.of(config.name());
         }
 
         @Override
         public Optional<String> postfix() {
-            return config.postfix().isPresent()
-                ? fixDefault(config.postfix())
-                : Optional.of(Converter.fromAuto(config.name()).toPascal());
+            return config.postfix().isPresent() ? config.postfix() : Optional.of(config.name());
         }
 
         @Override
@@ -82,17 +81,6 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
         @Override
         public Optional<List<String>> dependencies() {
             return config.dependencies();
-        }
-
-        private Optional<String> fixDefault(Optional<String> op) {
-            if (op.isEmpty()) {
-                return op;
-            }
-            String value = op.get();
-            if (value.equals(DEFAULT)) {
-                return Optional.of(DEFAULT);
-            }
-            return op;
         }
     }
 
