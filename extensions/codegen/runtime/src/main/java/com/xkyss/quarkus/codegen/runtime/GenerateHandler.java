@@ -112,6 +112,9 @@ public class GenerateHandler extends DevConsolePostHandler {
         String s = renderer.apply(target.template().get(), templateItems);
 
         List<Path> targetPaths = getPaths(table, generator, target);
+        for (Path p: targetPaths) {
+
+        }
 
         // 写入Target文件
         log.info(s);
@@ -121,6 +124,7 @@ public class GenerateHandler extends DevConsolePostHandler {
 //        }
     }
 
+    @SuppressWarnings("OptionalGetWithoutIsPresent")
     private List<Path> getPaths(Table table, CodegenConfig.GenerateConfig generator, CodegenConfig.TargetConfig target) {
 
         Path userPath = Paths.get(System.getProperty("user.dir"));
@@ -135,8 +139,8 @@ public class GenerateHandler extends DevConsolePostHandler {
             Path p = userPath.resolve("src/main/java").resolve(packagePath).resolve(relativePath);
             //noinspection DuplicatedCode
             try {
-                Files.createDirectories(p);
                 Path f = p.resolve(String.format("%s%s", table.getNamePascal(), target.postfix().get()));
+                Files.createDirectories(f.getParent());
                 log.infof("Target文件: %s", f.toString());
                 paths.add(f);
             }
@@ -147,19 +151,19 @@ public class GenerateHandler extends DevConsolePostHandler {
         else {
             log.infof("基础目录为: %s", basePath.toString());
             for (String s: generator.output().get()) {
-                Path p = basePath.resolve(s).resolve(packagePath).resolve(relativePath);
+                Path ps = Paths.get(s);
+                ps = ps.isAbsolute() ? ps : basePath.resolve(s);
+                Path p = ps.resolve(packagePath).resolve(relativePath);
                 //noinspection DuplicatedCode
                 try {
-                    Files.createDirectories(p);
+                    Path f = p.resolve(String.format("%s%s", table.getNamePascal(), target.postfix().get()));
+                    Files.createDirectories(f.getParent());
+                    log.infof("Target文件: %s", f.toString());
+                    paths.add(f);
                 }
                 catch (Throwable t) {
                     log.warnf("解析输出路径失败: %s", p.toString());
-                    continue;
                 }
-
-                Path f = p.resolve(String.format("%s%s", table.getNamePascal(), target.postfix().get()));
-                log.infof("Target文件: %s", f.toString());
-                paths.add(f);
             }
 
         }

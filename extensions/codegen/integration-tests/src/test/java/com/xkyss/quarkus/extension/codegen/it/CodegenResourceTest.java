@@ -143,6 +143,14 @@ public class CodegenResourceTest {
         Files.createDirectories(q);
     }
 
+    @Test
+    public void test_path_02() {
+        Path p = Paths.get("E:/xk/Code/zyaj/jwt_v3/ydjwv3/trunk/working/gits/Yfst/quarkus/yfst-common");
+        Assertions.assertTrue(p.isAbsolute());
+        Path p2 = Paths.get("a/b/c");
+        Assertions.assertFalse(p2.isAbsolute());
+    }
+
     class Table {
         public String name;
         public String schema;
