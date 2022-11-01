@@ -14,8 +14,10 @@ import io.vertx.core.MultiMap;
 import io.vertx.ext.web.RoutingContext;
 import org.jboss.logging.Logger;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -110,18 +112,17 @@ public class GenerateHandler extends DevConsolePostHandler {
         templateItems.put("source", source);
         templateItems.put("target", target);
         String s = renderer.apply(target.template().get(), templateItems);
-
-        List<Path> targetPaths = getPaths(table, generator, target);
-        for (Path p: targetPaths) {
-
-        }
+        log.info(s);
 
         // 写入Target文件
-        log.info(s);
-//        try (BufferedWriter writer = Files.newBufferedWriter(targetFile, StandardCharsets.UTF_8)) {
-//            writer.write(s, 0, s.length());
-//            writer.flush();
-//        }
+        List<Path> targetPaths = getPaths(table, generator, target);
+        for (Path p: targetPaths) {
+            try (BufferedWriter writer = Files.newBufferedWriter(p, StandardCharsets.UTF_8)) {
+                writer.write(s, 0, s.length());
+                writer.flush();
+            }
+        }
+
     }
 
     @SuppressWarnings("OptionalGetWithoutIsPresent")
@@ -139,7 +140,7 @@ public class GenerateHandler extends DevConsolePostHandler {
             Path p = userPath.resolve("src/main/java").resolve(packagePath).resolve(relativePath);
             //noinspection DuplicatedCode
             try {
-                Path f = p.resolve(String.format("%s%s", table.getNamePascal(), target.postfix().get()));
+                Path f = p.resolve(String.format("%s%s.%s", table.getNamePascal(), target.postfix().get(), target.fileExt()));
                 Files.createDirectories(f.getParent());
                 log.infof("Target文件: %s", f.toString());
                 paths.add(f);
@@ -156,7 +157,7 @@ public class GenerateHandler extends DevConsolePostHandler {
                 Path p = ps.resolve(packagePath).resolve(relativePath);
                 //noinspection DuplicatedCode
                 try {
-                    Path f = p.resolve(String.format("%s%s", table.getNamePascal(), target.postfix().get()));
+                    Path f = p.resolve(String.format("%s%s.%s", table.getNamePascal(), target.postfix().get(), target.fileExt()));
                     Files.createDirectories(f.getParent());
                     log.infof("Target文件: %s", f.toString());
                     paths.add(f);
