@@ -178,4 +178,150 @@ public class Arrayx extends PrimitiveArrayx {
         }
         return array;
     }
+
+    /**
+     * Converts an array of primitive booleans to objects.
+     *
+     * <p>This method returns {@code null} for a {@code null} input array.</p>
+     *
+     * @param array  a {@code boolean} array
+     * @return a {@link Boolean} array, {@code null} if null array input
+     */
+    public static Boolean[] toObject(final boolean[] array) {
+        if (array == null) {
+            return null;
+        }
+        if (array.length == 0) {
+            return EMPTY_BOOLEAN_OBJECT_ARRAY;
+        }
+        final Boolean[] result = new Boolean[array.length];
+        return setAll(result, i -> array[i] ? Boolean.TRUE : Boolean.FALSE);
+    }
+
+    /**
+     * Converts an array of primitive bytes to objects.
+     *
+     * <p>This method returns {@code null} for a {@code null} input array.</p>
+     *
+     * @param array  a {@code byte} array
+     * @return a {@link Byte} array, {@code null} if null array input
+     */
+    public static Byte[] toObject(final byte[] array) {
+        if (array == null) {
+            return null;
+        }
+        if (array.length == 0) {
+            return EMPTY_BYTE_OBJECT_ARRAY;
+        }
+        return setAll(new Byte[array.length], i -> Byte.valueOf(array[i]));
+    }
+
+    /**
+     * Converts an array of primitive chars to objects.
+     *
+     * <p>This method returns {@code null} for a {@code null} input array.</p>
+     *
+     * @param array a {@code char} array
+     * @return a {@link Character} array, {@code null} if null array input
+     */
+    public static Character[] toObject(final char[] array) {
+        if (array == null) {
+            return null;
+        }
+        if (array.length == 0) {
+            return EMPTY_CHARACTER_OBJECT_ARRAY;
+        }
+        return setAll(new Character[array.length], i -> Character.valueOf(array[i]));
+    }
+
+    /**
+     * Converts an array of primitive doubles to objects.
+     *
+     * <p>This method returns {@code null} for a {@code null} input array.</p>
+     *
+     * @param array  a {@code double} array
+     * @return a {@link Double} array, {@code null} if null array input
+     */
+    public static Double[] toObject(final double[] array) {
+        if (array == null) {
+            return null;
+        }
+        if (array.length == 0) {
+            return EMPTY_DOUBLE_OBJECT_ARRAY;
+        }
+        return setAll(new Double[array.length], i -> Double.valueOf(array[i]));
+    }
+
+    /**
+     * Converts an array of primitive floats to objects.
+     *
+     * <p>This method returns {@code null} for a {@code null} input array.</p>
+     *
+     * @param array  a {@code float} array
+     * @return a {@link Float} array, {@code null} if null array input
+     */
+    public static Float[] toObject(final float[] array) {
+        if (array == null) {
+            return null;
+        }
+        if (array.length == 0) {
+            return EMPTY_FLOAT_OBJECT_ARRAY;
+        }
+        return setAll(new Float[array.length], i -> Float.valueOf(array[i]));
+    }
+
+    /**
+     * Converts an array of primitive ints to objects.
+     *
+     * <p>This method returns {@code null} for a {@code null} input array.</p>
+     *
+     * @param array  an {@code int} array
+     * @return an {@link Integer} array, {@code null} if null array input
+     */
+    public static Integer[] toObject(final int[] array) {
+        if (array == null) {
+            return null;
+        }
+        if (array.length == 0) {
+            return EMPTY_INTEGER_OBJECT_ARRAY;
+        }
+        return setAll(new Integer[array.length], i -> Integer.valueOf(array[i]));
+    }
+
+    /**
+     * Converts an array of primitive longs to objects.
+     *
+     * <p>This method returns {@code null} for a {@code null} input array.</p>
+     *
+     * @param array  a {@code long} array
+     * @return a {@link Long} array, {@code null} if null array input
+     */
+    public static Long[] toObject(final long[] array) {
+        if (array == null) {
+            return null;
+        }
+        if (array.length == 0) {
+            return EMPTY_LONG_OBJECT_ARRAY;
+        }
+        return setAll(new Long[array.length], i -> Long.valueOf(array[i]));
+    }
+
+    /**
+     * Converts an array of primitive shorts to objects.
+     *
+     * <p>This method returns {@code null} for a {@code null} input array.</p>
+     *
+     * @param array  a {@code short} array
+     * @return a {@link Short} array, {@code null} if null array input
+     */
+    public static Short[] toObject(final short[] array) {
+        if (array == null) {
+            return null;
+        }
+        if (array.length == 0) {
+            return EMPTY_SHORT_OBJECT_ARRAY;
+        }
+        return setAll(new Short[array.length], i -> Short.valueOf(array[i]));
+    }
+
 }

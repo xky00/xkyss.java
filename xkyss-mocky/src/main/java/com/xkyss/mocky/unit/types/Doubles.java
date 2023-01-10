@@ -44,4 +44,16 @@ public class Doubles implements MockUnit<Double> {
             return result;
         };
     }
+
+    public MockUnit<Double> bound(double bound) {
+        return range(0.0, bound);
+    }
+
+    public MockUnit<Double> from(double[] alphabet) {
+        Checkx.notEmpty(alphabet, "alphabet");
+        return () -> {
+            int idx = random.nextInt(alphabet.length);
+            return alphabet[idx];
+        };
+    }
 }
