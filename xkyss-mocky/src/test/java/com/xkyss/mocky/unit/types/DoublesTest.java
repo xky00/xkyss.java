@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.xkyss.mocky.constants.MockTestConst.TEST_COUNT;
-import static java.util.Arrays.asList;
 
 public class DoublesTest {
 

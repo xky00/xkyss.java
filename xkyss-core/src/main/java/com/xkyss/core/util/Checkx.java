@@ -464,6 +464,64 @@ public class Checkx {
         return notEmpty(collection, "[Assertion failed] - this collection must not be empty: it must contain at least 1 element");
     }
 
+    /**
+     * 断言给定数组非空
+     * 并使用指定的函数获取错误信息返回
+     * <pre class="code">
+     * Assert.notEmpty(collection, ()-&gt;{
+     *      // to query relation message
+     *      return new IllegalArgumentException("relation message to return");
+     *  });
+     * </pre>
+     *
+     * @param <E>           集合元素类型
+     * @param <X>           异常类型
+     * @param collection    被检查的集合
+     * @param errorSupplier 错误抛出异常附带的消息生产接口
+     * @return 非空集合
+     * @throws X if the collection is {@code null} or has no elements
+     */
+    public static <E, X extends Throwable> float[] notEmpty(float[] collection, Supplier<X> errorSupplier) throws X {
+        if (Arrayx.isEmpty(collection)) {
+            throw errorSupplier.get();
+        }
+        return collection;
+    }
+
+    /**
+     * 断言给定数组非空
+     *
+     * <pre class="code">
+     * Assert.notEmpty(collection, "Collection must have elements");
+     * </pre>
+     *
+     * @param <E>              集合元素类型
+     * @param collection       被检查的集合
+     * @param errorMsgTemplate 异常时的消息模板
+     * @param params           参数列表
+     * @return 非空集合
+     * @throws IllegalArgumentException if the collection is {@code null} or has no elements
+     */
+    public static <E> float[] notEmpty(float[] collection, String errorMsgTemplate, Object... params) throws IllegalArgumentException {
+        return notEmpty(collection, () -> new IllegalArgumentException(String.format(errorMsgTemplate, params)));
+    }
+
+    /**
+     * 断言给定数组非空
+     *
+     * <pre class="code">
+     * Assert.notEmpty(collection);
+     * </pre>
+     *
+     * @param <E>        集合元素类型
+     * @param collection 被检查的集合
+     * @return 被检查集合
+     * @throws IllegalArgumentException if the collection is {@code null} or has no elements
+     */
+    public static <E> float[] notEmpty(float[] collection) throws IllegalArgumentException {
+        return notEmpty(collection, "[Assertion failed] - this collection must not be empty: it must contain at least 1 element");
+    }
+
     public static <T> void inclusiveBetween(final T start, final T end, final Comparable<T> value) {
         // TODO when breaking BC, consider returning value
         if (value.compareTo(start) < 0 || value.compareTo(end) > 0) {
@@ -554,6 +612,12 @@ public class Checkx {
 
     public static void isFinite(Double value) {
         if (Double.isNaN(value) || Double.isInfinite(value)) {
+            throw new IllegalArgumentException(String.format("Number %d should be finite (non-infinite, non-nan).", value));
+        }
+    }
+
+    public static void isFinite(Float value) {
+        if (Float.isNaN(value) || Float.isInfinite(value)) {
             throw new IllegalArgumentException(String.format("Number %d should be finite (non-infinite, non-nan).", value));
         }
     }
