@@ -1,5 +1,6 @@
 package com.xkyss.core.util;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -210,7 +211,7 @@ public class Checkx {
      * @throws IllegalArgumentException if the object is {@code null}
      */
     public static <T> T notNull(T object, String errorMsgTemplate, Object... params) throws IllegalArgumentException {
-        return notNull(object, () -> new IllegalArgumentException(String.format(errorMsgTemplate, params)));
+        return notNull(object, () -> new NullPointerException(String.format(errorMsgTemplate, params)));
     }
 
     /**
@@ -268,6 +269,7 @@ public class Checkx {
      * @throws IllegalArgumentException 被检查字符串为空
      */
     public static <T extends CharSequence> T notEmpty(T text, String errorMsgTemplate, Object... params) throws IllegalArgumentException {
+        Objects.requireNonNull(text, () -> String.format(errorMsgTemplate, params));
         return notEmpty(text, () -> new IllegalArgumentException(String.format(errorMsgTemplate, params)));
     }
 
@@ -328,6 +330,7 @@ public class Checkx {
      * @throws IllegalArgumentException if the collection is {@code null} or has no elements
      */
     public static <E, T extends Iterable<E>> T notEmpty(T collection, String errorMsgTemplate, Object... params) throws IllegalArgumentException {
+        Objects.requireNonNull(collection, () -> String.format(errorMsgTemplate, params));
         return notEmpty(collection, () -> new IllegalArgumentException(String.format(errorMsgTemplate, params)));
     }
 
@@ -387,6 +390,7 @@ public class Checkx {
      * @throws IllegalArgumentException if the collection is {@code null} or has no elements
      */
     public static <E> int[] notEmpty(int[] collection, String errorMsgTemplate, Object... params) throws IllegalArgumentException {
+        Objects.requireNonNull(collection, () -> String.format(errorMsgTemplate, params));
         return notEmpty(collection, () -> new IllegalArgumentException(String.format(errorMsgTemplate, params)));
     }
 
@@ -445,6 +449,7 @@ public class Checkx {
      * @throws IllegalArgumentException if the collection is {@code null} or has no elements
      */
     public static <E> double[] notEmpty(double[] collection, String errorMsgTemplate, Object... params) throws IllegalArgumentException {
+        Objects.requireNonNull(collection, () -> String.format(errorMsgTemplate, params));
         return notEmpty(collection, () -> new IllegalArgumentException(String.format(errorMsgTemplate, params)));
     }
 
@@ -503,6 +508,7 @@ public class Checkx {
      * @throws IllegalArgumentException if the collection is {@code null} or has no elements
      */
     public static <E> float[] notEmpty(float[] collection, String errorMsgTemplate, Object... params) throws IllegalArgumentException {
+        Objects.requireNonNull(collection, () -> String.format(errorMsgTemplate, params));
         return notEmpty(collection, () -> new IllegalArgumentException(String.format(errorMsgTemplate, params)));
     }
 
