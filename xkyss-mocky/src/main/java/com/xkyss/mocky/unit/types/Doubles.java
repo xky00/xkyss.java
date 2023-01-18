@@ -5,7 +5,7 @@ import com.xkyss.mocky.abstraction.MockUnit;
 
 import java.util.Random;
 
-import static com.xkyss.mocky.contant.MockConst.*;
+import static com.xkyss.mocky.contant.MockConsts.*;
 import static java.lang.Double.doubleToLongBits;
 import static java.lang.Double.longBitsToDouble;
 

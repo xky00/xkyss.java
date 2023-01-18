@@ -6,7 +6,7 @@ import com.xkyss.mocky.abstraction.MockUnit;
 
 import java.util.Random;
 
-import static com.xkyss.mocky.contant.MockConst.INPUT_PARAMETER_NOT_NULL;
+import static com.xkyss.mocky.contant.MockConsts.INPUT_PARAMETER_NOT_NULL;
 
 public class Strings implements MockUnit<String> {
 
