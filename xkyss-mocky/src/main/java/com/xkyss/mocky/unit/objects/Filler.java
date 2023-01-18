@@ -1,12 +1,13 @@
 package com.xkyss.mocky.unit.objects;
 
-import com.xkyss.core.util.Checkx;
 import com.xkyss.mocky.abstraction.MockUnit;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+
+import static org.apache.commons.lang3.Validate.notNull;
 
 public class Filler<T> implements MockUnit<T> {
 
@@ -16,7 +17,7 @@ public class Filler<T> implements MockUnit<T> {
     private final Map<BiConsumer, MockUnit> setters = new LinkedHashMap<>();
 
     public Filler(Supplier<T> supplier) {
-        Checkx.notNull(supplier, "supplier is null");
+        notNull(supplier, "supplier is null");
         this.supplier = supplier;
     }
 
@@ -29,16 +30,16 @@ public class Filler<T> implements MockUnit<T> {
     }
 
     public <R> Filler<T> setter(BiConsumer<T, R> setter, MockUnit<R> mockUnit) {
-        Checkx.notNull(setter, "setter");
-        Checkx.notNull(mockUnit, "mockUnit");
+        notNull(setter, "setter");
+        notNull(mockUnit, "mockUnit");
 
         setters.put(setter, mockUnit);
         return this;
     }
 
     public <R> Filler<T> constant(BiConsumer<T, R> setter, R constant) {
-        Checkx.notNull(setter, "setter");
-        Checkx.notNull(constant, "constant");
+        notNull(setter, "setter");
+        notNull(constant, "constant");
 
         setters.put(setter, () -> constant);
         return this;

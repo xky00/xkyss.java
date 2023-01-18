@@ -1,11 +1,12 @@
 package com.xkyss.mocky.unit.types;
 
-import com.xkyss.core.util.Checkx;
 import com.xkyss.mocky.abstraction.MockUnit;
+import com.xkyss.mocky.util.Validate;
 
 import java.util.Random;
 
 import static com.xkyss.mocky.contant.MockConsts.*;
+import static org.apache.commons.lang3.Validate.*;
 
 public class Ints implements MockUnit<Integer> {
 
@@ -21,23 +22,23 @@ public class Ints implements MockUnit<Integer> {
     }
 
     public MockUnit<Integer> range(Integer lowerBound, Integer upperBound) {
-        Checkx.notNull(lowerBound, "lowerBound");
-        Checkx.notNull(upperBound, "upperBound");
-        Checkx.isTrue(lowerBound>=0, LOWER_BOUND_BIGGER_THAN_ZERO);
-        Checkx.isTrue(upperBound>0, UPPER_BOUND_BIGGER_THAN_ZERO);
-        Checkx.isTrue(upperBound>lowerBound, UPPER_BOUND_BIGGER_LOWER_BOUND);
+        notNull(lowerBound, "lowerBound");
+        notNull(upperBound, "upperBound");
+        isTrue(lowerBound>=0, LOWER_BOUND_BIGGER_THAN_ZERO);
+        isTrue(upperBound>0, UPPER_BOUND_BIGGER_THAN_ZERO);
+        isTrue(upperBound>lowerBound, UPPER_BOUND_BIGGER_LOWER_BOUND);
 
         return () -> random.nextInt(upperBound - lowerBound) + lowerBound;
     }
 
     public MockUnit<Integer> bound(Integer bound) {
-        Checkx.isTrue(bound > 0, LOWER_BOUND_BIGGER_THAN_ZERO);
+        isTrue(bound > 0, LOWER_BOUND_BIGGER_THAN_ZERO);
 
         return () -> random.nextInt(bound);
     }
 
     public MockUnit<Integer> from(int[] alphabet) {
-        Checkx.notEmpty(alphabet, "alphabet");
+        Validate.notEmpty(alphabet, "alphabet");
         return () -> {
             int idx = random.nextInt(alphabet.length);
             return alphabet[idx];

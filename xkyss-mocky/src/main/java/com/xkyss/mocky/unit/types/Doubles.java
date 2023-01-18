@@ -1,13 +1,16 @@
 package com.xkyss.mocky.unit.types;
 
-import com.xkyss.core.util.Checkx;
 import com.xkyss.mocky.abstraction.MockUnit;
 
 import java.util.Random;
 
 import static com.xkyss.mocky.contant.MockConsts.*;
+import static com.xkyss.mocky.util.Validate.isFinite;
+import static com.xkyss.mocky.util.Validate.notEmpty;
 import static java.lang.Double.doubleToLongBits;
 import static java.lang.Double.longBitsToDouble;
+import static org.apache.commons.lang3.Validate.isTrue;
+import static org.apache.commons.lang3.Validate.notNull;
 
 public class Doubles implements MockUnit<Double> {
 
@@ -25,13 +28,13 @@ public class Doubles implements MockUnit<Double> {
     }
 
     public MockUnit<Double> range(double lowerBound, double upperBound) {
-        Checkx.notNull(lowerBound, "lowerBound");
-        Checkx.notNull(upperBound, "upperBound");
-        Checkx.isFinite(lowerBound);
-        Checkx.isFinite(upperBound);
-        Checkx.isTrue(lowerBound>=0.0, LOWER_BOUND_BIGGER_THAN_ZERO);
-        Checkx.isTrue(upperBound>0.0, UPPER_BOUND_BIGGER_THAN_ZERO);
-        Checkx.isTrue(upperBound>lowerBound, UPPER_BOUND_BIGGER_LOWER_BOUND);
+        notNull(lowerBound, "lowerBound");
+        notNull(upperBound, "upperBound");
+        isFinite(lowerBound);
+        isFinite(upperBound);
+        isTrue(lowerBound>=0.0, LOWER_BOUND_BIGGER_THAN_ZERO);
+        isTrue(upperBound>0.0, UPPER_BOUND_BIGGER_THAN_ZERO);
+        isTrue(upperBound>lowerBound, UPPER_BOUND_BIGGER_LOWER_BOUND);
 
         return () -> {
             // Algorithm implementation from the Java API
@@ -50,7 +53,7 @@ public class Doubles implements MockUnit<Double> {
     }
 
     public MockUnit<Double> from(double[] alphabet) {
-        Checkx.notEmpty(alphabet, "alphabet");
+        notEmpty(alphabet, "alphabet");
         return () -> {
             int idx = random.nextInt(alphabet.length);
             return alphabet[idx];

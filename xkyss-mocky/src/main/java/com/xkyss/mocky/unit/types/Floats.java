@@ -1,11 +1,13 @@
 package com.xkyss.mocky.unit.types;
 
-import com.xkyss.core.util.Checkx;
 import com.xkyss.mocky.abstraction.MockUnit;
+import com.xkyss.mocky.util.Validate;
 
 import java.util.Random;
 
 import static com.xkyss.mocky.contant.MockConsts.*;
+import static com.xkyss.mocky.util.Validate.isFinite;
+import static org.apache.commons.lang3.Validate.*;
 
 
 public class Floats implements MockUnit<Float> {
@@ -21,13 +23,13 @@ public class Floats implements MockUnit<Float> {
     }
 
     public MockUnit<Float> range(float lowerBound, float upperBound) {
-        Checkx.notNull(lowerBound, "lowerBound");
-        Checkx.notNull(upperBound, "upperBound");
-        Checkx.isFinite(lowerBound);
-        Checkx.isFinite(upperBound);
-        Checkx.isTrue(lowerBound>=0.0f, LOWER_BOUND_BIGGER_THAN_ZERO);
-        Checkx.isTrue(upperBound>0.0f, UPPER_BOUND_BIGGER_THAN_ZERO);
-        Checkx.isTrue(upperBound>lowerBound, UPPER_BOUND_BIGGER_LOWER_BOUND);
+        notNull(lowerBound, "lowerBound");
+        notNull(upperBound, "upperBound");
+        isFinite(lowerBound);
+        isFinite(upperBound);
+        isTrue(lowerBound>=0.0f, LOWER_BOUND_BIGGER_THAN_ZERO);
+        isTrue(upperBound>0.0f, UPPER_BOUND_BIGGER_THAN_ZERO);
+        isTrue(upperBound>lowerBound, UPPER_BOUND_BIGGER_LOWER_BOUND);
 
         return () -> random.nextFloat() * (upperBound - lowerBound) + lowerBound;
     }
@@ -37,7 +39,7 @@ public class Floats implements MockUnit<Float> {
     }
 
     public MockUnit<Float> from(float[] alphabet) {
-        Checkx.notEmpty(alphabet, "alphabet");
+        Validate.notEmpty(alphabet, "alphabet");
         return () -> {
             int idx = random.nextInt(alphabet.length);
             return alphabet[idx];

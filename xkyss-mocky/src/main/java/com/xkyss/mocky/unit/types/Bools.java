@@ -1,9 +1,10 @@
 package com.xkyss.mocky.unit.types;
 
-import com.xkyss.core.util.Checkx;
 import com.xkyss.mocky.abstraction.MockUnit;
 
 import java.util.Random;
+
+import static org.apache.commons.lang3.Validate.inclusiveBetween;
 
 public class Bools implements MockUnit<Boolean> {
 
@@ -21,7 +22,7 @@ public class Bools implements MockUnit<Boolean> {
     }
 
     public MockUnit<Boolean> probability(double probability) {
-        Checkx.inclusiveBetween(0.0, 100.0, probability);
+        inclusiveBetween(0.0, 100.0, probability);
         return () -> doubles
             .range(0.0, 100.0)
             .get() < probability;
