@@ -5,7 +5,8 @@ import com.xkyss.mocky.abstraction.MockUnit;
 
 import java.util.Random;
 
-import static com.xkyss.mocky.contant.MockConst.*;
+import static com.xkyss.mocky.contant.MockConsts.*;
+
 
 public class Floats implements MockUnit<Float> {
     private final Random random;
