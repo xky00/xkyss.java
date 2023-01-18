@@ -1,4 +1,4 @@
-package com.xkyss.mocky.util;
+package com.xkyss.core.util;
 
 public class Validate {
     public static void isFinite(Double value) {

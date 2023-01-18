@@ -1,7 +1,7 @@
 package com.xkyss.mocky.unit.types;
 
+import com.xkyss.core.util.Validate;
 import com.xkyss.mocky.abstraction.MockUnit;
-import com.xkyss.mocky.util.Validate;
 
 import java.util.Random;
 

@@ -10,10 +10,14 @@
     <parent>
         <artifactId>xkyss</artifactId>
         <groupId>com.xkyss</groupId>
-        <version>2022.0.2</version>
+        <version>2023.1.1</version>
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>com.xkyss</groupId>
+            <artifactId>xkyss-core</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -33,6 +37,19 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>org.apache.commons:commons-lang3</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/maven/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <artifactSet>
+                                <includes>
+                                    <include>org.apache.commons:commons-lang3</include>
+                                </includes>
+                            </artifactSet>
                             <relocations>
                                 <relocation>
                                     <pattern>org.apache.commons.lang3</pattern>
@@ -47,7 +64,7 @@
             <plugin>
                 <groupId>com.github.wvengen</groupId>
                 <artifactId>proguard-maven-plugin</artifactId>
-                <version>2.6.0</version>
+                <version>${proguard-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -55,16 +72,17 @@
                     </execution>
                 </executions>
                 <configuration>
-<!--                    <obfuscate>true</obfuscate>-->
-<!--                    <attach>true</attach>-->
-<!--                    <injar>classes</injar>-->
-<!--                    <outjar>${project.build.finalName}-pg.jar</outjar>-->
+                    <!--                    <obfuscate>true</obfuscate>-->
+                    <!--                    <attach>true</attach>-->
+                    <!--                    <injar>classes</injar>-->
+                    <!--                    <outjar>${project.build.finalName}-pg.jar</outjar>-->
                     <!-- 配置文件 -->
                     <proguardInclude>${basedir}/proguard.conf</proguardInclude>
                     <!-- 打包maven相关(pom.xml等) -->
                     <addMavenDescriptor>true</addMavenDescriptor>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 

@@ -1,12 +1,12 @@
 package com.xkyss.mocky.unit.types;
 
+import com.xkyss.core.util.Validate;
 import com.xkyss.mocky.abstraction.MockUnit;
-import com.xkyss.mocky.util.Validate;
 
 import java.util.Random;
 
+import static com.xkyss.core.util.Validate.isFinite;
 import static com.xkyss.mocky.contant.MockConsts.*;
-import static com.xkyss.mocky.util.Validate.isFinite;
 import static org.apache.commons.lang3.Validate.*;
 
 

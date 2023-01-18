@@ -10,7 +10,7 @@
     <parent>
         <artifactId>xkyss</artifactId>
         <groupId>com.xkyss</groupId>
-        <version>2022.0.2</version>
+        <version>2023.1.1</version>
     </parent>
 
     <dependencies>

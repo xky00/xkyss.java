@@ -4,9 +4,9 @@ import com.xkyss.mocky.abstraction.MockUnit;
 
 import java.util.Random;
 
+import static com.xkyss.core.util.Validate.isFinite;
+import static com.xkyss.core.util.Validate.notEmpty;
 import static com.xkyss.mocky.contant.MockConsts.*;
-import static com.xkyss.mocky.util.Validate.isFinite;
-import static com.xkyss.mocky.util.Validate.notEmpty;
 import static java.lang.Double.doubleToLongBits;
 import static java.lang.Double.longBitsToDouble;
 import static org.apache.commons.lang3.Validate.isTrue;
