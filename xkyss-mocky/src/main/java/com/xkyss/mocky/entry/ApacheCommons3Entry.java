@@ -6,4 +6,8 @@ public class ApacheCommons3Entry {
     public void used() {
         StringUtils.isEmpty("Hello");
     }
+
+    public static void main(String[] args) {
+        StringUtils.isEmpty("Hello");
+    }
 }

@@ -49,6 +49,28 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <version>2.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>proguard</goal></goals>
+                    </execution>
+                </executions>
+                <configuration>
+<!--                    <obfuscate>true</obfuscate>-->
+<!--                    <attach>true</attach>-->
+<!--                    <injar>classes</injar>-->
+<!--                    <outjar>${project.build.finalName}-pg.jar</outjar>-->
+                    <!-- 配置文件 -->
+                    <proguardInclude>${basedir}/proguard.conf</proguardInclude>
+                    <!-- 打包maven相关(pom.xml等) -->
+                    <addMavenDescriptor>true</addMavenDescriptor>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
