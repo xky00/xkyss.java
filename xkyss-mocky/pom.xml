@@ -72,10 +72,10 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!--                    <obfuscate>true</obfuscate>-->
-                    <!--                    <attach>true</attach>-->
-                    <!--                    <injar>classes</injar>-->
-                    <!--                    <outjar>${project.build.finalName}-pg.jar</outjar>-->
+                    <!-- <obfuscate>true</obfuscate> -->
+                    <!-- <attach>true</attach> -->
+                    <!-- <injar>classes</injar> -->
+                    <!-- <outjar>${project.build.finalName}-pg.jar</outjar> -->
                     <!-- 配置文件 -->
                     <proguardInclude>${basedir}/proguard.conf</proguardInclude>
                     <!-- 打包maven相关(pom.xml等) -->
