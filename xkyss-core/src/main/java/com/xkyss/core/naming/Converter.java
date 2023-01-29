@@ -1,7 +1,8 @@
 package com.xkyss.core.naming;
 
-import com.xkyss.core.stream.Collectorx;
+import com.xkyss.core.util.Collectorx;
 import com.xkyss.core.util.Stringx;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -33,27 +34,27 @@ public class Converter {
     public static Converter fromAuto(String original) {
         Converter c = new Converter();
         c.original = original;
-        if (Stringx.isEmpty(c.original)) {
+        if (StringUtils.isEmpty(c.original)) {
             return c;
         }
 
-        if (Stringx.contains(c.original, SEPARATOR_UNDERSCORE)) {
-            c.words = Stringx.split(c.original, SEPARATOR_UNDERSCORE);
+        if (StringUtils.contains(c.original, SEPARATOR_UNDERSCORE)) {
+            c.words = StringUtils.split(c.original, SEPARATOR_UNDERSCORE);
         }
-        else if (Stringx.contains(c.original, SEPARATOR_DASH)) {
-            c.words = Stringx.split(c.original, SEPARATOR_DASH);
+        else if (StringUtils.contains(c.original, SEPARATOR_DASH)) {
+            c.words = StringUtils.split(c.original, SEPARATOR_DASH);
         }
-        else if (Stringx.contains(c.original, SEPARATOR_DOT)) {
-            c.words = Stringx.split(c.original, SEPARATOR_DOT);
+        else if (StringUtils.contains(c.original, SEPARATOR_DOT)) {
+            c.words = StringUtils.split(c.original, SEPARATOR_DOT);
         }
-        else if (Stringx.contains(c.original, SEPARATOR_SPACE)) {
-            c.words = Stringx.split(c.original, SEPARATOR_SPACE);
+        else if (StringUtils.contains(c.original, SEPARATOR_SPACE)) {
+            c.words = StringUtils.split(c.original, SEPARATOR_SPACE);
         }
-        else if (Stringx.isAllUpperCase(c.original)) {
+        else if (StringUtils.isAllUpperCase(c.original)) {
             c.words = Stringx.splitByLength(c.original, 1);
         }
         else {
-            c.words = Stringx.splitByCharacterTypeCamelCase(c.original);
+            c.words = StringUtils.splitByCharacterTypeCamelCase(c.original);
         }
 
         return c;
@@ -62,11 +63,11 @@ public class Converter {
     private static Converter from(String original, char separator) {
         Converter c = new Converter();
         c.original = original;
-        if (Stringx.isEmpty(c.original)) {
+        if (StringUtils.isEmpty(c.original)) {
             return c;
         }
 
-        c.words = Stringx.split(c.original, separator);
+        c.words = StringUtils.split(c.original, separator);
         return c;
     }
 
@@ -85,22 +86,22 @@ public class Converter {
     public static Converter fromCamel(String original) {
         Converter c = new Converter();
         c.original = original;
-        if (Stringx.isEmpty(c.original)) {
+        if (StringUtils.isEmpty(c.original)) {
             return c;
         }
 
-        c.words = Stringx.splitByCharacterTypeCamelCase(c.original);
+        c.words = StringUtils.splitByCharacterTypeCamelCase(c.original);
         return c;
     }
 
     public static Converter fromPascal(String original) {
         Converter c = new Converter();
         c.original = original;
-        if (Stringx.isEmpty(c.original)) {
+        if (StringUtils.isEmpty(c.original)) {
             return c;
         }
 
-        c.words = Stringx.splitByCharacterTypeCamelCase(c.original);
+        c.words = StringUtils.splitByCharacterTypeCamelCase(c.original);
         return c;
     }
 
@@ -152,8 +153,8 @@ public class Converter {
      */
     public String toAda() {
         return Arrays.stream(this.words)
-            .map(Stringx::toLowerCase)
-            .map(Stringx::capitalize)
+            .map(StringUtils::toRootLowerCase)
+            .map(StringUtils::capitalize)
             .collect(Collectorx.joining(SEPARATOR_UNDERSCORE));
     }
 
@@ -166,8 +167,8 @@ public class Converter {
     public String toCamel() {
         return IntStream.range(0, this.words.length)
             .mapToObj(i -> (i == 0)
-                ? Stringx.toLowerCase(this.words[i])
-                : Stringx.capitalize(Stringx.toLowerCase(this.words[i])))
+                ? StringUtils.toRootLowerCase(this.words[i])
+                : StringUtils.capitalize(StringUtils.toRootLowerCase(this.words[i])))
             .collect(Collectors.joining());
     }
 
@@ -179,7 +180,7 @@ public class Converter {
      */
     public String toCobol() {
         return Arrays.stream(this.words)
-            .map(Stringx::toUpperCase)
+            .map(StringUtils::toRootUpperCase)
             .collect(Collectorx.joining(SEPARATOR_DASH));
     }
 
@@ -191,7 +192,7 @@ public class Converter {
      */
     public String toMacro() {
         return Arrays.stream(this.words)
-            .map(Stringx::toUpperCase)
+            .map(StringUtils::toRootUpperCase)
             .collect(Collectorx.joining(SEPARATOR_UNDERSCORE));
     }
 
@@ -203,7 +204,7 @@ public class Converter {
      */
     public String toDot() {
         return Arrays.stream(this.words)
-            .map(Stringx::toLowerCase)
+            .map(StringUtils::toRootLowerCase)
             .collect(Collectorx.joining(SEPARATOR_DOT));
     }
 
@@ -215,7 +216,7 @@ public class Converter {
      */
     public String toKebab() {
         return Arrays.stream(this.words)
-            .map(Stringx::toLowerCase)
+            .map(StringUtils::toRootLowerCase)
             .collect(Collectorx.joining(SEPARATOR_DASH));
     }
 
@@ -227,7 +228,7 @@ public class Converter {
      */
     public String toLower() {
         return Arrays.stream(this.words)
-            .map(Stringx::toLowerCase)
+            .map(StringUtils::toRootLowerCase)
             .collect(Collectorx.joining(SEPARATOR_SPACE));
     }
 
@@ -239,8 +240,8 @@ public class Converter {
      */
     public String toPascal() {
         return Arrays.stream(this.words)
-            .map(Stringx::toLowerCase)
-            .map(Stringx::capitalize)
+            .map(StringUtils::toRootLowerCase)
+            .map(StringUtils::capitalize)
             .collect(Collectors.joining());
     }
 
@@ -253,8 +254,8 @@ public class Converter {
     public String toSentence() {
         return IntStream.range(0, this.words.length)
             .mapToObj(i -> (i == 0)
-                ? Stringx.capitalize(Stringx.toLowerCase(this.words[i]))
-                : Stringx.toLowerCase(this.words[i]))
+                ? StringUtils.capitalize(StringUtils.toRootLowerCase(this.words[i]))
+                : StringUtils.toRootLowerCase(this.words[i]))
             .collect(Collectorx.joining(SEPARATOR_SPACE));
     }
 
@@ -266,7 +267,7 @@ public class Converter {
      */
     public String toSnake() {
         return Arrays.stream(this.words)
-            .map(Stringx::toLowerCase)
+            .map(StringUtils::toRootLowerCase)
             .collect(Collectorx.joining(SEPARATOR_UNDERSCORE));
     }
 
@@ -278,8 +279,8 @@ public class Converter {
      */
     public String toTitle() {
         return Arrays.stream(this.words)
-            .map(Stringx::toLowerCase)
-            .map(Stringx::capitalize)
+            .map(StringUtils::toRootLowerCase)
+            .map(StringUtils::capitalize)
             .collect(Collectorx.joining(SEPARATOR_SPACE));
     }
 
@@ -291,8 +292,8 @@ public class Converter {
      */
     public String toTrain() {
         return Arrays.stream(this.words)
-            .map(Stringx::toLowerCase)
-            .map(Stringx::capitalize)
+            .map(StringUtils::toRootLowerCase)
+            .map(StringUtils::capitalize)
             .collect(Collectorx.joining(SEPARATOR_DASH));
     }
 
@@ -304,7 +305,7 @@ public class Converter {
      */
     public String toUpper() {
         return Arrays.stream(this.words)
-            .map(Stringx::toUpperCase)
+            .map(StringUtils::toRootUpperCase)
             .collect(Collectorx.joining(SEPARATOR_SPACE));
     }
 }

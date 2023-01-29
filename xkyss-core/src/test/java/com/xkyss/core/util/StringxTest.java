@@ -1,6 +1,5 @@
 package com.xkyss.core.util;
 
-import com.xkyss.core.util.Stringx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -26,22 +25,4 @@ public class StringxTest {
             new String[]{"Are", "You", "Ok"}, Stringx.splitByLength("AreYouOk", 3));
     }
 
-    @Test
-    public void test_splitByCharacterTypeCamelCase() {
-        Assertions.assertArrayEquals(
-            new String[]{}, Stringx.splitByCharacterTypeCamelCase(null));
-        Assertions.assertArrayEquals(
-            new String[]{}, Stringx.splitByCharacterTypeCamelCase(""));
-        Assertions.assertArrayEquals(
-            new String[]{"Are", "You", "Ok"}, Stringx.splitByCharacterTypeCamelCase("AreYouOk"));
-        Assertions.assertArrayEquals(
-            new String[]{"are", "You", "Ok"}, Stringx.splitByCharacterTypeCamelCase("areYouOk"));
-    }
-
-    @Test
-    public void test_capitalize() {
-        Assertions.assertEquals("Cat", Stringx.capitalize("cat"));
-        Assertions.assertEquals("CAt", Stringx.capitalize("cAt"));
-        Assertions.assertEquals("CAt", Stringx.capitalize("CAt"));
-    }
 }
