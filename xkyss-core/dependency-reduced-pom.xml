@@ -33,11 +33,18 @@
                     <exclude>META-INF/maven/**</exclude>
                   </excludes>
                 </filter>
+                <filter>
+                  <artifact>com.google.guava:guava</artifact>
+                  <excludes>
+                    <exclude>META-INF/maven/**</exclude>
+                  </excludes>
+                </filter>
               </filters>
               <artifactSet>
                 <includes>
                   <include>org.apache.commons:commons-lang3</include>
                   <include>org.apache.commons:commons-collections4</include>
+                  <include>com.google.guava:guava</include>
                 </includes>
               </artifactSet>
               <relocations>
@@ -48,6 +55,10 @@
                 <relocation>
                   <pattern>org.apache.commons.collections4</pattern>
                   <shadedPattern>com.xkyss.org.apache.commons.collections4</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>com.google</pattern>
+                  <shadedPattern>com.xkyss.com.google</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>
