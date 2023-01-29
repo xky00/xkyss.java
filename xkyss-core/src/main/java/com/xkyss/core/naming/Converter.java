@@ -1,4 +1,4 @@
-package com.xkyss.experimental.naming;
+package com.xkyss.core.naming;
 
 import com.xkyss.core.stream.Collectorx;
 import com.xkyss.core.util.Stringx;

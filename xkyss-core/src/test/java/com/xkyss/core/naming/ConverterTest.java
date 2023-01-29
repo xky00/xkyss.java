@@ -1,4 +1,4 @@
-package com.xkyss.experimental.naming;
+package com.xkyss.core.naming;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
