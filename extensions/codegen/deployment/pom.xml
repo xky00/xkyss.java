@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.xkyss</groupId>
     <artifactId>xkyss-quarkus-codegen-parent</artifactId>
-    <version>2022.0.5</version>
+    <version>2023.1.1</version>
   </parent>
 
   <dependencies>
@@ -48,7 +48,7 @@
             <path>
               <groupId>io.quarkus</groupId>
               <artifactId>quarkus-extension-processor</artifactId>
-              <version>${quarkus.version}</version>
+              <version>${quarkus.platform.version}</version>
             </path>
           </annotationProcessorPaths>
         </configuration>

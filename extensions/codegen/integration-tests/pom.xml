@@ -8,7 +8,7 @@
   <parent>
     <groupId>com.xkyss</groupId>
     <artifactId>xkyss-quarkus-codegen-parent</artifactId>
-    <version>2022.0.5</version>
+    <version>2023.1.1</version>
   </parent>
 
   <properties>
