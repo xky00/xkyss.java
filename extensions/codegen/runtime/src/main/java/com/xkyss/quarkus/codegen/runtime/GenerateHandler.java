@@ -1,7 +1,7 @@
 package com.xkyss.quarkus.codegen.runtime;
 
 import com.xkyss.core.util.Listx;
-import com.xkyss.core.util.Stringx;
+import com.xkyss.org.apache.commons.collections4.CollectionUtils;
 import com.xkyss.quarkus.codegen.runtime.model.Column;
 import com.xkyss.quarkus.codegen.runtime.model.ColumnType;
 import com.xkyss.quarkus.codegen.runtime.model.Table;
@@ -10,6 +10,7 @@ import io.quarkus.agroal.runtime.DataSources;
 import io.quarkus.dev.console.DevConsoleManager;
 import io.quarkus.devconsole.runtime.spi.DevConsolePostHandler;
 import io.quarkus.qute.runtime.devmode.QuteDevConsoleRecorder;
+import io.quarkus.runtime.util.StringUtil;
 import io.vertx.core.MultiMap;
 import io.vertx.ext.web.RoutingContext;
 import org.jboss.logging.Logger;
@@ -92,7 +93,7 @@ public class GenerateHandler extends DevConsolePostHandler {
         // Target 依赖
         if (target.dependencies().isPresent()) {
             List<String> dependencies = target.dependencies().get();
-            if (!Listx.isNullOrEmpty(dependencies)) {
+            if (!CollectionUtils.isEmpty(dependencies)) {
                 for (String key: dependencies) {
                     CodegenConfig.TargetConfig d = CodegenContainerSupplier.INSTANCE.targets.getOrDefault(key, null);
                     if (d == null) {
@@ -239,7 +240,7 @@ public class GenerateHandler extends DevConsolePostHandler {
             ResultSet rs = connection.getMetaData().getColumns(connection.getCatalog(), table.getSchema(), table.getName(), "%");
             while (rs.next()) {
                 String name = rs.getString("COLUMN_NAME");
-                if (Stringx.isNullOrEmpty(name)) {
+                if (StringUtil.isNullOrEmpty(name)) {
                     continue;
                 }
                 Column column = table.getColumn(name);
@@ -261,7 +262,7 @@ public class GenerateHandler extends DevConsolePostHandler {
             ResultSet rs = connection.getMetaData().getPrimaryKeys(connection.getCatalog(), table.getSchema(), table.getName());
             while (rs.next()) {
                 String name = rs.getString("COLUMN_NAME");
-                if (Stringx.isNullOrEmpty(name)) {
+                if (StringUtil.isNullOrEmpty(name)) {
                     continue;
                 }
                 Column column = table.getColumn(name);

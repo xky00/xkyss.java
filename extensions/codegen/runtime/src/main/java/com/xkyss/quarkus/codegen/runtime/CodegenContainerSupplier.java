@@ -1,8 +1,6 @@
 package com.xkyss.quarkus.codegen.runtime;
 
-import com.xkyss.core.util.Listx;
-import com.xkyss.experimental.naming.Converter;
-import io.smallrye.config.common.AbstractDelegatingConverter;
+import com.xkyss.org.apache.commons.collections4.CollectionUtils;
 import org.jboss.logging.Logger;
 
 import java.util.*;
@@ -27,19 +25,19 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
 
         INSTANCE.clear();
 
-        if (!Listx.isNullOrEmpty(config.source())) {
+        if (!CollectionUtils.isEmpty(config.source())) {
             for (CodegenConfig.SourceConfig c: config.source()) {
                 INSTANCE.sources.put(c.name(), c);
             }
         }
 
-        if (!Listx.isNullOrEmpty(config.target())) {
+        if (!CollectionUtils.isEmpty(config.target())) {
             for (CodegenConfig.TargetConfig c: config.target()) {
                 INSTANCE.targets.put(c.name(), new TargetConfigProxy(c));
             }
         }
 
-        if (!Listx.isNullOrEmpty(config.generate())) {
+        if (!CollectionUtils.isEmpty(config.generate())) {
             INSTANCE.generators.addAll(config.generate());
         }
         log.infof("Source: %d, Target: %d, Generators: %d",

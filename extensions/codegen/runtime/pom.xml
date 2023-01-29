@@ -12,15 +12,6 @@
   </parent>
 
   <dependencies>
-    <!-- xkyss -->
-    <dependency>
-      <groupId>com.xkyss</groupId>
-      <artifactId>xkyss-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.xkyss</groupId>
-      <artifactId>xkyss-experimental</artifactId>
-    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
@@ -60,6 +51,15 @@
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
       <scope>test</scope>
+    </dependency>
+    <!-- xkyss -->
+    <dependency>
+      <groupId>com.xkyss</groupId>
+      <artifactId>xkyss-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.xkyss</groupId>
+      <artifactId>xkyss-mocky</artifactId>
     </dependency>
   </dependencies>
   <build>

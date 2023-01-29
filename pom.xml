@@ -14,7 +14,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <xkyss.version>2022.0.1</xkyss.version>
+        <xkyss.version>2023.1.1</xkyss.version>
     </properties>
 
     <modules>
@@ -30,7 +30,7 @@
             </dependency>
             <dependency>
                 <groupId>com.xkyss</groupId>
-                <artifactId>xkyss-experimental</artifactId>
+                <artifactId>xkyss-mocky</artifactId>
                 <version>${xkyss.version}</version>
             </dependency>
         </dependencies>

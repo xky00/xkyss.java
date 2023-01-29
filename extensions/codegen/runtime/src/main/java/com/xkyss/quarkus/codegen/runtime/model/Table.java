@@ -1,6 +1,7 @@
 package com.xkyss.quarkus.codegen.runtime.model;
 
-import com.xkyss.experimental.naming.Converter;
+
+import com.xkyss.core.naming.Converter;
 
 import java.util.ArrayList;
 import java.util.List;
