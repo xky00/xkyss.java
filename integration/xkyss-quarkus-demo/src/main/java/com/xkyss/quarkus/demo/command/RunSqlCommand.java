@@ -1,10 +1,10 @@
 package com.xkyss.quarkus.demo.command;
 
 
+import com.xkyss.ibatis.jdbc.ScriptRunner;
 import io.agroal.api.AgroalDataSource;
 import jakarta.inject.Inject;
 import org.apache.ibatis.io.Resources;
-//import org.apache.ibatis.jdbc.ScriptRunner;
 import org.jboss.logging.Logger;
 import picocli.CommandLine;
 
