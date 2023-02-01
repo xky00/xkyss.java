@@ -10,7 +10,7 @@
     <parent>
         <artifactId>xkyss</artifactId>
         <groupId>com.xkyss</groupId>
-        <version>2023.1.3</version>
+        <version>2023.2.1</version>
     </parent>
 
     <dependencies>
@@ -25,6 +25,10 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
         </dependency>
     </dependencies>
 
@@ -59,26 +63,38 @@
                                         <exclude>META-INF/maven/**</exclude>
                                     </excludes>
                                 </filter>
+                                <filter>
+                                    <artifact>org.mybatis:mybatis</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/maven/**</exclude>
+                                        <exclude>org/apache/ibatis/builder/**</exclude>
+                                    </excludes>
+                                </filter>
                             </filters>
                             <artifactSet>
                                 <includes>
                                     <include>org.apache.commons:commons-lang3</include>
                                     <include>org.apache.commons:commons-collections4</include>
                                     <include>com.google.guava:guava</include>
+                                    <include>org.mybatis:mybatis</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
                                     <pattern>org.apache.commons.lang3</pattern>
-                                    <shadedPattern>com.xkyss.org.apache.commons.lang3</shadedPattern>
+                                    <shadedPattern>com.xkyss.commons.lang3</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.apache.commons.collections4</pattern>
-                                    <shadedPattern>com.xkyss.org.apache.commons.collections4</shadedPattern>
+                                    <shadedPattern>com.xkyss.commons.collections4</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>com.google</pattern>
-                                    <shadedPattern>com.xkyss.com.google</shadedPattern>
+                                    <shadedPattern>com.xkyss.google</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.apache.ibatis</pattern>
+                                    <shadedPattern>com.xkyss.ibatis</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
