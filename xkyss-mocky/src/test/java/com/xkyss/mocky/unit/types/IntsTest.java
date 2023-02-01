@@ -1,6 +1,5 @@
 package com.xkyss.mocky.unit.types;
 
-import com.xkyss.core.util.Arrayx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.xkyss.mocky.constants.MockTestConst.TEST_COUNT;
+import static org.apache.commons.lang3.ArrayUtils.toObject;
 
 public class IntsTest {
 
@@ -82,7 +82,7 @@ public class IntsTest {
     @Test
     public void testNextCorrectValues() {
         int[] alphabet = {10, 20, 50, 100, 200, 500, 1000, 2000, 5000, 10000};
-        Set<Integer> checks = new HashSet<>(Arrays.asList(Arrayx.toObject(alphabet)));
+        Set<Integer> checks = new HashSet<>(Arrays.asList(toObject(alphabet)));
         for (int i = 0; i < TEST_COUNT; i++) {
             Integer d = ints.from(alphabet).get();
             Assertions.assertTrue(checks.contains(d));

@@ -1,6 +1,5 @@
 package com.xkyss.mocky.unit.types;
 
-import com.xkyss.core.util.Arrayx;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,6 +10,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.xkyss.mocky.constants.MockTestConst.TEST_COUNT;
+import static org.apache.commons.lang3.ArrayUtils.toObject;
 
 public class FloatsTest {
 
@@ -90,7 +90,7 @@ public class FloatsTest {
     @Test
     public void testNextFloatCorrectValues() {
         float[] values = { 1.0f, 5.0f, 10.0f, 15.0f, 20.52f };
-        Set<Float> checks = new HashSet<>(Arrays.asList(Arrayx.toObject(values)));
+        Set<Float> checks = new HashSet<>(Arrays.asList(toObject(values)));
 
         for (int i = 0; i < TEST_COUNT; i++) {
             Float d = floats.from(values).get();
