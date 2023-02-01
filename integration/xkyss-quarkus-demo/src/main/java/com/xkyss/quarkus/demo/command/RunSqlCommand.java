@@ -1,7 +1,6 @@
 package com.xkyss.quarkus.demo.command;
 
 
-import com.xkyss.quarkus.demo.jdbc.ScriptRunner;
 import io.agroal.api.AgroalDataSource;
 import jakarta.inject.Inject;
 import org.apache.ibatis.io.Resources;

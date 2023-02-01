@@ -4,15 +4,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>xkyss-quarkus-demo</artifactId>
-    <name>xkyss-quarkus Demo</name>
+    <name>xkyss-integration Demo</name>
 
     <parent>
         <groupId>com.xkyss</groupId>
-        <artifactId>xkyss-quarkus</artifactId>
-        <version>2023.1.1</version>
+        <artifactId>xkyss-integration</artifactId>
+        <version>2023.2.1</version>
     </parent>
 
     <dependencies>
+        <!-- xkyss -->
+        <dependency>
+            <groupId>com.xkyss</groupId>
+            <artifactId>xkyss-core</artifactId>
+        </dependency>
+        <!-- quarkus -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-picocli</artifactId>
