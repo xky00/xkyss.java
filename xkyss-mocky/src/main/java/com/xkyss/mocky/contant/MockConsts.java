@@ -8,4 +8,6 @@ public class MockConsts {
     public static final String UPPER_BOUND_BIGGER_LOWER_BOUND = "The input parameter 'upperBound' > 'lowerBound'.";
 
     public static final String SIZE_BIGGER_THAN_ZERO_STRICT = "The size needs to be bigger than 0 (>).";
+
+    public static final String INPUT_PARAMETER_NOT_EMPTY_OR_NULL = "Input parameter: '#{input}' should not be empty or NULL.";
 }
