@@ -8,9 +8,8 @@ import org.apache.ibatis.io.Resources;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static java.nio.charset.Charset.defaultCharset;
@@ -21,6 +20,8 @@ public class Dicts implements MockUnit<String>  {
 
     // 字典资源目录
     private final String dir = "dicts";
+
+    private final Map<String, List<String>> cache = new HashMap<>();
 
     private final Random random;
 
@@ -44,39 +45,60 @@ public class Dicts implements MockUnit<String>  {
      * @return
      */
     public String get(String type) {
-        String path = dir + "/" + type;
+        // TODO: 处理相对路径
+        String path = Paths.get(type).isAbsolute() ? type : (dir + "/" + type);
 
+        // 优先读取缓存
+        if (cache.containsKey(path)) {
+            List<String> caches = cache.get(path);
+            return caches.get(random.nextInt(caches.size()));
+        }
+
+        // 尝试读取外部文件
         List<String> lines = readFileLines(path);
-        if (CollectionUtils.isEmpty(lines)) {
-            lines = readResourceLines(path);
+        if (!CollectionUtils.isEmpty(lines)) {
+            return lines.get(random.nextInt(lines.size()));
         }
 
-        if (CollectionUtils.isEmpty(lines)) {
-            return "";
+        // 尝试读取资源文件
+        lines = readResourceLines(path);
+        if (!CollectionUtils.isEmpty(lines)) {
+            return lines.get(random.nextInt(lines.size()));
         }
 
-        int idx = random.nextInt(lines.size());
-        return lines.get(idx);
+        return "";
     }
 
     private List<String> readResourceLines(String path) {
+        if (cache.containsKey(path)) {
+            return cache.get(path);
+        }
+
         Resources.setCharset(defaultCharset());
 
         try (
             Reader reader = requireNonNull(Resources.getResourceAsReader(path));
             BufferedReader buff = new BufferedReader(reader);
         ) {
-            return buff.lines().collect(toList());
+            List<String> lines = buff.lines().collect(toList());
+            cache.put(path, lines);
+            return lines;
         } catch (IOException e) {
             return Collections.emptyList();
         }
     }
 
     private List<String> readFileLines(String path) {
+        if (cache.containsKey(path)) {
+            return cache.get(path);
+        }
+
         Path p = java.nio.file.Paths.get(path);
 
         try (Stream<String> stream = Files.lines(p)) {
-            return stream.collect(toList());
+            List<String> lines = stream.collect(toList());
+            cache.put(path, lines);
+            return lines;
         } catch (IOException e) {
             return Collections.emptyList();
         }
