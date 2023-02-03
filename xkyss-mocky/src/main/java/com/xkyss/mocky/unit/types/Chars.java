@@ -6,9 +6,8 @@ import com.xkyss.mocky.unit.objects.Froms;
 
 import java.util.Random;
 
-import static com.xkyss.core.util.Validate.notEmptyOrNullValues;
+import static com.xkyss.core.util.Validate.*;
 import static com.xkyss.mocky.contant.Alphabets.*;
-import static org.apache.commons.lang3.Validate.notNull;
 
 
 public class Chars implements MockUnit<Character> {
@@ -48,6 +47,22 @@ public class Chars implements MockUnit<Character> {
         return froms.from(HEXA);
     }
 
+    public MockUnit<Character> from(String alphabet) {
+        notEmpty(alphabet, "alphabet");
+        return () -> {
+            int idx = random.nextInt(alphabet.length());
+            return alphabet.charAt(idx);
+        };
+    }
+
+    public MockUnit<Character> from(char[] alphabet) {
+        notEmpty(alphabet, "alphabet");
+        return () -> {
+            int idx = random.nextInt(alphabet.length);
+            return alphabet[idx];
+        };
+    }
+
     public MockUnit<Character> type(CharsType type) {
         notNull(type, "type");
 
@@ -57,7 +72,7 @@ public class Chars implements MockUnit<Character> {
             case LOWER_LETTERS: return lowerLetter();
             case UPPER_LETTERS: return upperLetter();
             case LETTERS: return letter();
-            case ALPHA_NUMERIC: return this::get;
+            case ALPHA_NUMERIC: return this;
             default: throw new IllegalArgumentException("Invalid CharsType");
         }
     }
