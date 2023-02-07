@@ -3,12 +3,10 @@ package com.xkyss.security;
 import cn.hutool.crypto.Mode;
 import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.SecureUtil;
-import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.symmetric.SM4;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -46,25 +44,10 @@ public class PasswordTest {
 //        SM4 sm4 = SmUtil.sm4(String.class.getName().getBytes(StandardCharsets.UTF_8));
         String key = String.class.getName();
 
-        byte[] keybs = new byte[16];
-        byte[] ivbs = new byte[16];
-        buildSm4KeyAndIvBytes(key.getBytes(StandardCharsets.UTF_8), keybs, ivbs);
-
         byte[] k1 = SecureUtil.md5().digest(key);
         byte[] k2 = SecureUtil.md5().digest(k1);
-        SM4 sm4 = new SM4(Mode.CBC, Padding.ZeroPadding, keybs, ivbs);
-        String s = sm4.encryptBase64(xorbytes);
-        return s;
-//
-//        String key = String.class.getName();
-//        // md5
-//        byte[] kbytes = SecureUtil.md5().digest(key);
-//        // xor
-//        byte[] xorbytes = xor(kbytes, data.getBytes("UTF-8"));
-//        // sm4
-//        SM4 sm4 = new SM4(Mode.CBC.name(), Padding.ZeroPadding.name(), kbytes, kbytes);
-//        String s = sm4.encryptBase64(xorbytes);
-//        return s;
+        String s1 = new SM4(Mode.CBC, Padding.PKCS5Padding, k1, k2).encryptBase64(xorbytes);
+        return s1;
     }
 
     private void buildSm4KeyAndIvBytes(byte[] key, byte[] sm4key, byte[] sm4iv) throws NoSuchAlgorithmException {
