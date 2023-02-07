@@ -3,7 +3,7 @@
   <parent>
     <artifactId>xkyss</artifactId>
     <groupId>com.xkyss</groupId>
-    <version>2023.2.5</version>
+    <version>2023.2.6</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>xkyss-security</artifactId>
@@ -34,8 +34,8 @@
               </artifactSet>
               <relocations>
                 <relocation>
-                  <pattern>cn.hutool.crypto</pattern>
-                  <shadedPattern>com.xkyss.security.crypto</shadedPattern>
+                  <pattern>cn.hutool</pattern>
+                  <shadedPattern>com.xkyss.hutool</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>
