@@ -10,7 +10,7 @@
     <parent>
         <artifactId>xkyss</artifactId>
         <groupId>com.xkyss</groupId>
-        <version>2023.2.3</version>
+        <version>2023.2.4</version>
     </parent>
 
     <dependencies>
@@ -52,7 +52,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>org.apache.commons.lang3</pattern>
-                                    <shadedPattern>com.xkyss.org.apache.commons.lang3</shadedPattern>
+                                    <shadedPattern>com.xkyss.commons.lang3</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>

@@ -7,7 +7,7 @@
     <name>xkyss :: Root</name>
     <groupId>com.xkyss</groupId>
     <artifactId>xkyss</artifactId>
-    <version>2023.2.3</version>
+    <version>2023.2.4</version>
     <packaging>pom</packaging>
 
     <properties>
@@ -25,6 +25,7 @@
         <guava.version>31.1-jre</guava.version>
         <mybatis.version>3.5.11</mybatis.version>
         <bcprov-jdk15on.version>1.46</bcprov-jdk15on.version>
+        <hutool.version>5.8.11</hutool.version>
     </properties>
 
     <modules>

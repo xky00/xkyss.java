@@ -4,18 +4,89 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>xkyss-security</artifactId>
+    <name>xkyss :: Security</name>
 
     <parent>
         <groupId>com.xkyss</groupId>
         <artifactId>xkyss</artifactId>
-        <version>2023.2.3</version>
+        <version>2023.2.4</version>
     </parent>
+
+    <properties>
+        <bouncycastle.version>1.72</bouncycastle.version>
+    </properties>
 
     <dependencies>
         <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-crypto</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
+            <artifactId>bcpkix-jdk15to18</artifactId>
+            <version>${bouncycastle.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>cn.hutool:hutool-crypto</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/maven/**</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <artifactSet>
+                                <includes>
+                                    <include>cn.hutool:hutool-crypto</include>
+                                </includes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>cn.hutool.crypto</pattern>
+                                    <shadedPattern>com.xkyss.security.crypto</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>com.github.wvengen</groupId>
+                <artifactId>proguard-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals><goal>proguard</goal></goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- <obfuscate>true</obfuscate> -->
+                    <!-- <attach>true</attach> -->
+                    <!-- <injar>classes</injar> -->
+                    <!-- <outjar>${project.build.finalName}-pg.jar</outjar> -->
+                    <!-- 配置文件 -->
+                    <proguardInclude>${basedir}/proguard.conf</proguardInclude>
+                    <!-- 打包maven相关(pom.xml等) -->
+                    <addMavenDescriptor>true</addMavenDescriptor>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 
 </project>
