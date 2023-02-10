@@ -11,7 +11,10 @@ public class AjCryptoUtilTest {
         String key = "DD8AA8E5AA5F4335A7ABD95671319231";
         String pwd = "123456";
 
-        Assertions.assertEquals("ycBQWaGsjCgNWQYy3MEJWg==", AjCryptoUtil.md5AndBase64(key+pwd));
+        String md5b64 = AjCryptoUtil.md5AndBase64(key + pwd);
+        Assertions.assertEquals("ycBQWaGsjCgNWQYy3MEJWg==", md5b64);
+        String password = AjCryptoUtil.md5AndBase64(key + md5b64);
+        Assertions.assertEquals("pH4ssWTAHjL8AgtROfoNWg==", password);
     }
 
     @Test

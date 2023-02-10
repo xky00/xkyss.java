@@ -9,7 +9,7 @@
     <parent>
         <groupId>com.xkyss</groupId>
         <artifactId>xkyss</artifactId>
-        <version>2023.2.6</version>
+        <version>2023.2.7</version>
     </parent>
 
     <properties>
@@ -48,10 +48,17 @@
                                         <exclude>META-INF/maven/**</exclude>
                                     </excludes>
                                 </filter>
+                                <filter>
+                                    <artifact>cn.hutool:hutool-core</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/maven/**</exclude>
+                                    </excludes>
+                                </filter>
                             </filters>
                             <artifactSet>
                                 <includes>
                                     <include>cn.hutool:hutool-crypto</include>
+                                    <include>cn.hutool:hutool-core</include>
                                 </includes>
                             </artifactSet>
                             <relocations>
