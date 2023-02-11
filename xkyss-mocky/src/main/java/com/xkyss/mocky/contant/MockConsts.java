@@ -10,4 +10,7 @@ public class MockConsts {
     public static final String SIZE_BIGGER_THAN_ZERO_STRICT = "The size needs to be bigger than 0 (>).";
 
     public static final String INPUT_PARAMETER_NOT_EMPTY_OR_NULL = "Input parameter: '#{input}' should not be empty or NULL.";
+
+    public static final String IMPOSSIBLE_TO_SEQ_OVER_EMPTY_COLLECTION = "Impossible to create a Seq from an empty Iterable<T>.";
+    public static final String SIZE_BIGGER_THAN_ZERO = "The size needs to be bigger than 0 (>=).";
 }
