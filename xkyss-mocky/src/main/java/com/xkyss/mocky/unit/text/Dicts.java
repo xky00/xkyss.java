@@ -2,10 +2,11 @@ package com.xkyss.mocky.unit.text;
 
 import com.xkyss.mocky.abstraction.MockUnit;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.ListUtils;
 import org.apache.ibatis.io.Resources;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
