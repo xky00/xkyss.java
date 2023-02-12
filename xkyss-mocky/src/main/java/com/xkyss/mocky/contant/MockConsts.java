@@ -20,4 +20,6 @@ public class MockConsts {
     public static final String SEQ_INVALID_RANGE = "The min value '#{min}' should be lower than the maximum '#{max}' value of the sequence.";
 
     public static final String SEQ_OVERFLOW = "Seq overflow. Values are generated inside the interval: [#{min}, #{max}]. Cannot increment any further.";
+
+    public static final String INVALID_REGEX_PATTERN = "Invalid regex pattern ('%s'): ";
 }

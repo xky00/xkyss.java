@@ -27,6 +27,7 @@
         <mybatis.version>3.5.11</mybatis.version>
         <bcprov-jdk15on.version>1.46</bcprov-jdk15on.version>
         <hutool.version>5.8.11</hutool.version>
+        <generex.version>1.0.2</generex.version>
     </properties>
 
     <modules>
