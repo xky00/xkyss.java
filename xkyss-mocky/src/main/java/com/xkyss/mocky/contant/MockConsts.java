@@ -11,15 +11,15 @@ public class MockConsts {
 
     public static final String SIZE_BIGGER_THAN_ZERO_STRICT = "The size needs to be bigger than 0 (>).";
 
-    public static final String INPUT_PARAMETER_NOT_EMPTY_OR_NULL = "Input parameter: '#{input}' should not be empty or NULL.";
+    public static final String INPUT_PARAMETER_NOT_EMPTY_OR_NULL = "Input parameter: '{}' should not be empty or NULL.";
 
     public static final String IMPOSSIBLE_TO_SEQ_OVER_EMPTY_COLLECTION = "Impossible to create a Seq from an empty Iterable<T>.";
 
     public static final String SIZE_BIGGER_THAN_ZERO = "The size needs to be bigger than 0 (>=).";
 
-    public static final String SEQ_INVALID_RANGE = "The min value '#{min}' should be lower than the maximum '#{max}' value of the sequence.";
+    public static final String SEQ_INVALID_RANGE = "The min value '{}' should be lower than the maximum '{}' value of the sequence.";
 
-    public static final String SEQ_OVERFLOW = "Seq overflow. Values are generated inside the interval: [#{min}, #{max}]. Cannot increment any further.";
+    public static final String SEQ_OVERFLOW = "Seq overflow. Values are generated inside the interval: [{}, {}]. Cannot increment any further.";
 
-    public static final String INVALID_REGEX_PATTERN = "Invalid regex pattern ('%s'): ";
+    public static final String INVALID_REGEX_PATTERN = "Invalid regex pattern ('{}'): ";
 }
