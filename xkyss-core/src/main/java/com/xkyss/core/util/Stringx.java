@@ -58,7 +58,7 @@ public class Stringx {
      * 以[Slf4j MessageFormatter]样式格式化字符串
      * @param pattern 字符串模板
      * @param arg 单个参数
-     * @return
+     * @return 格式化后的字符串
      */
     public static String format(String pattern, Object... arg) {
         if (arg == null) {
@@ -79,4 +79,15 @@ public class Stringx {
 
         return org.slf4j.helpers.MessageFormatter.arrayFormat(pattern, arg).getMessage();
     }
+
+    /**
+     * 以[Slf4j MessageFormatter]样式格式化字符串
+     * @param pattern 字符串模板
+     * @param arg 数组参数
+     * @return 格式化后的字符串
+     */
+    public static <T> String arrayFormat(String pattern, T[] arg) {
+        return org.slf4j.helpers.MessageFormatter.arrayFormat(pattern, arg).getMessage();
+    }
+
 }

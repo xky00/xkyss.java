@@ -9,9 +9,7 @@ public class StringTest {
 
     @Test
     public void test_substring() {
-        String s = "430105000000";
-        String x = s.substring(0, 6);
-        Assertions.assertEquals("430105", s.substring(0, 6));
+        Assertions.assertEquals("430105", "430105000000".substring(0, 6));
     }
 
     @Test
@@ -25,6 +23,12 @@ public class StringTest {
         // 二个参数
         Assertions.assertEquals("Hello 1 a", Stringx.format("Hello {} {}", 1, "a"));
         // 多个参数
-        Assertions.assertEquals("Hello 1 a b c", Stringx.format("Hello {} {} {} {}", 1, "a", "b", "c"));
+        Assertions.assertEquals("Hello 1 a b c",
+                Stringx.format("Hello {} {} {} {}", 1, "a", "b", "c"));
+        // 数组
+        Assertions.assertEquals("Hello 1 a b c",
+                Stringx.arrayFormat("Hello {} {} {} {}", new Object[] {1, "a", "b", "c"}));
+        Assertions.assertEquals("Hello 1 a b c",
+                Stringx.arrayFormat("Hello {} {} {} {}", new String[] {"1", "a", "b", "c"}));
     }
 }
