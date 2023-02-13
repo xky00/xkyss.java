@@ -45,6 +45,12 @@
                     <exclude>org/apache/ibatis/builder/**</exclude>
                   </excludes>
                 </filter>
+                <filter>
+                  <artifact>org.slf4j:slf4j-api</artifact>
+                  <excludes>
+                    <exclude>META-INF/maven/**</exclude>
+                  </excludes>
+                </filter>
               </filters>
               <artifactSet>
                 <includes>
@@ -52,6 +58,7 @@
                   <include>org.apache.commons:commons-collections4</include>
                   <include>com.google.guava:guava</include>
                   <include>org.mybatis:mybatis</include>
+                  <include>org.slf4j:slf4j-api</include>
                 </includes>
               </artifactSet>
               <relocations>
@@ -70,6 +77,10 @@
                 <relocation>
                   <pattern>org.apache.ibatis</pattern>
                   <shadedPattern>com.xkyss.ibatis</shadedPattern>
+                </relocation>
+                <relocation>
+                  <pattern>org.slf4j</pattern>
+                  <shadedPattern>com.xkyss.slf4j</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>

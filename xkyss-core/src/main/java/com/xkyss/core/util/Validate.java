@@ -27,44 +27,44 @@ public class Validate {
 
     public static void notEmpty(char[] array, String fmt, Object... params) {
         if (null==array)
-            throw new NullPointerException(String.format(fmt, params));
+            throw new NullPointerException(Stringx.format(fmt, params));
         if (0==array.length)
-            throw new IllegalArgumentException(String.format(fmt, params));
+            throw new IllegalArgumentException(Stringx.format(fmt, params));
     }
 
     public static void notEmpty(double[] array, String fmt, Object... params) {
         if (null==array)
-            throw new NullPointerException(String.format(fmt, params));
+            throw new NullPointerException(Stringx.format(fmt, params));
         if (0==array.length)
-            throw new IllegalArgumentException(String.format(fmt, params));
+            throw new IllegalArgumentException(Stringx.format(fmt, params));
     }
 
     public static void notEmpty(float[] array, String fmt, Object... params) {
         if (null==array)
-            throw new NullPointerException(String.format(fmt, params));
+            throw new NullPointerException(Stringx.format(fmt, params));
         if (0==array.length)
-            throw new IllegalArgumentException(String.format(fmt, params));
+            throw new IllegalArgumentException(Stringx.format(fmt, params));
     }
     public static void notEmpty(int[] array, String fmt, Object... params) {
         if (null==array)
-            throw new NullPointerException(String.format(fmt, params));
+            throw new NullPointerException(Stringx.format(fmt, params));
         if (0==array.length)
-            throw new IllegalArgumentException(String.format(fmt, params));
+            throw new IllegalArgumentException(Stringx.format(fmt, params));
     }
 
     public static void notEmpty(long[] array, String fmt, Object... params) {
         if (null==array)
-            throw new NullPointerException(String.format(fmt, params));
+            throw new NullPointerException(Stringx.format(fmt, params));
         if (0==array.length)
-            throw new IllegalArgumentException(String.format(fmt, params));
+            throw new IllegalArgumentException(Stringx.format(fmt, params));
     }
 
     public static <T extends CharSequence> T notEmpty(T chars, String fmt, Object... params) {
         if (chars == null) {
-            throw new NullPointerException(String.format(fmt, params));
+            throw new NullPointerException(Stringx.format(fmt, params));
         }
         if (chars.length() == 0) {
-            throw new IllegalArgumentException(String.format(fmt, params));
+            throw new IllegalArgumentException(Stringx.format(fmt, params));
         }
         return chars;
     }
@@ -84,12 +84,12 @@ public class Validate {
 
     public static <T> void notNull(T object, final String fmt, Object... params) {
         if (object == null)
-            throw new NullPointerException(String.format(fmt, params));
+            throw new NullPointerException(Stringx.format(fmt, params));
     }
 
 
     public static <T> void notNull(T object, String input) {
-        notNull(object, "Input parameter: '%s' should not be NULL.", input);
+        notNull(object, "Input parameter: '{}' should not be NULL.", input);
     }
 
     public static <T> void notEmptyOrNullValues(T[] arr, String arrName) {

@@ -53,4 +53,30 @@ public class Stringx {
         }
         return str;
     }
+
+    /**
+     * 以[Slf4j MessageFormatter]样式格式化字符串
+     * @param pattern 字符串模板
+     * @param arg 单个参数
+     * @return
+     */
+    public static String format(String pattern, Object... arg) {
+        if (arg == null) {
+            return org.slf4j.helpers.MessageFormatter.format(pattern, arg).getMessage();
+        }
+
+        if (arg.length == 0) {
+            return pattern;
+        }
+
+        if (arg.length == 1) {
+            return org.slf4j.helpers.MessageFormatter.format(pattern, arg[0]).getMessage();
+        }
+
+        if (arg.length == 2) {
+            return org.slf4j.helpers.MessageFormatter.format(pattern, arg[0], arg[1]).getMessage();
+        }
+
+        return org.slf4j.helpers.MessageFormatter.arrayFormat(pattern, arg).getMessage();
+    }
 }
