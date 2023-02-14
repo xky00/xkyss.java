@@ -1,5 +1,7 @@
 package com.xkyss.security;
 
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.asymmetric.RSA;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
@@ -11,28 +13,21 @@ import java.util.Base64;
 
 public class RsaTest {
     @Test
-    public void test_publicKey() throws IOException, ClassNotFoundException {
-        String publicKeyString = "rO0ABXNyABRqYXZhLnNlY3VyaXR5LktleVJlcL35T7OImqVDAgAETAAJYWxnb3JpdGhtdAASTGphdmEvbGFuZy9TdHJpbmc7WwAHZW5jb2RlZHQAAltCTAAGZm9ybWF0cQB+AAFMAAR0eXBldAAbTGphdmEvc2VjdXJpdHkvS2V5UmVwJFR5cGU7eHB0AANSU0F1cgACW0Ks8xf4BghU4AIAAHhwAAAAXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCCmRBRz4oUehsuHrZY9MYpYXl8SZ2wh8a7PgGu6abkDevg6xWJ5RuOBprnItYZU+8cFsNFm//1qne4QZmR/A6zAgMBAAF0AAVYLjUwOX5yABlqYXZhLnNlY3VyaXR5LktleVJlcCRUeXBlAAAAAAAAAAASAAB4cgAOamF2YS5sYW5nLkVudW0AAAAAAAAAABIAAHhwdAAGUFVCTElD";
+    public void test_03() throws IOException {
+        // aj
+//        String publicKeyString = "rO0ABXNyABRqYXZhLnNlY3VyaXR5LktleVJlcL35T7OImqVDAgAETAAJYWxnb3JpdGhtdAASTGphdmEvbGFuZy9TdHJpbmc7WwAHZW5jb2RlZHQAAltCTAAGZm9ybWF0cQB+AAFMAAR0eXBldAAbTGphdmEvc2VjdXJpdHkvS2V5UmVwJFR5cGU7eHB0AANSU0F1cgACW0Ks8xf4BghU4AIAAHhwAAAAXjBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQCCmRBRz4oUehsuHrZY9MYpYXl8SZ2wh8a7PgGu6abkDevg6xWJ5RuOBprnItYZU+8cFsNFm//1qne4QZmR/A6zAgMBAAF0AAVYLjUwOX5yABlqYXZhLnNlY3VyaXR5LktleVJlcCRUeXBlAAAAAAAAAAASAAB4cgAOamF2YS5sYW5nLkVudW0AAAAAAAAAABIAAHhwdAAGUFVCTElD";
+//        String privateKeyString = "rO0ABXNyABRqYXZhLnNlY3VyaXR5LktleVJlcL35T7OImqVDAgAETAAJYWxnb3JpdGhtdAASTGphdmEvbGFuZy9TdHJpbmc7WwAHZW5jb2RlZHQAAltCTAAGZm9ybWF0cQB+AAFMAAR0eXBldAAbTGphdmEvc2VjdXJpdHkvS2V5UmVwJFR5cGU7eHB0AANSU0F1cgACW0Ks8xf4BghU4AIAAHhwAAABWDCCAVQCAQAwDQYJKoZIhvcNAQEBBQAEggE+MIIBOgIBAAJBAIKZEFHPihR6Gy4etlj0xilheXxJnbCHxrs+Aa7ppuQN6+DrFYnlG44Gmuci1hlT7xwWw0Wb//Wqd7hBmZH8DrMCAwEAAQJATw/Q1GY7JnhhmgMXyzSr/oM3I6oBX8xi4BoCtNxYn3h8YMOG81DcPpqzJeMpv++5GMZR3Ud0h/0nMKRH4ut3sQIhAMDAOIJBPwjfZJep/tnyOnH5QN6g3entVqc0yciNiO/7AiEArXPERrNxrPg10emmjwC6+tu/F7RD1vG9T33+S2Y1RqkCIFsMMWUtxsW9KDoP3cc7iWn+8Cp5WHnAV5dB8zLd0FpzAiEAlwI/8pHNuRqLuMpkAQJQx5BDST7fBSaHe8qkdz5vyakCIAqRBGLfcni3VGh9+v5FZKEpvv6VuiNi0vlaQjNyipbxdAAGUEtDUyM4fnIAGWphdmEuc2VjdXJpdHkuS2V5UmVwJFR5cGUAAAAAAAAAABIAAHhyAA5qYXZhLmxhbmcuRW51bQAAAAAAAAAAEgAAeHB0AAdQUklWQVRF";
 
-        // base64解码
-        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyString);
+        // agile
+//        String publicKeyString = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCh6HkK+rCM37FAzCHVythTc6pxvr551K07CRhdX/NjCddHAuQMOd/57R5fiIwgVNEfCsD1cIyS6A8IWj4DtJLR2t29JehPpqiFSJ4hNtDcLNxNJiYRcCQvyMQeyQIPE5Ljc35c72YwDtQAsIJChsauyLrc+E6HC3gn1JDm18HNXwIDAQAB";
+//        String privateKeyString = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAKHoeQr6sIzfsUDMIdXK2FNzqnG+vnnUrTsJGF1f82MJ10cC5Aw53/ntHl+IjCBU0R8KwPVwjJLoDwhaPgO0ktHa3b0l6E+mqIVIniE20Nws3E0mJhFwJC/IxB7JAg8TkuNzflzvZjAO1ACwgkKGxq7Iutz4TocLeCfUkObXwc1fAgMBAAECgYAWwCzqDwnp8bDdkxGaEhPNvi4QJ6ZqRilFZ2TGEiqIGyTl9JEI6sT/QIOJFw3hqSltfDxbAMKwDe221b9rE9+hZhE2rrpwcTKuehob9Z8CObYeUHR9HG7Qb2tYRElvSCWo74iz2zajXAvJLjIE4MPuPYqXC5zOabH+EJ/eaOzVwQJBANmRkMlb+qzp1GWuqFMHP+5MeYhFwUHVX7fxKNA24oHldX8zjPIZ6d3vaRfliTvxOaz1T80acvJkkb7zHBmaW38CQQC+gfF8Lg+nvBY/S3wfOPL8FcntP16jdFhNNZmbOxq72ZmCfl5Zk5cYNBc4rDSrd9Sj4TkLLug+wrK6Wr117P4hAkBOVxnZR2NVy8SM8HzvmJauiZ7hMKzLtbcHlrBpeLnKqALM0JUZv7b0EPa4ghAOI2fvHU2kvrdRDGFmbkdZ+LilAkBnX8eT5MKl+A/yZJmDr7laRNB/poVKGNXZf55Md3P4Pwlnn/6+iLHSdmGrZPZnnOyLyKjVgqyPccLeEGMCXIlBAkAt2OMwss16OH2x79OcfBrabU5iCVbDHg56JYGbWP8KcPfvspxtL/4TdACRsa+yCMcI6L29Q4wn791SEEnE834a";
 
-        PublicKey publicKey = (PublicKey) (new ObjectInputStream(new ByteArrayInputStream(publicKeyBytes))).readObject();
+        // spry
+        String publicKeyString = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlivFI8qB4D0y2jy0CfEqFyy46R0o7S8TKpsx5xbHKoU1VWg6QkQm+ntyIv1p4kE1sPEQO73+HY8+Bzs75XwRTYL1BmR1w8J5hmjVWjc6R2BTBGAYRPFRhor3kpM6ni2SPmNNhurEAHw7TaqszP5eUF/F9+KEBWkwVta+PZ37bwqSE4sCb1soZFrVz/UT/LF4tYpuVYt3YbqToZ3pZOZ9AX2o1GCG3xwOjkc4x0W7ezbQZdC9iftPxVHR8irOijJRRjcPDtA6vPKpzLl6CyYnsIYPd99ltwxTHjr3npfv/3Lw50bAkbT4HeLFxTx4flEoZLKO/g0bAoV2uqBhkA9xnQIDAQAB";
+        String privateKeyString = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCWK8UjyoHgPTLaPLQJ8SoXLLjpHSjtLxMqmzHnFscqhTVVaDpCRCb6e3Ii/WniQTWw8RA7vf4djz4HOzvlfBFNgvUGZHXDwnmGaNVaNzpHYFMEYBhE8VGGiveSkzqeLZI+Y02G6sQAfDtNqqzM/l5QX8X34oQFaTBW1r49nftvCpITiwJvWyhkWtXP9RP8sXi1im5Vi3dhupOhnelk5n0BfajUYIbfHA6ORzjHRbt7NtBl0L2J+0/FUdHyKs6KMlFGNw8O0Dq88qnMuXoLJiewhg9332W3DFMeOveel+//cvDnRsCRtPgd4sXFPHh+UShkso7+DRsChXa6oGGQD3GdAgMBAAECggEAAjfTSZwMHwvIXIDZB+yP+pemg4ryt84iMlbofclQV8hv6TsI4UGwcbKxFOM5VSYxbNOisb80qasb929gixsyBjsQ8284bhPJR7r0q8h1C+jYURA6S4pk8d/LmFakXwG9Tz6YPo3pJziuh48lzkFTk0xW2Dp4SLwtAptZY/+ZXyJ696QXDrZKSSM99Jh9s7a0ST66WoxSS0UC51ak+Keb0KJ1jz4bIJ2C3r4rYlSu4hHBY73GfkWORtQuyUDa9yDOem0/z0nr6pp+pBSXPLHADsqvZiIhxD/O0Xk5I6/zVHB3zuoQqLERk0WvA8FXz2o8AYwcQRY2g30eX9kU4uDQAQKBgQDmf7KGImUGitsEPepFKH5yLWYWqghHx6wfV+fdbBxoqn9WlwcQ7JbynIiVx8MX8/1lLCCe8v41ypu/eLtPiY1ev2IKdrUStvYRSsFigRkuPHUo1ajsGHQd+ucTDf58mn7kRLW1JGMeGxo/t32Bm96Af6AiPWPEJuVfgGV0iwg+HQKBgQCmyPzL9M2rhYZn1AozRUguvlpmJHU2DpqS34Q+7x2Ghf7MgBUhqE0t3FAOxEC7IYBwHmeYOvFR8ZkVRKNF4gbnF9RtLdz0DMEG5qsMnvJUSQbNB1yVjUCnDAtElqiFRlQ/k0LgYkjKDY7LfciZl9uJRl0OSYeX/qG2tRW09tOpgQKBgBSGkpM3RN/MRayfBtmZvYjVWh3yjkI2GbHA1jj1g6IebLB9SnfLWbXJErCj1U+wvoPf5hfBc7m+jRgD3Eo86YXibQyZfY5pFIh9q7Ll5CQl5hj4zc4Yb16sFR+xQ1Q9Pcd+BuBWmSz5JOE/qcF869dthgkGhnfVLt/OQzqZluZRAoGAXQ09nT0TkmKIvlza5Af/YbTqEpq8mlBDhTYXPlWCD4+qvMWpBII1rSSBtftgcgca9XLBMXmRMbqtQeRtg4u7dishZVh1MeP7vbHsNLppUQT9Ol6lFPsd2xUpJDc6BkFat62dXjr3iWNPC9E9nhPPdCNBv7reX7q81obpeXFMXgECgYEAmk2Qlus3OV0tfoNRqNpeMb0teduf2+h3xaI1XDIzPVtZF35ELY/RkAHlmWRT4PCdR0zXDidE67L6XdJyecStFdOUH8z5qUraVVebRFvJqf/oGsXc4+ex1ZKUTbY0wqY1y9E39yvB3MaTmZFuuqk8f3cg+fr8aou7pr9SHhJlZCU=";
 
-        // 导出为pem
-        RsaUtil.writePem(publicKey, "publicKey.pem");
-    }
-
-    @Test
-    public void test_privateKey() throws IOException, ClassNotFoundException {
-        String publicKeyString = "rO0ABXNyABRqYXZhLnNlY3VyaXR5LktleVJlcL35T7OImqVDAgAETAAJYWxnb3JpdGhtdAASTGphdmEvbGFuZy9TdHJpbmc7WwAHZW5jb2RlZHQAAltCTAAGZm9ybWF0cQB+AAFMAAR0eXBldAAbTGphdmEvc2VjdXJpdHkvS2V5UmVwJFR5cGU7eHB0AANSU0F1cgACW0Ks8xf4BghU4AIAAHhwAAABWDCCAVQCAQAwDQYJKoZIhvcNAQEBBQAEggE+MIIBOgIBAAJBAIKZEFHPihR6Gy4etlj0xilheXxJnbCHxrs+Aa7ppuQN6+DrFYnlG44Gmuci1hlT7xwWw0Wb//Wqd7hBmZH8DrMCAwEAAQJATw/Q1GY7JnhhmgMXyzSr/oM3I6oBX8xi4BoCtNxYn3h8YMOG81DcPpqzJeMpv++5GMZR3Ud0h/0nMKRH4ut3sQIhAMDAOIJBPwjfZJep/tnyOnH5QN6g3entVqc0yciNiO/7AiEArXPERrNxrPg10emmjwC6+tu/F7RD1vG9T33+S2Y1RqkCIFsMMWUtxsW9KDoP3cc7iWn+8Cp5WHnAV5dB8zLd0FpzAiEAlwI/8pHNuRqLuMpkAQJQx5BDST7fBSaHe8qkdz5vyakCIAqRBGLfcni3VGh9+v5FZKEpvv6VuiNi0vlaQjNyipbxdAAGUEtDUyM4fnIAGWphdmEuc2VjdXJpdHkuS2V5UmVwJFR5cGUAAAAAAAAAABIAAHhyAA5qYXZhLmxhbmcuRW51bQAAAAAAAAAAEgAAeHB0AAdQUklWQVRF";
-
-        // base64解码
-        byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyString);
-
-        PrivateKey key = (PrivateKey) (new ObjectInputStream(new ByteArrayInputStream(publicKeyBytes))).readObject();
-
-        // 导出为pem
-        RsaUtil.writePem(key, "privateKey.pem");
+        RSA rsa = SecureUtil.rsa(privateKeyString, publicKeyString);
+        RsaUtil.writePem(rsa.getPublicKey(), "target/publicKey.pem");
+        RsaUtil.writePem(rsa.getPrivateKey(), "target/privateKey.pem");
     }
 }

@@ -31,4 +31,13 @@ public class StringTest {
         Assertions.assertEquals("Hello 1 a b c",
                 Stringx.arrayFormat("Hello {} {} {} {}", new String[] {"1", "a", "b", "c"}));
     }
+
+
+    @Test
+    public void test_sub() {
+        String url = "http://36.148.14.100:8181/2023/02/14/b72c4dadba58418d80a48bdc8d925c3b.jpg";
+        String contextPath = "http://36.148.14.100:8181";
+        String address = url.substring(url.indexOf(contextPath) + contextPath.length());
+        System.out.println(address);
+    }
 }
