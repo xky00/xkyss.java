@@ -1,6 +1,6 @@
 package com.xkyss.quarkus.codegen.runtime;
 
-import com.xkyss.org.apache.commons.collections4.CollectionUtils;
+import com.xkyss.commons.collections4.CollectionUtils;
 import org.jboss.logging.Logger;
 
 import java.util.*;
@@ -64,6 +64,11 @@ public class CodegenContainerSupplier implements Supplier<CodegenContainerSuppli
         @Override
         public Optional<String> relativePackage() {
             return config.relativePackage().isPresent() ? config.relativePackage() : Optional.of(config.name());
+        }
+
+        @Override
+        public Optional<String> prefix() {
+            return config.prefix().isPresent() ? config.prefix() : Optional.of("");
         }
 
         @Override

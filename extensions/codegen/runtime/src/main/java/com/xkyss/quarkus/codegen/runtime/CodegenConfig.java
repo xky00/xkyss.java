@@ -76,6 +76,11 @@ public interface CodegenConfig {
         Optional<String> relativePackage();
 
         /**
+         * prefix
+         */
+        Optional<String> prefix();
+
+        /**
          * postfix
          */
         Optional<String> postfix();

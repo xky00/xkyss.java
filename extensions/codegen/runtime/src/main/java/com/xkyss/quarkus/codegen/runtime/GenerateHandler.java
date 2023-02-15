@@ -1,7 +1,7 @@
 package com.xkyss.quarkus.codegen.runtime;
 
+import com.xkyss.commons.collections4.CollectionUtils;
 import com.xkyss.core.util.Listx;
-import com.xkyss.org.apache.commons.collections4.CollectionUtils;
 import com.xkyss.quarkus.codegen.runtime.model.Column;
 import com.xkyss.quarkus.codegen.runtime.model.ColumnType;
 import com.xkyss.quarkus.codegen.runtime.model.Table;
@@ -141,7 +141,7 @@ public class GenerateHandler extends DevConsolePostHandler {
             Path p = userPath.resolve("src/main/java").resolve(packagePath).resolve(relativePath);
             //noinspection DuplicatedCode
             try {
-                Path f = p.resolve(String.format("%s%s.%s", table.getNamePascal(), target.postfix().get(), target.fileExt()));
+                Path f = p.resolve(String.format("%s%s%s.%s", target.prefix().get(), table.getNamePascal(), target.postfix().get(), target.fileExt()));
                 Files.createDirectories(f.getParent());
                 log.infof("Target文件: %s", f.toString());
                 paths.add(f);
@@ -158,7 +158,7 @@ public class GenerateHandler extends DevConsolePostHandler {
                 Path p = ps.resolve(packagePath).resolve(relativePath);
                 //noinspection DuplicatedCode
                 try {
-                    Path f = p.resolve(String.format("%s%s.%s", table.getNamePascal(), target.postfix().get(), target.fileExt()));
+                    Path f = p.resolve(String.format("%s%s%s.%s", target.prefix().get(), table.getNamePascal(), target.postfix().get(), target.fileExt()));
                     Files.createDirectories(f.getParent());
                     log.infof("Target文件: %s", f.toString());
                     paths.add(f);
