@@ -121,4 +121,18 @@ public class Table {
         }
         columns.add(column);
     }
+
+    public boolean isComposite() {
+        int count = 0;
+        for (Column c: columns) {
+            if (c.isPrimary()) {
+                count++;
+                if (count > 1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
