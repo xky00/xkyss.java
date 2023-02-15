@@ -7,7 +7,7 @@
     <name>xkyss-quarkus</name>
     <groupId>com.xkyss</groupId>
     <artifactId>xkyss-quarkus</artifactId>
-    <version>2023.2.1</version>
+    <version>2023.2.9</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -27,7 +27,7 @@
         <quarkus.platform.version>3.0.0.Alpha3</quarkus.platform.version>
         <compiler-plugin.version>3.10.1</compiler-plugin.version>
         <surefire-plugin.version>3.0.0-M8</surefire-plugin.version>
-        <xkyss.version>2023.2.2</xkyss.version>
+        <xkyss.version>2023.2.9</xkyss.version>
     </properties>
 
     <dependencyManagement>
