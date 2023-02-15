@@ -24,8 +24,8 @@ public class TypeHelper {
 //            case Numeric: return Number.class.getName();
             case Decimal: return BigDecimal.class.getName();
             case Char:
-            case VarChar: return String.class.getName();
-//            case LongVarChar: return LongVarChar;
+            case VarChar:
+            case LongVarChar: return String.class.getName();
             case Date: return Date.class.getName();
             // 与常规的Mysql-Java类型对应不一致
             case Time: return Date.class.getName();
