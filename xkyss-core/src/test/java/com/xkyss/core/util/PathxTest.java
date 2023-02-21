@@ -21,8 +21,8 @@ public class PathxTest {
 
         // 包名
         String binaryName = "com.aj.frame.yfty.platform.entity.User";
-        // System.getProperty("user.dir")
-        String filepath = "E:\\xk\\Code\\zyaj\\jwt_v3\\ydjwv3\\trunk\\working\\gits\\Yfty\\quarks\\yfty-migration";
+        String filepath = System.getProperty("user.dir");
+//        String filepath = "E:\\xk\\Code\\zyaj\\jwt_v3\\ydjwv3\\trunk\\working\\gits\\Yfty\\quarks\\yfty-migration";
 
         // 组合新路径
         String p0 = binaryName.replace('.', '\\');
