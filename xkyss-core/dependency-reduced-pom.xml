@@ -3,7 +3,7 @@
   <parent>
     <artifactId>xkyss</artifactId>
     <groupId>com.xkyss</groupId>
-    <version>2023.3.1</version>
+    <version>2023.3.2</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>xkyss-core</artifactId>
@@ -64,23 +64,23 @@
               <relocations>
                 <relocation>
                   <pattern>org.apache.commons.lang3</pattern>
-                  <shadedPattern>com.xkyss.commons.lang3</shadedPattern>
+                  <shadedPattern>com.xkyss.external.core.commons.lang3</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>org.apache.commons.collections4</pattern>
-                  <shadedPattern>com.xkyss.commons.collections4</shadedPattern>
+                  <shadedPattern>com.xkyss.external.core.commons.collections4</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>com.google</pattern>
-                  <shadedPattern>com.xkyss.google</shadedPattern>
+                  <shadedPattern>com.xkyss.external.core.google</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>org.apache.ibatis</pattern>
-                  <shadedPattern>com.xkyss.ibatis</shadedPattern>
+                  <shadedPattern>com.xkyss.external.core.ibatis</shadedPattern>
                 </relocation>
                 <relocation>
                   <pattern>org.slf4j</pattern>
-                  <shadedPattern>com.xkyss.slf4j</shadedPattern>
+                  <shadedPattern>com.xkyss.external.core.slf4j</shadedPattern>
                 </relocation>
               </relocations>
             </configuration>

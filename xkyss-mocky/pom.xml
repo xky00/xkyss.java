@@ -10,7 +10,7 @@
     <parent>
         <artifactId>xkyss</artifactId>
         <groupId>com.xkyss</groupId>
-        <version>2023.3.1</version>
+        <version>2023.3.2</version>
     </parent>
 
     <dependencies>
@@ -84,15 +84,15 @@
                             <relocations>
                                 <relocation>
                                     <pattern>org.apache.commons.lang3</pattern>
-                                    <shadedPattern>com.xkyss.commons.lang3</shadedPattern>
+                                    <shadedPattern>com.xkyss.external.mocky.commons.lang3</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.apache.commons.collections4</pattern>
-                                    <shadedPattern>com.xkyss.commons.collections4</shadedPattern>
+                                    <shadedPattern>com.xkyss.external.mocky.commons.collections4</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.apache.ibatis</pattern>
-                                    <shadedPattern>com.xkyss.ibatis</shadedPattern>
+                                    <shadedPattern>com.xkyss.external.mocky.ibatis</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
