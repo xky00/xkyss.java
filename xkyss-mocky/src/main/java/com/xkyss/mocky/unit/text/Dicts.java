@@ -22,6 +22,8 @@ public class Dicts implements MockUnit<String>  {
     // 字典资源目录
     private final String dir = "dicts";
 
+    private final String ext = ".txt";
+
     private final Map<String, List<String>> cache = new HashMap<>();
 
     private final Random random;
@@ -41,13 +43,12 @@ public class Dicts implements MockUnit<String>  {
 
     /**
      * 子目录:
-     *  dicts/type
-     * @param type
-     * @return
+     *  {dir}/{type}{ext}
+     *  默认: dicts/type.txt
      */
     public String get(String type) {
         // TODO: 处理相对路径
-        String path = Paths.get(type).isAbsolute() ? type : (dir + "/" + type);
+        String path = Paths.get(type).isAbsolute() ? type : (dir + "/" + type + ext);
 
         // 优先读取缓存
         if (cache.containsKey(path)) {
