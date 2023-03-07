@@ -23,24 +23,22 @@ public interface MockUnit<T> extends Supplier<T> {
         return () -> function.apply(get());
     }
 
-    default MockUnit<List<T>> list(int size) {
+    default List<T> list(int size) {
         return list(ArrayList::new, size);
     }
 
-    default MockUnit<List<T>> list(MockUnit<Integer> sizeUnit) {
+    default List<T> list(MockUnit<Integer> sizeUnit) {
         notNull(sizeUnit, "sizeUnit");
         return list(sizeUnit.get());
     }
 
-    default MockUnit<List<T>> list(Supplier<List<T>> listSupplier, int size) {
+    default List<T> list(Supplier<List<T>> listSupplier, int size) {
         notNull(listSupplier, "listSupplier");
         isTrue(size>=0, SIZE_BIGGER_THAN_ZERO);
 
-        return () -> {
-            final List<T> result = listSupplier.get();
-            notNull(result, "listSupplier");
-            range(0, size).forEach(i -> result.add(get()));
-            return result;
-        };
+        final List<T> result = listSupplier.get();
+        notNull(result, "listSupplier");
+        range(0, size).forEach(i -> result.add(get()));
+        return result;
     }
 }
