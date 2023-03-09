@@ -18,7 +18,7 @@ public class SeqTest {
 
     @Test
     public void testEmptyList() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> new Seq<>(new ArrayList<>()).list(100).get());
+        Assertions.assertThrows(IllegalArgumentException.class, () -> new Seq<>(new ArrayList<>()).list(100));
     }
 
 //    @Test
@@ -31,7 +31,7 @@ public class SeqTest {
 
     @Test
     public void testTwoElementsCycle() {
-        List<Integer> seq = new Seq<>(Arrays.asList(1, 2)).cycle(true).list(100).get();
+        List<Integer> seq = new Seq<>(Arrays.asList(1, 2)).cycle(true).list(100);
 
         range(0, seq.size()).forEach(i -> {
             if (i%2==0)
@@ -43,7 +43,7 @@ public class SeqTest {
 
     @Test
     public void testOneElementNoCycle() {
-        List<Integer> seq = new Seq<>(Arrays.asList(2)).list(10).get();
+        List<Integer> seq = new Seq<>(Arrays.asList(2)).list(10);
 
         Assertions.assertEquals(2, (int) seq.get(0));
         Assertions.assertNull(seq.get(1));
@@ -51,7 +51,7 @@ public class SeqTest {
 
     @Test
     public void testOneElementNoCycleAfterNonNull() {
-        List<Integer> seq = new Seq<>(Arrays.asList(2)).after(4).list(10).get();
+        List<Integer> seq = new Seq<>(Arrays.asList(2)).after(4).list(10);
 
         Assertions.assertEquals(2, (int) seq.get(0));
         Assertions.assertEquals(4, (int) seq.get(1));

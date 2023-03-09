@@ -44,7 +44,7 @@ public class LongSeqTest {
 
         for (int i = 0; i < TEST_COUNT; i++) {
             int size = ints.range(100, 1000).get();
-            List<Long> lst = new LongSeq().start(1).list(size).get();
+            List<Long> lst = new LongSeq().start(1).list(size);
             int sum = lst.stream().mapToInt(Long::intValue).sum();
             Assertions.assertEquals(sum, (long) size * (size + 1) / 2);
         }
