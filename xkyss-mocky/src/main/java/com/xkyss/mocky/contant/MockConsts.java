@@ -22,4 +22,15 @@ public class MockConsts {
     public static final String SEQ_OVERFLOW = "Seq overflow. Values are generated inside the interval: [{}, {}]. Cannot increment any further.";
 
     public static final String INVALID_REGEX_PATTERN = "Invalid regex pattern ('{}'): ";
+
+    public static final String LOWER_DATE_SMALLER_THAN_UPPER_DATE = "lowerDate '{}' should be < than upperDate '{}'.";
+
+    public static final String MAX_DATE_NOT_BIGGER_THAN = "maxDate '{}'  should be < than '{}' (LocalDates.MAX)";
+
+    public static final String MIN_DATE_BIGGER_THAN = "minDate '{}' should be > than '{}' (LocalDate.MIN)";
+
+    public static final String MAX_DATE_DIFFERENT_THAN_NOW = "maxDate '{}' should be > than now() ({}).";
+
+    public static final String MIN_DATE_DIFFERENT_THAN_NOW = "minDate '{}' should be < than now() ({}).";
+
 }
