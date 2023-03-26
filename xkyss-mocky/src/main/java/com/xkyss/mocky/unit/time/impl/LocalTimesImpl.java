@@ -1,25 +1,36 @@
 package com.xkyss.mocky.unit.time.impl;
 
+import com.xkyss.mocky.abstraction.AMockUnit;
 import com.xkyss.mocky.unit.time.LocalTimes;
 
 import java.time.LocalTime;
+import java.util.function.Supplier;
 
-public class LocalTimesImpl implements LocalTimes {
+public class LocalTimesImpl extends AMockUnit<LocalTime> implements LocalTimes {
 
-    @Override
-    public LocalTimes gets() {
-        return last -> {
-            return LocalTime.ofSecondOfDay(last.toSecondOfDay() + 60);
-        };
+    public LocalTimesImpl() {
+        super(LocalTime::now);
+    }
+
+    protected LocalTimesImpl(Supplier<LocalTime> supplier) {
+        super(supplier);
     }
 
     @Override
-    public LocalTime apply(LocalTime localTime) {
-        if (localTime == null) {
-            return LocalTime.now();
-        }
-        else {
-            return localTime;
-        }
+    public LocalTimes get1() {
+        Supplier<LocalTime> supplier = () -> {
+            LocalTime localTime = get();
+            return LocalTime.ofSecondOfDay(localTime.toSecondOfDay() + 60);
+        };
+        return new LocalTimesImpl(supplier);
+    }
+
+    @Override
+    public LocalTimes get2() {
+        Supplier<LocalTime> supplier = () -> {
+            LocalTime localTime = get();
+            return LocalTime.ofSecondOfDay(localTime.toSecondOfDay() + 3600);
+        };
+        return new LocalTimesImpl(supplier);
     }
 }
