@@ -1,28 +1,29 @@
 package com.xkyss.mocky.unit.time;
 
-import com.xkyss.mocky.abstraction.MockUnit2;
+import com.xkyss.mocky.abstraction.MockUnit;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.time.LocalDate;
 
-public interface LocalDates extends MockUnit2<LocalDate> {
+public interface LocalDates extends MockUnit<LocalDate> {
 
-    default LocalDates between(LocalDate lowerDate, LocalDate upperDate) {
-        return this;
+    default MockUnit<LocalDate> between(LocalDate lowerDate, LocalDate upperDate) {
+        throw new NotImplementedException();
     }
 
-    default LocalDates thisYear() {
-        return this;
+    default MockUnit<LocalDate> thisYear() {
+        throw new NotImplementedException();
     }
 
-    default LocalDates thisMonth() {
-        return this;
+    default MockUnit<LocalDate> thisMonth() {
+        throw new NotImplementedException();
     }
 
-    default LocalDates future(LocalDate maxDate) {
-        return this;
+    default MockUnit<LocalDate> future(LocalDate maxDate) {
+        throw new NotImplementedException();
     }
 
-    default LocalDates past(LocalDate minDate) {
-        return this;
+    default MockUnit<LocalDate> past(LocalDate minDate) {
+        throw new NotImplementedException();
     }
 }

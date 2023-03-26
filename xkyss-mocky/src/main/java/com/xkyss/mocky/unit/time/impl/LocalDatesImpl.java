@@ -1,12 +1,12 @@
 package com.xkyss.mocky.unit.time.impl;
 
+import com.xkyss.mocky.abstraction.MockUnit;
 import com.xkyss.mocky.unit.time.LocalDates;
 import com.xkyss.mocky.unit.types.Ints;
 import com.xkyss.mocky.unit.types.Longs;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Optional;
 
 import static com.xkyss.core.util.Validate.notNull;
 import static com.xkyss.mocky.contant.MockConsts.*;
@@ -25,19 +25,21 @@ public class LocalDatesImpl implements LocalDates {
     }
 
     @Override
-    public LocalDate apply(LocalDate localDate) {
-        return Optional.ofNullable(localDate).orElse(LocalDate.now());
+    public LocalDate get() {
+        return between(EPOCH_START, now()).get();
     }
 
     @Override
-    public LocalDates between(LocalDate lowerDate, LocalDate upperDate) {
+    public MockUnit<LocalDate> between(LocalDate lowerDate, LocalDate upperDate) {
         notNull(lowerDate, "lowerDate");
         notNull(upperDate, "upperDate");
         isTrue(lowerDate.compareTo(upperDate)<0,
             LOWER_DATE_SMALLER_THAN_UPPER_DATE,
             "lower", lowerDate,
             "upper", upperDate);
-        return last -> {
+
+        return () -> {
+
             long lowerEpoch = lowerDate.toEpochDay();
             long upperEpoch = upperDate.toEpochDay();
             long diff = upperEpoch - lowerEpoch;
@@ -47,13 +49,18 @@ public class LocalDatesImpl implements LocalDates {
     }
 
     @Override
-    public LocalDates thisYear() {
-        return last -> ofYearDay(now().getYear(), last.getDayOfYear());
+    public MockUnit<LocalDate> thisYear() {
+        return () -> {
+            int year = now().getYear();
+            int maxDays = now().lengthOfYear() + 1;
+            int randDay = ints.range(1, maxDays).get();
+            return ofYearDay(year, randDay);
+        };
     }
 
     @Override
-    public LocalDates thisMonth() {
-        return last -> {
+    public MockUnit<LocalDate> thisMonth() {
+        return () -> {
             int year = now().getYear();
             Month month = now().getMonth();
             int lM = now().lengthOfMonth() + 1;
@@ -63,7 +70,7 @@ public class LocalDatesImpl implements LocalDates {
     }
 
     @Override
-    public LocalDates future(LocalDate maxDate) {
+    public MockUnit<LocalDate> future(LocalDate maxDate) {
         notNull(maxDate, "maxDate");
         isTrue(maxDate.compareTo(MAX.minusDays(1))<=0,
             MAX_DATE_NOT_BIGGER_THAN,
@@ -77,7 +84,7 @@ public class LocalDatesImpl implements LocalDates {
     }
 
     @Override
-    public LocalDates past(LocalDate minDate) {
+    public MockUnit<LocalDate> past(LocalDate minDate) {
         notNull(minDate,  "minDate");
         isTrue(minDate.compareTo(MIN)>0,
             MIN_DATE_BIGGER_THAN,
