@@ -1,30 +1,17 @@
 package com.xkyss.mocky.unit.types;
 
 import com.xkyss.mocky.abstraction.MockUnit;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.Random;
 
-import static org.apache.commons.lang3.Validate.inclusiveBetween;
+public interface Bools extends MockUnit<Boolean> {
 
-public class Bools implements MockUnit<Boolean> {
-
-    private final Random random;
-    private final Doubles doubles;
-
-    public Bools(Random random, Doubles doubles) {
-        this.random = random;
-        this.doubles = doubles;
+    static Bools defaultWith(Random random, DoublesImpl doubles) {
+        return new BoolsImpl(random, doubles);
     }
 
-    @Override
-    public Boolean get() {
-        return random.nextBoolean();
-    }
-
-    public MockUnit<Boolean> probability(double probability) {
-        inclusiveBetween(0.0, 100.0, probability);
-        return () -> doubles
-            .range(0.0, 100.0)
-            .get() < probability;
+    default MockUnit<Boolean> probability(double probability) {
+        throw new NotImplementedException();
     }
 }

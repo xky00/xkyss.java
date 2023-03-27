@@ -1,7 +1,6 @@
-package com.xkyss.mocky.unit.time.impl;
+package com.xkyss.mocky.unit.time;
 
 import com.xkyss.mocky.abstraction.MockUnit;
-import com.xkyss.mocky.unit.time.LocalDates;
 import com.xkyss.mocky.unit.types.Ints;
 import com.xkyss.mocky.unit.types.Longs;
 
@@ -13,7 +12,7 @@ import static com.xkyss.mocky.contant.MockConsts.*;
 import static java.time.LocalDate.*;
 import static org.apache.commons.lang3.Validate.isTrue;
 
-public class LocalDatesImpl implements LocalDates {
+class LocalDatesImpl implements LocalDates {
 
     public static final LocalDate EPOCH_START = ofEpochDay(0);
     private final Ints ints;

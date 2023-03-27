@@ -1,6 +1,5 @@
 package com.xkyss.mocky.unit.time;
 
-import com.xkyss.mocky.unit.time.impl.LocalDatesImpl;
 import com.xkyss.mocky.unit.types.Ints;
 import com.xkyss.mocky.unit.types.Longs;
 import org.junit.jupiter.api.Assertions;
@@ -11,18 +10,18 @@ import java.time.LocalDate;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.xkyss.mocky.constants.MockTestConst.TEST_COUNT;
-import static com.xkyss.mocky.unit.time.impl.LocalDatesImpl.EPOCH_START;
+import static com.xkyss.mocky.unit.time.LocalDatesImpl.EPOCH_START;
 import static java.time.LocalDate.MAX;
 import static java.time.LocalDate.MIN;
 
 public class LocalDatesTest {
 
-    LocalDatesImpl localDates;
+    LocalDates localDates;
 
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        localDates = new LocalDatesImpl(new Ints(random), new Longs(random));
+        localDates = LocalDates.defaultOf(Ints.defaultWith(random), Longs.defaultWith(random));
     }
 
     @Test

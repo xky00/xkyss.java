@@ -19,7 +19,7 @@ public class LongsTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        longs = new Longs(random);
+        longs = Longs.defaultWith(random);
     }
 
     @Test

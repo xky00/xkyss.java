@@ -3,84 +3,49 @@ package com.xkyss.mocky.unit.types;
 import com.xkyss.mocky.abstraction.MockUnit;
 import com.xkyss.mocky.contant.CharsType;
 import com.xkyss.mocky.unit.objects.Froms;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.Random;
 
-import static com.xkyss.core.util.Validate.*;
-import static com.xkyss.mocky.contant.Alphabets.*;
+public interface Chars extends MockUnit<Character> {
 
-
-public class Chars implements MockUnit<Character> {
-
-    private final Random random;
-
-    private final Froms froms;
-
-
-    public Chars(Random random, Froms froms) {
-        this.random = random;
-        this.froms = froms;
+    static Chars defaultWith(Random random, Froms froms) {
+        return new CharsImpl(random, froms);
     }
 
-    @Override
-    public Character get() {
-        return froms.from(ALPHA_NUMERIC).get();
-    }
-    
-    public MockUnit<Character> digits() {
-        return froms.from(DIGITS);
+    default MockUnit<Character> digits() {
+        throw new NotImplementedException();
     }
 
-    public MockUnit<Character> lowerLetter() {
-        return froms.from(LETTERS_LOWERCASE);
+    default MockUnit<Character> lowerLetter() {
+        throw new NotImplementedException();
     }
 
-    public MockUnit<Character> upperLetter() {
-        return froms.from(LETTERS_UPPERCASE);
+    default MockUnit<Character> upperLetter() {
+        throw new NotImplementedException();
     }
 
-    public MockUnit<Character> letter() {
-        return froms.from(LETTERS);
+    default MockUnit<Character> letter() {
+        throw new NotImplementedException();
     }
 
-    public MockUnit<Character> hex() {
-        return froms.from(HEXA);
+    default MockUnit<Character> hex() {
+        throw new NotImplementedException();
     }
 
-    public MockUnit<Character> from(String alphabet) {
-        notEmpty(alphabet, "alphabet");
-        return () -> {
-            int idx = random.nextInt(alphabet.length());
-            return alphabet.charAt(idx);
-        };
+    default MockUnit<Character> from(String alphabet) {
+        throw new NotImplementedException();
     }
 
-    public MockUnit<Character> from(char[] alphabet) {
-        notEmpty(alphabet, "alphabet");
-        return () -> {
-            int idx = random.nextInt(alphabet.length);
-            return alphabet[idx];
-        };
+    default MockUnit<Character> from(char[] alphabet) {
+        throw new NotImplementedException();
     }
 
-    public MockUnit<Character> type(CharsType type) {
-        notNull(type, "type");
-
-        switch (type) {
-            case DIGITS: return digits();
-            case HEX: return hex();
-            case LOWER_LETTERS: return lowerLetter();
-            case UPPER_LETTERS: return upperLetter();
-            case LETTERS: return letter();
-            case ALPHA_NUMERIC: return this;
-            default: throw new IllegalArgumentException("Invalid CharsType");
-        }
+    default MockUnit<Character> type(CharsType type) {
+        throw new NotImplementedException();
     }
 
-    public MockUnit<Character> types(CharsType... types) {
-        notEmptyOrNullValues(types, "types");
-
-        CharsType type = froms.from(types).get();
-        return type(type);
+    default MockUnit<Character> types(CharsType... types) {
+        throw new NotImplementedException();
     }
 }

@@ -1,47 +1,25 @@
 package com.xkyss.mocky.unit.types;
 
-import com.xkyss.core.util.Validate;
 import com.xkyss.mocky.abstraction.MockUnit;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.Random;
 
-import static com.xkyss.mocky.contant.MockConsts.*;
-import static org.apache.commons.lang3.Validate.*;
+public interface Ints extends MockUnit<Integer> {
 
-public class Ints implements MockUnit<Integer> {
-
-    private final Random random;
-
-    public Ints(Random random) {
-        this.random = random;
+    static Ints defaultWith(Random random) {
+        return new IntsImpl(random);
     }
 
-    @Override
-    public Integer get() {
-        return random.nextInt();
+    default MockUnit<Integer> range(Integer lowerBound, Integer upperBound) {
+        throw new NotImplementedException();
     }
 
-    public MockUnit<Integer> range(Integer lowerBound, Integer upperBound) {
-        notNull(lowerBound, "lowerBound");
-        notNull(upperBound, "upperBound");
-        isTrue(lowerBound>=0, LOWER_BOUND_BIGGER_THAN_ZERO);
-        isTrue(upperBound>0, UPPER_BOUND_BIGGER_THAN_ZERO);
-        isTrue(upperBound>lowerBound, UPPER_BOUND_BIGGER_LOWER_BOUND);
-
-        return () -> random.nextInt(upperBound - lowerBound) + lowerBound;
+    default MockUnit<Integer> bound(Integer bound) {
+        throw new NotImplementedException();
     }
 
-    public MockUnit<Integer> bound(Integer bound) {
-        isTrue(bound > 0, LOWER_BOUND_BIGGER_THAN_ZERO);
-
-        return () -> random.nextInt(bound);
-    }
-
-    public MockUnit<Integer> from(int[] alphabet) {
-        Validate.notEmpty(alphabet, "alphabet");
-        return () -> {
-            int idx = random.nextInt(alphabet.length);
-            return alphabet[idx];
-        };
+    default MockUnit<Integer> from(int[] alphabet) {
+        throw new NotImplementedException();
     }
 }

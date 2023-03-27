@@ -19,7 +19,7 @@ public class FloatsTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        floats = new Floats(random);
+        floats = Floats.defaultWith(random);
     }
 
     @Test

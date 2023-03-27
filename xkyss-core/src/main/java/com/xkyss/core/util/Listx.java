@@ -1,7 +1,10 @@
 package com.xkyss.core.util;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Listx {
@@ -23,5 +26,14 @@ public class Listx {
         }
 
         return list.get(index);
+    }
+
+    public static <E> List<E> of(E... elements) {
+        if (elements == null || elements.length == 0) {
+            return new ArrayList<>();
+        }
+        List<E> list = new ArrayList<>(elements.length);
+        list.addAll(Arrays.asList(elements));
+        return list;
     }
 }

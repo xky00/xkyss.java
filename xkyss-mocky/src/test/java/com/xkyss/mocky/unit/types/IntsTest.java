@@ -19,7 +19,7 @@ public class IntsTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        ints = new Ints(random);
+        ints = Ints.defaultWith(random);
     }
 
     @Test

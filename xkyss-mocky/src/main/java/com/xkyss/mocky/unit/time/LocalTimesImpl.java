@@ -1,12 +1,11 @@
-package com.xkyss.mocky.unit.time.impl;
+package com.xkyss.mocky.unit.time;
 
 import com.xkyss.mocky.abstraction.AMockUnit;
-import com.xkyss.mocky.unit.time.LocalTimes;
 
 import java.time.LocalTime;
 import java.util.function.Supplier;
 
-public class LocalTimesImpl extends AMockUnit<LocalTime> implements LocalTimes {
+class LocalTimesImpl extends AMockUnit<LocalTime> implements LocalTimes {
 
     public LocalTimesImpl() {
         super(LocalTime::now);
