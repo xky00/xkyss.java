@@ -1,5 +1,6 @@
 package com.xkyss.mocky.unit.text;
 
+import com.xkyss.mocky.unit.types.Ints;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ public class HashesTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        hashes = new Hashes(random, new Strings(random));
+        hashes = new Hashes(random, Strings.defaultOf(random));
     }
 
     @Test
