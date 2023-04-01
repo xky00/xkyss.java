@@ -38,26 +38,32 @@ public class HashesImpl implements Hashes {
         return strings.size(HASHED_STRING_SIZE).map(digester);
     }
 
+    @Override
     public String md2() {
         return supplier(DigestUtils::md2Hex).get();
     }
 
+    @Override
     public String md5() {
         return supplier(DigestUtils::md5Hex).get();
     }
 
+    @Override
     public String sha1() {
         return supplier(DigestUtils::sha1Hex).get();
     }
 
+    @Override
     public String sha256() {
         return supplier(DigestUtils::sha256Hex).get();
     }
 
+    @Override
     public String sha384() {
         return supplier(DigestUtils::sha384Hex).get();
     }
 
+    @Override
     public String sha512() {
         return supplier(DigestUtils::sha512Hex).get();
     }
