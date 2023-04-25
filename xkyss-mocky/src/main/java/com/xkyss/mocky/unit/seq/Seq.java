@@ -24,7 +24,6 @@ public class Seq<T> implements MockUnit<T> {
         isTrue(iterator.hasNext(), IMPOSSIBLE_TO_SEQ_OVER_EMPTY_COLLECTION);
     }
 
-
     @Override
     public T get() {
         if (iterator.hasNext())
