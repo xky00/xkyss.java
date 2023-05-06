@@ -185,7 +185,7 @@ public class Converter {
     }
 
     /**
-     * 全大写, {code '_'}连接
+     * 全小写, {code '_'}连接
      * <pre>
      *     lower_case_name
      * </pre>
@@ -221,7 +221,7 @@ public class Converter {
     }
 
     /**
-     * 全小写, {code '_'}连接
+     * 全小写, {code ' '}连接
      * <pre>
      *     lower case name
      * </pre>
@@ -298,7 +298,7 @@ public class Converter {
     }
 
     /**
-     * 全大写 + {@code ' '}连接
+     * 全大写, {@code ' '}连接
      * <pre>
      *     UPPER CASE NAME
      * </pre>
