@@ -19,7 +19,7 @@ public class DoublesTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        doubles = Doubles.defaultWith(random);
+        doubles = new Doubles(random);
     }
 
     @Test

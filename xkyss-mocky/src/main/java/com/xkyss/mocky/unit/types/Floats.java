@@ -1,25 +1,45 @@
 package com.xkyss.mocky.unit.types;
 
+import com.xkyss.core.util.Validate;
 import com.xkyss.mocky.abstraction.MockUnit;
-import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.Random;
 
-public interface Floats extends MockUnit<Float> {
+import static com.xkyss.core.util.Validate.isFinite;
+import static com.xkyss.mocky.contant.MockConsts.*;
+import static org.apache.commons.lang3.Validate.*;
 
-    static Floats defaultWith(Random random) {
-        return new FloatsImpl(random);
+public class Floats implements MockUnit<Float> {
+    private final Random random;
+
+    public Floats(Random random) {
+        this.random = random;
     }
 
-    default MockUnit<Float> range(float lowerBound, float upperBound) {
-        throw new NotImplementedException();
+    @Override
+    public Float get() {
+        return random.nextFloat();
     }
 
-    default MockUnit<Float> bound(float bound) {
-        throw new NotImplementedException();
+    public MockUnit<Float> range(float lowerBound, float upperBound) {
+        isFinite(lowerBound);
+        isFinite(upperBound);
+        isTrue(lowerBound>=0.0f, LOWER_BOUND_BIGGER_THAN_ZERO);
+        isTrue(upperBound>0.0f, UPPER_BOUND_BIGGER_THAN_ZERO);
+        isTrue(upperBound>lowerBound, UPPER_BOUND_BIGGER_LOWER_BOUND);
+
+        return () -> random.nextFloat() * (upperBound - lowerBound) + lowerBound;
     }
 
-    default MockUnit<Float> from(float[] alphabet) {
-        throw new NotImplementedException();
+    public MockUnit<Float> bound(float bound) {
+        return range(0f, bound);
+    }
+
+    public MockUnit<Float> from(float[] alphabet) {
+        Validate.notEmpty(alphabet, "alphabet");
+        return () -> {
+            int idx = random.nextInt(alphabet.length);
+            return alphabet[idx];
+        };
     }
 }

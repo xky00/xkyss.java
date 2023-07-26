@@ -40,7 +40,7 @@ public class IntSeqTest {
     @Test
     public void testIntSeqListings() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        Ints ints = Ints.defaultWith(random);
+        Ints ints = new Ints(random);
 
         for (int i = 0; i < TEST_COUNT; i++) {
             int size = ints.range(100, 1000).get();
