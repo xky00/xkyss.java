@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.xkyss.mocky.constants.MockTestConst.TEST_COUNT;
-import static com.xkyss.mocky.unit.time.LocalDatesImpl.EPOCH_START;
+import static com.xkyss.mocky.unit.time.LocalDates.EPOCH_START;
 import static java.time.LocalDate.MAX;
 import static java.time.LocalDate.MIN;
 
@@ -21,7 +21,7 @@ public class LocalDatesTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        localDates = LocalDates.defaultOf(Ints.defaultWith(random), Longs.defaultWith(random));
+        localDates = new LocalDates(new Ints(random), new Longs(random));
     }
 
     @Test

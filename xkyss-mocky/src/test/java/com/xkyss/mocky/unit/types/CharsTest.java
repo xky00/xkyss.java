@@ -17,7 +17,7 @@ public class CharsTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        chars = Chars.defaultWith(random, new Froms(random));
+        chars = new Chars(random, new Froms(random));
     }
 
     @Test

@@ -8,7 +8,7 @@ public class LocalTimesTest {
 
     @Test
     public void test_01() {
-        LocalTimes times = new LocalTimesImpl();
+        LocalTimes times = new LocalTimes();
         LocalTime t1 = times.get();
         LocalTime t2 = times.get1().get();
         LocalTime t3 = times.get1().get2().get();

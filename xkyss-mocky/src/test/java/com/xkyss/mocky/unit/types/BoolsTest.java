@@ -15,7 +15,7 @@ public class BoolsTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        bools = Bools.defaultWith(random, new DoublesImpl(random));
+        bools = new Bools(random, new Doubles(random));
     }
 
     @Test

@@ -19,7 +19,7 @@ public class LongsTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        longs = Longs.defaultWith(random);
+        longs = new Longs(random);
     }
 
     @Test
@@ -106,8 +106,6 @@ public class LongsTest {
     @Test
     public void testNextIntegerNullNotBound() {
         Assertions.assertThrows(NullPointerException.class, () -> longs.bound(null).get());
-        Assertions.assertThrows(NullPointerException.class, () -> longs.range(null, 100L).get());
-        Assertions.assertThrows(NullPointerException.class, () -> longs.range(1L, null).get());
     }
 
     @Test

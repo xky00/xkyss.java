@@ -1,7 +1,6 @@
 package com.xkyss.mocky.unit.text;
 
 import com.xkyss.mocky.abstraction.MockUnit;
-import com.xkyss.mocky.unit.types.Ints;
 
 import java.util.Random;
 

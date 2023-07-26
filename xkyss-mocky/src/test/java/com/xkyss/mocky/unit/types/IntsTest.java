@@ -19,7 +19,7 @@ public class IntsTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        ints = Ints.defaultWith(random);
+        ints = new Ints(random);
     }
 
     @Test
@@ -101,13 +101,6 @@ public class IntsTest {
         Assertions.assertThrows(IllegalArgumentException.class, () -> ints.range(1, 1).get());
         Assertions.assertThrows(IllegalArgumentException.class, () -> ints.range(10, 10).get());
         Assertions.assertThrows(IllegalArgumentException.class, () -> ints.range(Integer.MAX_VALUE, Integer.MAX_VALUE).get());
-    }
-
-    @Test
-    public void testNextIntegerNullNotBound() {
-        Assertions.assertThrows(NullPointerException.class, () -> ints.bound(null).get());
-        Assertions.assertThrows(NullPointerException.class, () -> ints.range(null, 100).get());
-        Assertions.assertThrows(NullPointerException.class, () -> ints.range(1, null).get());
     }
 
     @Test

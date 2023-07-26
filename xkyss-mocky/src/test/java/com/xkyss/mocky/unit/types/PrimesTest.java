@@ -17,7 +17,7 @@ public class PrimesTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        primes = Primes.defaultWith(new Froms(random));
+        primes = new Primes(new Froms(random));
     }
 
     @Test
