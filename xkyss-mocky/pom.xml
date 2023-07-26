@@ -82,6 +82,7 @@
                                 <includes>
                                     <include>org.apache.commons:commons-lang3</include>
                                     <include>org.apache.commons:commons-collections4</include>
+                                    <include>org.apache.commons:commons-csv</include>
                                     <include>org.mybatis:mybatis</include>
                                 </includes>
                             </artifactSet>
@@ -93,6 +94,10 @@
                                 <relocation>
                                     <pattern>org.apache.commons.collections4</pattern>
                                     <shadedPattern>com.xkyss.external.mocky.commons.collections4</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.apache.commons.csv</pattern>
+                                    <shadedPattern>com.xkyss.external.mocky.commons.csv</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.apache.ibatis</pattern>
