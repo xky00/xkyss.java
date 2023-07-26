@@ -1,6 +1,7 @@
 package com.xkyss.mocky.unit.address;
 
-import com.xkyss.mocky.abstraction.ADictUnit;
+import com.xkyss.mocky.abstraction.ACachedDictUnit;
+import com.xkyss.mocky.abstraction.ACsvDictUnit;
 import com.xkyss.mocky.model.Province;
 import org.apache.commons.csv.CSVRecord;
 
@@ -10,7 +11,7 @@ import java.util.Random;
 /**
  * 省
  */
-public class Provinces extends ADictUnit<Province> {
+public class Provinces extends ACsvDictUnit<Province> {
 
     public Provinces(Random random) {
         super(random);

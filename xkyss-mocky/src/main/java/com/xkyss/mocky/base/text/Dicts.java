@@ -1,13 +1,12 @@
 package com.xkyss.mocky.base.text;
 
-import com.xkyss.mocky.abstraction.ADictUnit;
+import com.xkyss.mocky.abstraction.ALineDictUnit;
 import com.xkyss.mocky.abstraction.MockUnit;
-import org.apache.commons.csv.CSVRecord;
+import com.xkyss.mocky.util.LineReader;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static com.xkyss.mocky.contant.MockConsts.DICT_PATH;
 
@@ -39,7 +38,7 @@ public class Dicts implements MockUnit<String> {
         return sd.get();
     }
 
-    class StringDict extends ADictUnit<String> {
+    class StringDict extends ALineDictUnit {
 
         private final String path;
 
@@ -50,12 +49,7 @@ public class Dicts implements MockUnit<String> {
 
         @Override
         protected String path() {
-            return path;
-        }
-
-        @Override
-        protected String convert(CSVRecord record) {
-            return record.get(0);
+            return this.path;
         }
     }
 }
