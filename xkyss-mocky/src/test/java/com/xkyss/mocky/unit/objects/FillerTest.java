@@ -1,7 +1,6 @@
 package com.xkyss.mocky.unit.objects;
 
 import com.xkyss.mocky.unit.objects.bean.SimpleBean;
-import com.xkyss.mocky.unit.text.Strings;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

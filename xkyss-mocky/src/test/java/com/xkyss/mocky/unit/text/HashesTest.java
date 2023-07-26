@@ -15,7 +15,7 @@ public class HashesTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        hashes = Hashes.defaultOf(random, Strings.defaultOf(random));
+        hashes = new Hashes(random, new Strings(random));
     }
 
     @Test

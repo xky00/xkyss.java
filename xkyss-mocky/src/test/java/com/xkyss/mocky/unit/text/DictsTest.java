@@ -17,7 +17,7 @@ public class DictsTest {
     @BeforeEach
     public void init() {
         ThreadLocalRandom random = ThreadLocalRandom.current();
-        dicts = Dicts.defaultOf(random);
+        dicts = new Dicts(random);
     }
 
     @Test
