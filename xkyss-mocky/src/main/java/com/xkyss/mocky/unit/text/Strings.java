@@ -9,7 +9,7 @@ import static org.apache.commons.lang3.RandomStringUtils.random;
 import static org.apache.commons.lang3.Validate.isTrue;
 import static org.apache.commons.lang3.Validate.notNull;
 
-class Strings implements MockUnit<String> {
+public class Strings implements MockUnit<String> {
 
     private final Random random;
 
