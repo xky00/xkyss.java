@@ -1,109 +1,61 @@
 package com.xkyss.mocky.base.text;
 
+import com.xkyss.mocky.abstraction.ADictUnit;
 import com.xkyss.mocky.abstraction.MockUnit;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.ibatis.io.Resources;
+import org.apache.commons.csv.CSVRecord;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.Reader;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
-import static java.nio.charset.Charset.defaultCharset;
-import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
+import static com.xkyss.mocky.contant.MockConsts.DICT_PATH;
 
 public class Dicts implements MockUnit<String> {
 
-    // 字典资源目录
-    private final static String DIR = "dicts";
-
     private final static String EXT = ".txt";
 
-    private final Map<String, List<String>> cache = new HashMap<>();
-
     private final Random random;
+
+    private Map<String, StringDict> dicts = new HashMap<>();
 
     public Dicts(Random random) {
         this.random = random;
     }
 
-    /**
-     * TODO: 随机从现有的字典返回一个
-     * @return
-     */
     @Override
     public String get() {
         return null;
     }
 
-    /**
-     * 子目录:
-     *  {dir}/{type}{ext}
-     *  默认: dicts/type.txt
-     */
-    public String get(String type) {
-        // TODO: 处理相对路径
-        String path = Paths.get(type).isAbsolute() ? type : (DIR + "/" + type + EXT);
-
-        // 优先读取缓存
-        if (cache.containsKey(path)) {
-            List<String> caches = cache.get(path);
-            return caches.get(random.nextInt(caches.size()));
+    public String get(String key) {
+        if (dicts.containsKey(key)) {
+            return dicts.get(key).get();
         }
 
-        // 尝试读取外部文件
-        List<String> lines = readFileLines(path);
-        if (!CollectionUtils.isEmpty(lines)) {
-            return lines.get(random.nextInt(lines.size()));
-        }
-
-        // 尝试读取资源文件
-        lines = readResourceLines(path);
-        if (!CollectionUtils.isEmpty(lines)) {
-            return lines.get(random.nextInt(lines.size()));
-        }
-
-        return "";
+        String path = Paths.get(key).isAbsolute() ? key : (DICT_PATH + "/" + key + EXT);
+        StringDict sd = new StringDict(random, path);
+        dicts.put(key, sd);
+        return sd.get();
     }
 
-    private List<String> readResourceLines(String path) {
-        if (cache.containsKey(path)) {
-            return cache.get(path);
+    class StringDict extends ADictUnit<String> {
+
+        private final String path;
+
+        public StringDict(Random random, String path) {
+            super(random);
+            this.path = path;
         }
 
-        Resources.setCharset(defaultCharset());
-
-        try (
-            Reader reader = requireNonNull(Resources.getResourceAsReader(path));
-            BufferedReader buff = new BufferedReader(reader);
-        ) {
-            List<String> lines = buff.lines().collect(toList());
-            cache.put(path, lines);
-            return lines;
-        } catch (IOException e) {
-            return Collections.emptyList();
-        }
-    }
-
-    private List<String> readFileLines(String path) {
-        if (cache.containsKey(path)) {
-            return cache.get(path);
+        @Override
+        protected String path() {
+            return path;
         }
 
-        Path p = java.nio.file.Paths.get(path);
-
-        try (Stream<String> stream = Files.lines(p)) {
-            List<String> lines = stream.collect(toList());
-            cache.put(path, lines);
-            return lines;
-        } catch (IOException e) {
-            return Collections.emptyList();
+        @Override
+        protected String convert(CSVRecord record) {
+            return record.get(0);
         }
     }
-
 }

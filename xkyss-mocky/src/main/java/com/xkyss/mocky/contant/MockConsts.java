@@ -1,6 +1,8 @@
 package com.xkyss.mocky.contant;
 
 public class MockConsts {
+    public static final String DICT_PATH = "dicts";
+
     public static final String INPUT_PARAMETER_NOT_NULL = "Input parameter: '%s' should not be NULL.";
 
     public static final String LOWER_BOUND_BIGGER_THAN_ZERO = "The input parameter 'lowerBound' should be >= 0.0.";
