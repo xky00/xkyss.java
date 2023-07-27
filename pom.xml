@@ -18,17 +18,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <maven-shade-plugin.version>3.4.1</maven-shade-plugin.version>
         <proguard-maven-plugin.version>2.6.0</proguard-maven-plugin.version>
-        <!-- dependencies -->
         <junit.version>5.9.0</junit.version>
-        <commons-lang3.version>3.12.0</commons-lang3.version>
-        <commons-collections4.version>4.4</commons-collections4.version>
-        <commons-codec.version>1.15</commons-codec.version>
-        <commons-csv.version>1.10.0</commons-csv.version>
-        <guava.version>31.1-jre</guava.version>
-        <mybatis.version>3.5.11</mybatis.version>
-        <slf4j.version>2.0.6</slf4j.version>
-        <hutool.version>5.8.11</hutool.version>
-        <generex.version>1.0.2</generex.version>
     </properties>
 
     <modules>
@@ -36,6 +26,7 @@
         <module>xkyss-mocky</module>
         <module>xkyss-json</module>
         <module>xkyss-security</module>
+        <module>xkyss-bom</module>
     </modules>
 
     <dependencies>
@@ -47,69 +38,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.xkyss</groupId>
-                <artifactId>xkyss-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.xkyss</groupId>
-                <artifactId>xkyss-json</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.xkyss</groupId>
-                <artifactId>xkyss-mocky</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-collections4 -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-collections4</artifactId>
-                <version>${commons-collections4.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>${commons-codec.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-csv -->
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-csv</artifactId>
-                <version>${commons-csv.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis</artifactId>
-                <version>${mybatis.version}</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <pluginManagement>
