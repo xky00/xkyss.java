@@ -3,12 +3,9 @@ package com.xkyss.quarkus.codegen.runtime;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 import io.smallrye.config.ConfigMapping;
-import io.smallrye.config.WithConverter;
-import org.eclipse.microprofile.config.spi.Converter;
 
 import java.util.List;
 import java.util.Optional;
-
 
 @ConfigMapping(prefix = "xkyss.codegen")
 @ConfigRoot(phase = ConfigPhase.BUILD_AND_RUN_TIME_FIXED)
