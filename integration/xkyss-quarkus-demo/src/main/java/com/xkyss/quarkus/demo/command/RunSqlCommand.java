@@ -1,7 +1,7 @@
 package com.xkyss.quarkus.demo.command;
 
 
-import com.xkyss.ibatis.jdbc.ScriptRunner;
+import com.xkyss.external.core.ibatis.jdbc.ScriptRunner;
 import io.agroal.api.AgroalDataSource;
 import jakarta.inject.Inject;
 import org.apache.ibatis.io.Resources;
@@ -47,6 +47,5 @@ public class RunSqlCommand implements Runnable {
         }
 
         logger.info("Run Sql END.");
-
     }
 }

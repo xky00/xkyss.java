@@ -1,7 +1,7 @@
 package com.xkyss.core.jdbc;
 
-import com.xkyss.ibatis.io.Resources;
-import com.xkyss.ibatis.jdbc.ScriptRunner;
+import com.xkyss.external.core.ibatis.io.Resources;
+import com.xkyss.external.core.ibatis.jdbc.ScriptRunner;
 import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.Assertions;
