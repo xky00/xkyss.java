@@ -41,13 +41,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <dependency>
-                <groupId>com.xkyss</groupId>
-                <version>${xkyss.version}</version>
-                <artifactId>xkyss-bom</artifactId>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

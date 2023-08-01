@@ -14,4 +14,17 @@
         <version>2023.8.1</version>
     </parent>
 
+    <dependencies>
+        <!-- quarkus -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-arc-deployment</artifactId>
+        </dependency>
+        <!-- xkyss -->
+        <dependency>
+            <groupId>com.xkyss</groupId>
+            <artifactId>xkyss-quarkus-server</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

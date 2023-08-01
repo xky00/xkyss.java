@@ -16,7 +16,7 @@
     </parent>
 
     <properties>
-        <xkyss.version>2023.7.1</xkyss.version>
+        <xkyss.version>2023.8.1</xkyss.version>
         <mysql.version>8.0.30</mysql.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
     </properties>
@@ -30,6 +30,12 @@
                 <version>${xkyss.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <!-- xkyss-quarkus -->
+            <dependency>
+                <groupId>com.xkyss</groupId>
+                <artifactId>xkyss-quarkus-server</artifactId>
+                <version>${xkyss.version}</version>
             </dependency>
             <!-- mapstruct -->
             <dependency>

@@ -14,4 +14,12 @@
         <version>2023.8.1</version>
     </parent>
 
+    <dependencies>
+        <!-- quarkus -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-arc</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>
