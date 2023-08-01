@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>xkyss-quarkus-bom</artifactId>
+    <packaging>pom</packaging>
+    <name>Xkyss Quarkus :: BOM</name>
+
+    <parent>
+        <groupId>com.xkyss</groupId>
+        <artifactId>xkyss-quarkus</artifactId>
+        <version>2023.8.1</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <properties>
+        <xkyss.version>2023.7.1</xkyss.version>
+        <mysql.version>8.0.30</mysql.version>
+        <mapstruct.version>1.5.3.Final</mapstruct.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- xkyss -->
+            <dependency>
+                <groupId>com.xkyss</groupId>
+                <artifactId>xkyss-bom</artifactId>
+                <version>${xkyss.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- mapstruct -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>
