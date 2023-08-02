@@ -1,5 +1,6 @@
 package com.xkyss.quarkus.server.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.xkyss.quarkus.server.error.ErrorCode;
 
 import java.util.Objects;
@@ -96,14 +97,17 @@ public class Response<T> {
         return new Response<>(ErrorCode.错误, message, data, pageInfo);
     }
 
+    @JsonIgnore
     public boolean isSuccess() {
         return Objects.equals(ErrorCode.成功, code);
     }
 
+    @JsonIgnore
     public boolean isWarn() {
         return Objects.equals(ErrorCode.警告, code);
     }
 
+    @JsonIgnore
     public boolean isError() {
         return Objects.equals(ErrorCode.错误, code);
     }
