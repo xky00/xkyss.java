@@ -9,11 +9,13 @@ import static com.xkyss.quarkus.server.constant.KsConstants.CONFIG_PREFIX;
  * 配置
  */
 @ConfigMapping(prefix = CONFIG_PREFIX)
-public interface KsConfig {
+public interface KsRuntimeConfig {
 
     /**
      * 项目名称
      */
+
+
     String appName();
 
     /**
