@@ -1,6 +1,7 @@
 package com.xkyss.quarkus.server;
 
-import com.xkyss.quarkus.server.config.KsBuildConfig;
+import com.xkyss.quarkus.server.config.BuildConfig;
+import io.quarkus.hibernate.validator.runtime.ValidatorProvider;
 import io.quarkus.runtime.annotations.Recorder;
 import jakarta.validation.MessageInterpolator;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
@@ -9,11 +10,11 @@ import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 import java.util.function.Supplier;
 
 @Recorder
-public class KsServerRecorder {
+public class ServerRecorder {
 
-    private final KsBuildConfig buildConfig;
+    private final BuildConfig buildConfig;
 
-    public KsServerRecorder(KsBuildConfig buildConfig) {
+    public ServerRecorder(BuildConfig buildConfig) {
         this.buildConfig = buildConfig;
     }
 
