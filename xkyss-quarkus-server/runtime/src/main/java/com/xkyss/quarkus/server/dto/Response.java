@@ -97,6 +97,26 @@ public class Response<T> {
         return new Response<>(ErrorCode.错误, message, data, pageInfo);
     }
 
+    public static <T> Response<T> exception() {
+        return new Response<>(ErrorCode.异常);
+    }
+
+    public static <T> Response<T> exception(T data) {
+        return new Response<>(ErrorCode.异常, null, data);
+    }
+
+    public static <T> Response<T> exception(T data, PageInfo pageInfo) {
+        return new Response<>(ErrorCode.异常, null, data, pageInfo);
+    }
+
+    public static <T> Response<T> exception(String message, T data) {
+        return new Response<>(ErrorCode.异常, message, data);
+    }
+
+    public static <T> Response<T> exception(String message, T data, PageInfo pageInfo) {
+        return new Response<>(ErrorCode.异常, message, data, pageInfo);
+    }
+
     @JsonIgnore
     public boolean isSuccess() {
         return Objects.equals(ErrorCode.成功, code);
@@ -110,6 +130,11 @@ public class Response<T> {
     @JsonIgnore
     public boolean isError() {
         return Objects.equals(ErrorCode.错误, code);
+    }
+
+    @JsonIgnore
+    public boolean isException() {
+        return Objects.equals(ErrorCode.异常, code);
     }
 
     public Integer getCode() {
