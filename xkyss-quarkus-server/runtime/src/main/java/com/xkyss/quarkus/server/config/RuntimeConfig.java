@@ -21,6 +21,11 @@ public interface RuntimeConfig {
     String appName();
 
     /**
+     * 项目标识
+     */
+    String appSn();
+
+    /**
      * 项目版本
      */
     String appVersion();

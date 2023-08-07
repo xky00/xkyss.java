@@ -13,7 +13,6 @@ public class Constants {
     public static final String I18N_VALIDATION = "i18n/validation";
 
 
-
     public static final String REQUEST_TIME_KEY = "request-time";
 
     public static final String REQUEST_BODY_KEY = "request-body";
