@@ -5,6 +5,8 @@ import io.quarkus.runtime.annotations.ConfigRoot;
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
 
+import java.util.Set;
+
 import static com.xkyss.quarkus.server.constant.Constants.CONFIG_SERVER_BUILD_PREFIX;
 import static com.xkyss.quarkus.server.constant.Constants.I18N_VALIDATION;
 
@@ -16,4 +18,9 @@ public interface BuildConfig {
      */
     @WithDefault(I18N_VALIDATION)
     String validationMessagesPath();
+
+    /**
+     * 不进行Response包装的类型
+     */
+    Set<String> ignoreResponseFilterTypes();
 }

@@ -1,13 +1,18 @@
 package com.xkyss.quarkus.server.filter;
 
 
+import com.xkyss.quarkus.server.config.BuildConfig;
+import com.xkyss.quarkus.server.dto.Response;
 import com.xkyss.quarkus.server.service.ErrorMessageService;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.server.ServerResponseFilter;
+
+import java.util.Set;
+
+import static com.xkyss.quarkus.server.constant.Constants.KS_SERVER_RESPONSE_FILTER_PRIORITY;
 
 /**
  * 自动给http调用包装为Response
@@ -18,8 +23,14 @@ public class ResponseFilter {
     @Inject
     ErrorMessageService ems;
 
-    @ServerResponseFilter
+    @Inject
+    BuildConfig buildConfig;
+
+    private static final Set<MediaType> mediaTypes = Set.of(MediaType.APPLICATION_JSON_TYPE, MediaType.TEXT_PLAIN_TYPE);
+
+    @ServerResponseFilter(priority = KS_SERVER_RESPONSE_FILTER_PRIORITY)
     public void mapResponse(ContainerResponseContext response) {
+
         // 没有返回体
         if (!response.hasEntity()) {
             return;
@@ -30,21 +41,27 @@ public class ResponseFilter {
             return;
         }
 
-        // 只对json返回类型进行处理
-        if (!response.getMediaType().isCompatible(MediaType.APPLICATION_JSON_TYPE)) {
+        // 过滤指定MediaType
+        if (mediaTypes.stream().noneMatch(t -> response.getMediaType().isCompatible(t))) {
             return;
         }
 
-        // 已经是Response了
-        if (response.getEntity() instanceof Response) {
+        // 忽略指定的类型
+        if (buildConfig.ignoreResponseFilterTypes().contains(response.getEntityClass().getName())) {
             return;
         }
-        if (response.getEntity() instanceof com.xkyss.quarkus.server.dto.Response) {
+
+        // 已经是Response,看下是否需要填充message
+        if (response.getEntity() instanceof Response) {
+            @SuppressWarnings("rawtypes") Response entity = (Response) response.getEntity();
+            if (entity.getCode() != null && entity.getMessage() == null) {
+                entity.setMessage(ems.getMessage(entity.getCode()));
+            }
             return;
         }
 
         // 包装一下
-        com.xkyss.quarkus.server.dto.Response<Object> r = com.xkyss.quarkus.server.dto.Response.success();
+        Response<Object> r = Response.success();
         r.setMessage(ems.getMessage(r.getCode()));
         r.setData(response.getEntity());
         response.setEntity(r);
