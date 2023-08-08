@@ -6,6 +6,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.server.ServerResponseFilter;
 
 /**
@@ -35,6 +36,9 @@ public class ResponseFilter {
         }
 
         // 已经是Response了
+        if (response.getEntity() instanceof Response) {
+            return;
+        }
         if (response.getEntity() instanceof com.xkyss.quarkus.server.dto.Response) {
             return;
         }
