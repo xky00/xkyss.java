@@ -20,22 +20,35 @@ public interface BuildConfig {
     String validationMessagesPath();
 
     /**
-     * ResponseFilter配置
+     * [ResponseFilter]配置
      */
     ResponseFilterConfig responseFilter();
+
+    /**
+     * [ExceptionMapper]配置
+     */
+    ExceptionMapperConfig exceptionMapper();
+
 
     interface ResponseFilterConfig {
 
         /**
-         * 是否启用ResponseFilter
+         * 是否启用[ResponseFilter]
          */
         @WithDefault("false")
         boolean enabled();
 
         /**
-         * 不进行Response包装的类型
+         * 不进行[Response]包装的类型
          */
         Set<String> ignoreTypes();
+    }
 
+    interface ExceptionMapperConfig {
+        /**
+         * 是否启用[ExceptionMapper]
+         */
+        @WithDefault("false")
+        boolean enabled();
     }
 }
