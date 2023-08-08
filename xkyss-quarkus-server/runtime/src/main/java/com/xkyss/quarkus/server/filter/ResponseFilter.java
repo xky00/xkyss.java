@@ -4,6 +4,7 @@ package com.xkyss.quarkus.server.filter;
 import com.xkyss.quarkus.server.config.BuildConfig;
 import com.xkyss.quarkus.server.dto.Response;
 import com.xkyss.quarkus.server.service.ErrorMessageService;
+import io.quarkus.arc.properties.IfBuildProperty;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.container.ContainerResponseContext;
@@ -18,6 +19,7 @@ import static com.xkyss.quarkus.server.constant.Constants.KS_SERVER_RESPONSE_FIL
  * 自动给http调用包装为Response
  */
 @ApplicationScoped
+@IfBuildProperty(name = "xkyss.server.build.response-filter.enabled", stringValue = "true")
 public class ResponseFilter {
 
     @Inject
@@ -47,7 +49,8 @@ public class ResponseFilter {
         }
 
         // 忽略指定的类型
-        if (buildConfig.ignoreResponseFilterTypes().contains(response.getEntityClass().getName())) {
+        if (buildConfig.responseFilter().ignoreTypes().contains(response.getEntityClass().getName())
+            || buildConfig.responseFilter().ignoreTypes().contains(response.getEntityType().getTypeName())) {
             return;
         }
 

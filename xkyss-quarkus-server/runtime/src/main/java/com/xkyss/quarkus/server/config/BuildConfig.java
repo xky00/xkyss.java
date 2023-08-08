@@ -20,7 +20,22 @@ public interface BuildConfig {
     String validationMessagesPath();
 
     /**
-     * 不进行Response包装的类型
+     * ResponseFilter配置
      */
-    Set<String> ignoreResponseFilterTypes();
+    ResponseFilterConfig responseFilter();
+
+    interface ResponseFilterConfig {
+
+        /**
+         * 是否启用ResponseFilter
+         */
+        @WithDefault("false")
+        boolean enabled();
+
+        /**
+         * 不进行Response包装的类型
+         */
+        Set<String> ignoreTypes();
+
+    }
 }
