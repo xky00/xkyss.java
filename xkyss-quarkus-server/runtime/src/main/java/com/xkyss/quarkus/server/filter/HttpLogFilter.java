@@ -82,7 +82,7 @@ public class HttpLogFilter {
     }
 
 
-    @ServerResponseFilter(priority = KS_SERVER_HTTP_LOG_FILTER_PRIORITY)
+    @ServerResponseFilter(priority = KS_SERVER_PRIORITY_HTTP_LOG_FILTER)
     public Uni<Void> mapResponse(ContainerResponseContext response, RoutingContext rc) {
         if (!config.httpLogEnable()) {
             return Uni.createFrom().voidItem();

@@ -26,7 +26,6 @@ public class Constants {
     // 优先级 (值越小,优先级越高)
     public static final int KS_SERVER_PRIORITY = 1000;
 
-    public static final int KS_SERVER_HTTP_LOG_FILTER_PRIORITY = KS_SERVER_PRIORITY + 1;
-    public static final int KS_SERVER_RESPONSE_FILTER_PRIORITY = KS_SERVER_PRIORITY + 2;
-
+    public static final int KS_SERVER_PRIORITY_HTTP_LOG_FILTER = KS_SERVER_PRIORITY + 1;
+    public static final int KS_SERVER_PRIORITY_RESPONSE_FILTER = KS_SERVER_PRIORITY + 2;
 }

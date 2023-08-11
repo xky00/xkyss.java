@@ -13,7 +13,7 @@ import org.jboss.resteasy.reactive.server.ServerResponseFilter;
 
 import java.util.Set;
 
-import static com.xkyss.quarkus.server.constant.Constants.KS_SERVER_RESPONSE_FILTER_PRIORITY;
+import static com.xkyss.quarkus.server.constant.Constants.KS_SERVER_PRIORITY_RESPONSE_FILTER;
 
 /**
  * 自动给http调用包装为Response
@@ -30,7 +30,7 @@ public class ResponseFilter {
 
     private static final Set<MediaType> mediaTypes = Set.of(MediaType.APPLICATION_JSON_TYPE, MediaType.TEXT_PLAIN_TYPE);
 
-    @ServerResponseFilter(priority = KS_SERVER_RESPONSE_FILTER_PRIORITY)
+    @ServerResponseFilter(priority = KS_SERVER_PRIORITY_RESPONSE_FILTER)
     public void mapResponse(ContainerResponseContext response) {
 
         // 没有返回体
