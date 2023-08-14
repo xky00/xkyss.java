@@ -23,8 +23,8 @@ public class Constants {
     public static final String RESPONSE_BODY_KEY = "response-body";
 
 
-    // 优先级 (值越小,优先级越高)
-    public static final int KS_SERVER_PRIORITY = 1000;
+    /// 优先级 (值越小,优先级越高)
+    public static final int KS_SERVER_PRIORITY = 500;
 
     public static final int KS_SERVER_PRIORITY_HTTP_LOG_FILTER = KS_SERVER_PRIORITY + 1;
     public static final int KS_SERVER_PRIORITY_RESPONSE_FILTER = KS_SERVER_PRIORITY + 2;

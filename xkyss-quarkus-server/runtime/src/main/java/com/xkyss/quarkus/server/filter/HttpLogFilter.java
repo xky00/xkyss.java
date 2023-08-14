@@ -15,6 +15,7 @@ import io.vertx.mutiny.core.Vertx;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
+import jakarta.ws.rs.Priorities;
 import jakarta.ws.rs.container.ContainerRequestContext;
 import jakarta.ws.rs.container.ContainerResponseContext;
 import jakarta.ws.rs.core.MediaType;
@@ -117,7 +118,7 @@ public class HttpLogFilter {
         }
         LoggerHandler loggerHandler = new LoggerHandler(logger);
 
-        router.route().handler(loggerHandler);
+        router.route().order(Integer.MIN_VALUE).handler(loggerHandler);
 
         if (config.httpLogRoutes().isPresent()) {
             for (String routePath: config.httpLogRoutes().get()) {
