@@ -17,7 +17,7 @@ public class StringTest {
         // 无参数
         Assertions.assertEquals("Hello {}", Stringx.format("Hello {}"));
         // null
-        Assertions.assertEquals("Hello null", Stringx.format("Hello {}", null));
+        Assertions.assertEquals("Hello null", Stringx.format("Hello {}", (Object) null));
         // 一个参数
         Assertions.assertEquals("Hello 1", Stringx.format("Hello {}", 1));
         // 二个参数
