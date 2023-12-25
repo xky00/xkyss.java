@@ -27,6 +27,7 @@
         <module>xkyss-json</module>
         <module>xkyss-security</module>
         <module>xkyss-bom</module>
+        <module>xkyss-test</module>
     </modules>
 
     <dependencies>
@@ -55,20 +56,4 @@
             </plugins>
         </pluginManagement>
     </build>
-
-    <profiles>
-        <profile>
-            <id>nexus</id>
-            <distributionManagement>
-                <snapshotRepository>
-                    <id>maven-snapshots</id>
-                    <url>http://192.168.0.54:8899/ajco/repository/maven-snapshots</url>
-                </snapshotRepository>
-                <repository>
-                    <id>maven-releases</id>
-                    <url>http://192.168.0.54:8899/ajco/repository/maven-releases/</url>
-                </repository>
-            </distributionManagement>
-        </profile>
-    </profiles>
 </project>
