@@ -2,3 +2,4 @@
 target
 *.iml
 xkyss-mocky/dependency-reduced-pom.xml
+exp/jbang/**/out
