@@ -1,0 +1,9 @@
+name: Xkyss Server
+description: Xkyss Server
+metadata:
+  #  keywords:
+  #    - xkyss-quarkus-server
+  #  guide: ... # To create and publish this guide, see https://github.com/quarkiverse/quarkiverse/wiki#documenting-your-extension
+  categories:
+    - "xkyss"
+  status: "preview"
