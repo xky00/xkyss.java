@@ -2,16 +2,12 @@ package com.xkyss.quarkus.server.resource;
 
 import io.quarkus.arc.profile.IfBuildProfile;
 import io.smallrye.mutiny.Uni;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
-import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import java.util.Map;
 
 import static com.xkyss.quarkus.server.constant.Constants.ROUTE_PREFIX;
 
