@@ -2,7 +2,6 @@ package com.xkyss.quarkus.server.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.hibernate.validator.resourceloading.AggregateResourceBundleLocator;
-import org.hibernate.validator.resourceloading.PlatformResourceBundleLocator;
 import org.hibernate.validator.spi.resourceloading.ResourceBundleLocator;
 
 import java.util.List;

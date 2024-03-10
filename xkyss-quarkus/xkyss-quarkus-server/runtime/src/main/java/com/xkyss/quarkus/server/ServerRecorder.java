@@ -1,7 +1,6 @@
 package com.xkyss.quarkus.server;
 
 import com.xkyss.quarkus.server.config.BuildConfig;
-import io.quarkus.hibernate.validator.runtime.ValidatorProvider;
 import io.quarkus.runtime.annotations.Recorder;
 import jakarta.validation.MessageInterpolator;
 import org.hibernate.validator.messageinterpolation.ResourceBundleMessageInterpolator;
