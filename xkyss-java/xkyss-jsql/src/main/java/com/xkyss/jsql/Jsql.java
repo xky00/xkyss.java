@@ -512,7 +512,7 @@ public class Jsql {
                     count++;
                 }
             } catch (Exception e) {
-                F.log().dbe(String.format("Jsql运行时异常：%s - %s.", e.getMessage(), e.getClass().getSimpleName()), e);
+                // F.log().dbe(String.format("Jsql运行时异常：%s - %s.", e.getMessage(), e.getClass().getSimpleName()), e);
             }
             return count;
         }
@@ -574,7 +574,7 @@ public class Jsql {
                     }
                 }
             } catch (IntrospectionException e) {
-                F.log().dbe(String.format("Jsql运行时异常：%s - %s.", e.getMessage(), e.getClass().getSimpleName()), e);
+                // F.log().dbe(String.format("Jsql运行时异常：%s - %s.", e.getMessage(), e.getClass().getSimpleName()), e);
             }
             return propCls;
         }
@@ -689,7 +689,7 @@ public class Jsql {
             if (Jsql.this.isEnableDebug()) {
                 Grammar root = this.root();
                 if (!(root instanceof Select)) {
-                    F.log().dbd(String.format("Jsql逻辑错误：找不到Select语法对象%s.", Jsql.callMeAt()));
+                    // F.log().dbd(String.format("Jsql逻辑错误：找不到Select语法对象%s.", Jsql.callMeAt()));
                 }
             }
             return this;
@@ -712,7 +712,7 @@ public class Jsql {
                 HibernateSessionBox sessionBox = this.getSessionBox();
                 Session session = sessionBox == null ? null : sessionBox.getSession(false);
                 if (session == null) {
-                    F.log().dbd(String.format("Jsql逻辑错误：没有指定有效的hibernate会话对象%s.", Jsql.callMeAt()));
+                    // F.log().dbd(String.format("Jsql逻辑错误：没有指定有效的hibernate会话对象%s.", Jsql.callMeAt()));
                     return -1;
                 }
                 try {
@@ -723,7 +723,7 @@ public class Jsql {
                     sessionBox.freeSession(session);
                 }
             } else {
-                F.log().dbd(String.format("Jsql逻辑错误：语法不完整%s.", Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：语法不完整%s.", Jsql.callMeAt()));
             }
             return -1;
         }
@@ -745,21 +745,21 @@ public class Jsql {
             Map<String, Object> params = new HashMap<String, Object>();
             Grammar root = this.root();
             if (root instanceof UpdateAbstract) {
-                if (Jsql.this.getExecuteBefore() != null && root.isEnableExecuteCallback()) {
-                    Object setArgs = null;
-                    if (root instanceof Update) {
-                        Grammar set = root.subs() != null && root.subs().size() > 0 ? root.subs().get(0) : null;
-                        if (set != null && set instanceof Set) {
-                            setArgs = ((Set)set).args;
-                        }
-                    }
-                    Jsql.this.getExecuteBefore().executeUpdateBefore(Jsql.this, this, this.getTargetClass(), setArgs);
-                }
+                // if (Jsql.this.getExecuteBefore() != null && root.isEnableExecuteCallback()) {
+                //     Object setArgs = null;
+                //     if (root instanceof Update) {
+                //         Grammar set = root.subs() != null && root.subs().size() > 0 ? root.subs().get(0) : null;
+                //         if (set != null && set instanceof Set) {
+                //             setArgs = ((Set)set).args;
+                //         }
+                //     }
+                //     // Jsql.this.getExecuteBefore().executeUpdateBefore(Jsql.this, this, this.getTargetClass(), setArgs);
+                // }
                 UpdateAbstract update = (UpdateAbstract)root;
                 if (!update.isUpdateAll()) {
                     Grammar logic = update.rootLogic();
                     if (logic == null) {
-                        F.log().dbd(String.format("Jsql逻辑错误：意外的无条件'%s'语法被阻止执行%s.", root.getClass().getSimpleName(), Jsql.callMeAt()));
+                        // F.log().dbd(String.format("Jsql逻辑错误：意外的无条件'%s'语法被阻止执行%s.", root.getClass().getSimpleName(), Jsql.callMeAt()));
                         return -1;
                     }
                 }
@@ -770,12 +770,12 @@ public class Jsql {
                         pagingInfo.getPageSize() == null || pagingInfo.getPageSize().intValue() <= 0 ||
                         pagingInfo.getPageNo() == null || pagingInfo.getPageNo().intValue() <= 1) {
                         pagingInfo = null;
-                        F.log().dbw(String.format("Jsql逻辑错误：'%s'语法指定了无效的分页参数%s.", root.getClass().getSimpleName(), Jsql.callMeAt()));
+                        // F.log().dbw(String.format("Jsql逻辑错误：'%s'语法指定了无效的分页参数%s.", root.getClass().getSimpleName(), Jsql.callMeAt()));
                     } else {
                         int firstResult = (pagingInfo.getPageNo() - 1) * pagingInfo.getPageSize();
                         if (firstResult < 0 || firstResult >= pagingInfo.getTotalPageNumber().intValue()) {
                             pagingInfo = null;
-                            F.log().dbw(String.format("Jsql逻辑错误：'%s'语法指定了无效的分页参数%s.", root.getClass().getSimpleName(), Jsql.callMeAt()));
+                            // F.log().dbw(String.format("Jsql逻辑错误：'%s'语法指定了无效的分页参数%s.", root.getClass().getSimpleName(), Jsql.callMeAt()));
                         }
                     }
                 }
@@ -785,17 +785,17 @@ public class Jsql {
                 try {
                     session = sessionBox == null ? null : sessionBox.getSession(true);
                     if (session == null) {
-                        F.log().dbd(String.format("Jsql逻辑错误：没有指定有效的hibernate会话对象%s.", Jsql.callMeAt()));
+                        // F.log().dbd(String.format("Jsql逻辑错误：没有指定有效的hibernate会话对象%s.", Jsql.callMeAt()));
                         return -1;
                     }
-                    if (Jsql.this.getExecuteBeanChanged() != null) {
-                        batchId = UUID.randomUUID();
-                        if (root instanceof Delete) {
-                            Jsql.this.getExecuteBeanChanged().batchDeleting(Jsql.this, (Delete)root, (Class<?>)root.target(), batchId);
-                        } else if (root instanceof Update) {
-                            Jsql.this.getExecuteBeanChanged().batchUpdating(Jsql.this, (Update)root, (Class<?>)root.target(), batchId);
-                        }
-                    }
+                    // if (Jsql.this.getExecuteBeanChanged() != null) {
+                    //     batchId = UUID.randomUUID();
+                    //     if (root instanceof Delete) {
+                    //         Jsql.this.getExecuteBeanChanged().batchDeleting(Jsql.this, (Delete)root, (Class<?>)root.target(), batchId);
+                    //     } else if (root instanceof Update) {
+                    //         Jsql.this.getExecuteBeanChanged().batchUpdating(Jsql.this, (Update)root, (Class<?>)root.target(), batchId);
+                    //     }
+                    // }
                     @SuppressWarnings("unchecked")
                     List<Integer> res = this.exec(session, building, params, pagingInfo, true, null);
                     int retVal = res.get(0);
@@ -809,46 +809,47 @@ public class Jsql {
                             pagingInfo.setPageNo(pagingInfo.getTotalPageNumber());
                         }
                     }
-                    if (Jsql.this.getExecuteBeanChanged() != null) {
-                        try {
-                            if (root instanceof Delete) {
-                                if (retVal > 0) {
-                                    Jsql.this.getExecuteBeanChanged().batchDeleted(Jsql.this, (Delete)root, (Class<?>)root.target(), batchId, retVal);
-                                } else {
-                                    Jsql.this.getExecuteBeanChanged().batchDeleteCanceled(Jsql.this, (Delete)root, (Class<?>)root.target(), batchId);
-                                }
-                            } else if (root instanceof Update) {
-                                if (retVal > 0) {
-                                    Jsql.this.getExecuteBeanChanged().batchUpdated(Jsql.this, (Update)root, (Class<?>)root.target(), batchId, retVal);
-                                } else {
-                                    Jsql.this.getExecuteBeanChanged().batchUpdateCanceled(Jsql.this, (Update)root, (Class<?>)root.target(), batchId);
-                                }
-                            }
-                        } finally {
-                            // 批量更新或删除已经执行过回调了
-                            batchId = null;
-                        }
-                    }
+                    // if (Jsql.this.getExecuteBeanChanged() != null) {
+                    //     try {
+                    //         if (root instanceof Delete) {
+                    //             if (retVal > 0) {
+                    //                 Jsql.this.getExecuteBeanChanged().batchDeleted(Jsql.this, (Delete)root, (Class<?>)root.target(), batchId, retVal);
+                    //             } else {
+                    //                 Jsql.this.getExecuteBeanChanged().batchDeleteCanceled(Jsql.this, (Delete)root, (Class<?>)root.target(), batchId);
+                    //             }
+                    //         } else if (root instanceof Update) {
+                    //             if (retVal > 0) {
+                    //                 Jsql.this.getExecuteBeanChanged().batchUpdated(Jsql.this, (Update)root, (Class<?>)root.target(), batchId, retVal);
+                    //             } else {
+                    //                 Jsql.this.getExecuteBeanChanged().batchUpdateCanceled(Jsql.this, (Update)root, (Class<?>)root.target(), batchId);
+                    //             }
+                    //         }
+                    //     } finally {
+                    //         // 批量更新或删除已经执行过回调了
+                    //         batchId = null;
+                    //     }
+                    // }
                     return retVal;
                 } finally {
-                    try {
-                        if (batchId != null) {
-                            // 批量更新或删除尚未执行过结论性回调，表示操作过程出异常了，这里要回调通知batchId指定的操作已经取消了
-                            if (root instanceof Delete) {
-                                Jsql.this.getExecuteBeanChanged().batchDeleteCanceled(Jsql.this, (Delete)root, (Class<?>)root.target(), batchId);
-                            } else if (root instanceof Update) {
-                                Jsql.this.getExecuteBeanChanged().batchUpdateCanceled(Jsql.this, (Update)root, (Class<?>)root.target(), batchId);
-                            }
-                        }
-                    } finally {
+                    // try {
+                    //     if (batchId != null) {
+                    //         // 批量更新或删除尚未执行过结论性回调，表示操作过程出异常了，这里要回调通知batchId指定的操作已经取消了
+                    //         if (root instanceof Delete) {
+                    //             Jsql.this.getExecuteBeanChanged().batchDeleteCanceled(Jsql.this, (Delete)root, (Class<?>)root.target(), batchId);
+                    //         } else if (root instanceof Update) {
+                    //             Jsql.this.getExecuteBeanChanged().batchUpdateCanceled(Jsql.this, (Update)root, (Class<?>)root.target(), batchId);
+                    //         }
+                    //     }
+                    // } finally {
                         if (sessionBox != null && session != null) {
                             sessionBox.freeSession(session);
                         }
-                    }
+                    // }
                 }
-            } else {
-                F.log().dbd(String.format("Jsql逻辑错误：'%s'语法不支持executeUpdate()方法%s.", root.getClass().getSimpleName(), Jsql.callMeAt()));
             }
+            // else {
+                // F.log().dbd(String.format("Jsql逻辑错误：'%s'语法不支持executeUpdate()方法%s.", root.getClass().getSimpleName(), Jsql.callMeAt()));
+            // }
             return -1;
         }
         /**
@@ -958,15 +959,15 @@ public class Jsql {
             Map<String, Object> params = new HashMap<String, Object>();
             Grammar root = this.root();
             if (root instanceof Select) {
-                if (Jsql.this.getExecuteBefore() != null && root.isEnableExecuteCallback()) {
-                    Jsql.this.getExecuteBefore().listBefore(Jsql.this, this, this.getTargetClass());
-                }
+                // if (Jsql.this.getExecuteBefore() != null && root.isEnableExecuteCallback()) {
+                //     Jsql.this.getExecuteBefore().listBefore(Jsql.this, this, this.getTargetClass());
+                // }
                 HibernateSessionBox sessionBox = this.getSessionBox();
                 Session session = null;
                 try {
                     session = sessionBox == null ? null : sessionBox.getSession(false);
                     if (session == null) {
-                        F.log().dbd(String.format("Jsql逻辑错误：没有指定有效的hibernate会话对象%s.", Jsql.callMeAt()));
+                        // F.log().dbd(String.format("Jsql逻辑错误：没有指定有效的hibernate会话对象%s.", Jsql.callMeAt()));
                         return null;
                     }
                     // 当前语法树描述的是一段select语句
@@ -1007,7 +1008,7 @@ public class Jsql {
                     String aliasForUpdate = null;
                     if (forUpdate && (
                         pagingInfo.getOrderType() == null ||
-                            pagingInfo.getOrderType().equals(OrderType.NOORDER) ||
+                            pagingInfo.getOrderType().equals(PagingInfo.OrderType.NOORDER) ||
                             pagingInfo.getOrderPropertyNames() == null ||
                             pagingInfo.getOrderPropertyNames().length < 1)) {
                         aliasForUpdate = select.alias();
@@ -1043,7 +1044,7 @@ public class Jsql {
                                     }
                                     results.set(i, bean);
                                 } catch (Exception e) {
-                                    F.log().dbe(String.format("Jsql运行时异常：%s - %s.", e.getMessage(), e.getClass().getSimpleName()), e);
+                                    // F.log().dbe(String.format("Jsql运行时异常：%s - %s.", e.getMessage(), e.getClass().getSimpleName()), e);
                                 }
                             }
                         }
@@ -1064,9 +1065,9 @@ public class Jsql {
 //							}
 //						}
 //					}
-                    if (Jsql.this.getExecuteAfter() != null && root.isEnableExecuteCallback()) {
-                        Jsql.this.getExecuteAfter().listAfter(Jsql.this, results);
-                    }
+//                     if (Jsql.this.getExecuteAfter() != null && root.isEnableExecuteCallback()) {
+//                         Jsql.this.getExecuteAfter().listAfter(Jsql.this, results);
+//                     }
                     return results;
                 } finally {
                     if (sessionBox != null && session != null) {
@@ -1074,7 +1075,7 @@ public class Jsql {
                     }
                 }
             } else {
-                F.log().dbd(String.format("Jsql逻辑错误：语法不完整%s.", Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：语法不完整%s.", Jsql.callMeAt()));
             }
             return null;
         }
@@ -1100,9 +1101,9 @@ public class Jsql {
                 String alias = this.alias();
                 boolean ordered = false;
                 if (pagingInfo.getOrders() != null && pagingInfo.getOrders().size() > 0) {
-                    Iterator<Order> it = pagingInfo.getOrders().iterator();
+                    Iterator<PagingInfo.Order> it = pagingInfo.getOrders().iterator();
                     while (it.hasNext()) {
-                        Order order = it.next();
+                        PagingInfo.Order order = it.next();
                         if (order.getOrderType() != null && !order.getOrderType().equals(PagingInfo.OrderType.NOORDER) &&
                             order.getOrderPropertyNames() != null && order.getOrderPropertyNames().length > 0) {
                             String[] opns = order.getOrderPropertyNames();
@@ -1163,19 +1164,19 @@ public class Jsql {
                 List<Integer> res = new ArrayList<Integer>();
                 long time = System.currentTimeMillis();
                 res.add(query.executeUpdate());
-                if (Jsql.this.getExecuteCompleted() != null) {
-                    Jsql.this.getExecuteCompleted().executeUpdateCompleted(Jsql.this, this, hql, System.currentTimeMillis() - time);
-                }
+                // if (Jsql.this.getExecuteCompleted() != null) {
+                //     Jsql.this.getExecuteCompleted().executeUpdateCompleted(Jsql.this, this, hql, System.currentTimeMillis() - time);
+                // }
                 return res;
             }
-            long time = System.currentTimeMillis();
+            // long time = System.currentTimeMillis();
             if (aliasForUpdate != null && aliasForUpdate.length() > 0) {
                 query.setLockMode(aliasForUpdate, LockMode.PESSIMISTIC_WRITE);
             }
             List results = query.list();
-            if (Jsql.this.getExecuteCompleted() != null) {
-                Jsql.this.getExecuteCompleted().listCompleted(Jsql.this, this, hql, System.currentTimeMillis() - time);
-            }
+            // if (Jsql.this.getExecuteCompleted() != null) {
+            //     Jsql.this.getExecuteCompleted().listCompleted(Jsql.this, this, hql, System.currentTimeMillis() - time);
+            // }
             return results;
         }
     }
@@ -1223,7 +1224,7 @@ public class Jsql {
         }
         /**
          * @param logicType 逻辑类型
-         * @param examples 逻辑条件样本
+         * @param extQueryCondition 逻辑条件样本
          */
         private Logic(LogicType logicType, ExtQueryConditions<TARGET_CLASS> extQueryCondition) {
             this.logicType = logicType;
@@ -1303,7 +1304,7 @@ public class Jsql {
             StringBuilder building, Map<String, Object> params) {
             building.append('(');
             List<TARGET_CLASS> likes = extQueryCondition.getLikeExamples();
-            List<RangeExample<TARGET_CLASS>> ranges = extQueryCondition.getRangeExamples();
+            List<ExtQueryConditions.RangeExample<TARGET_CLASS>> ranges = extQueryCondition.getRangeExamples();
             List<Object> inValues = extQueryCondition.getInValues();
             List<Object> notInValues = extQueryCondition.getNotInValues();
             String pkName = null;
@@ -1331,19 +1332,19 @@ public class Jsql {
                                 if (cm != null) {
                                     pkName = cm.getIdentifierPropertyName();
                                 } else {
-                                    F.log().dbd(String.format("Jsql逻辑错误：无法通过hibernate获取'%s'的主键名称%s.", ((Class<?>)target).getName(), Jsql.callMeAt()));
+                                    // F.log().dbd(String.format("Jsql逻辑错误：无法通过hibernate获取'%s'的主键名称%s.", ((Class<?>)target).getName(), Jsql.callMeAt()));
                                 }
                             } finally {
                                 sessionBox.freeSession(session);
                             }
                         } else {
-                            F.log().dbd(String.format("Jsql逻辑错误：没有指定有效的hibernate会话%s.", Jsql.callMeAt()));
+                            // F.log().dbd(String.format("Jsql逻辑错误：没有指定有效的hibernate会话%s.", Jsql.callMeAt()));
                         }
                     } else {
-                        F.log().dbd(String.format("Jsql逻辑错误：没有指定有效的语法目标类型%s.", Jsql.callMeAt()));
+                        // F.log().dbd(String.format("Jsql逻辑错误：没有指定有效的语法目标类型%s.", Jsql.callMeAt()));
                     }
                 } else {
-                    F.log().dbd(String.format("Jsql逻辑错误：没有指定有效的语法目标%s.", Jsql.callMeAt()));
+                    // F.log().dbd(String.format("Jsql逻辑错误：没有指定有效的语法目标%s.", Jsql.callMeAt()));
                 }
             }
             if (pkName == null) {
@@ -1384,7 +1385,7 @@ public class Jsql {
                     building.append('(');
                 }
                 boolean insertOr = false;
-                for (RangeExample<TARGET_CLASS> example : ranges) {
+                for (ExtQueryConditions.RangeExample<TARGET_CLASS> example : ranges) {
                     if (example.getLowerLimitExample() != null) {
                         if (this.buildConditions(example.getLowerLimitExample(), ">=", " AND ", true, false, insertOr, building, params) > 0) {
                             insertOr = true;
@@ -1507,7 +1508,7 @@ public class Jsql {
             if (targetClass != null) {
                 Class<?> pc = this.getPropertyClass(targetClass, propName);
                 if (pc == null) {
-                    F.log().dbd(String.format("Jsql逻辑错误：'%s'不是'%s'的属性%s.", propName, targetClass.getSimpleName(), Jsql.callMeAt()));
+                    // F.log().dbd(String.format("Jsql逻辑错误：'%s'不是'%s'的属性%s.", propName, targetClass.getSimpleName(), Jsql.callMeAt()));
                     return null;
                 }
             }
@@ -1697,7 +1698,7 @@ public class Jsql {
                 if (this.operator.trim().toUpperCase().equals("IN")) {
                     Class<?> rc = ((Grammar)this.value).resultClass();
                     if (rc == null || !this.isPrimitive(rc)) {
-                        F.log().dbd(String.format("Jsql逻辑错误：IN关键字被应用于非原生类型'%s'的查询结果集%s.", rc == null ? "*" : rc.getSimpleName(), Jsql.callMeAt()));
+                        // F.log().dbd(String.format("Jsql逻辑错误：IN关键字被应用于非原生类型'%s'的查询结果集%s.", rc == null ? "*" : rc.getSimpleName(), Jsql.callMeAt()));
                     }
                 }
             } else {
@@ -1710,7 +1711,7 @@ public class Jsql {
                 building.append(paramName);
                 if (forLike) {
                     if (!(this.value instanceof String)) {
-                        F.log().dbd(String.format("Jsql逻辑错误：LIKE关键字被应用于非字符串属性'%s'%s.", this.propName, Jsql.callMeAt()));
+                        // F.log().dbd(String.format("Jsql逻辑错误：LIKE关键字被应用于非字符串属性'%s'%s.", this.propName, Jsql.callMeAt()));
                         params.put(paramName, "%" + this.value + "%");
                     } else {
                         if (((String)this.value).indexOf('%') >= 0) {
@@ -1766,10 +1767,10 @@ public class Jsql {
             if (targetClass != null) {
                 Class<?> pc = this.getPropertyClass(targetClass, this.propName);
                 if (pc == null) {
-                    F.log().dbd(String.format("Jsql逻辑错误：'%s'不是'%s'的属性%s.", this.propName, targetClass.getSimpleName(), Jsql.callMeAt()));
+                    // F.log().dbd(String.format("Jsql逻辑错误：'%s'不是'%s'的属性%s.", this.propName, targetClass.getSimpleName(), Jsql.callMeAt()));
                     return null;
                 } else if (value != null && !pc.equals(value.getClass())) {
-                    F.log().dbd(String.format("Jsql逻辑错误：'%s.%s'的'%s'类型与条件值(%s)的'%s'类型不一致%s.", targetClass.getSimpleName(), this.propName, pc.getSimpleName(), value.toString(), value.getClass().getSimpleName(), Jsql.callMeAt()));
+                    // F.log().dbd(String.format("Jsql逻辑错误：'%s.%s'的'%s'类型与条件值(%s)的'%s'类型不一致%s.", targetClass.getSimpleName(), this.propName, pc.getSimpleName(), value.toString(), value.getClass().getSimpleName(), Jsql.callMeAt()));
                     return null;
                 }
             }
@@ -1843,7 +1844,7 @@ public class Jsql {
             }
             building.append(" WHERE ");
             if (Jsql.this.isEnableDebug() && this.subs().size() > 1) {
-                F.log().dbd(String.format("Jsql逻辑错误：Where语法指定了多个逻辑条件集%s.", Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Where语法指定了多个逻辑条件集%s.", Jsql.callMeAt()));
             }
             Iterator<Grammar> it = this.subs().iterator();
             while (it.hasNext()) {
@@ -1893,18 +1894,19 @@ public class Jsql {
                     if (propCls == null) {
                         //F.log().dbd(String.format("Jsql逻辑错误：设置的逻辑化查询属性'%s'不是'%s'的属性.", ((RootGrammarAbstract)root).getLogicalizationConditionPropertyName(), tarCls.getSimpleName()));
                         return null;
-                    } else if (((RootGrammarAbstract)root).getLogicalizationConditionValue() != null) {
-                        Class<? extends Object> vc = ((RootGrammarAbstract)root).getLogicalizationConditionValue().getClass();
-                        if (!vc.equals(propCls)) {
-                            F.log().dbd(String.format("Jsql逻辑错误：逻辑化查询参数指定的'%s'属性值类型'%s'与'%s.%s'的'%s'属性类型不一致%s.",
-                                ((RootGrammarAbstract)root).getLogicalizationConditionPropertyName(),
-                                vc.getSimpleName(),
-                                tarCls.getSimpleName(),
-                                ((RootGrammarAbstract)root).getLogicalizationConditionPropertyName(),
-                                propCls.getSimpleName(),
-                                Jsql.callMeAt()));
-                        }
                     }
+                    // else if (((RootGrammarAbstract)root).getLogicalizationConditionValue() != null) {
+                    //     Class<? extends Object> vc = ((RootGrammarAbstract)root).getLogicalizationConditionValue().getClass();
+                    //     if (!vc.equals(propCls)) {
+                    //         F.log().dbd(String.format("Jsql逻辑错误：逻辑化查询参数指定的'%s'属性值类型'%s'与'%s.%s'的'%s'属性类型不一致%s.",
+                    //             ((RootGrammarAbstract)root).getLogicalizationConditionPropertyName(),
+                    //             vc.getSimpleName(),
+                    //             tarCls.getSimpleName(),
+                    //             ((RootGrammarAbstract)root).getLogicalizationConditionPropertyName(),
+                    //             propCls.getSimpleName(),
+                    //             Jsql.callMeAt()));
+                    //     }
+                    // }
                 }
                 return (RootGrammarAbstract)root;
             }
@@ -2020,7 +2022,7 @@ public class Jsql {
             if (targetClass != null) {
                 Class<?> pc = this.getPropertyClass(targetClass, propName);
                 if (pc == null) {
-                    F.log().dbd(String.format("Jsql逻辑错误：'%s'不是'%s'的属性%s.", propName, targetClass.getSimpleName(), Jsql.callMeAt()));
+                    // F.log().dbd(String.format("Jsql逻辑错误：'%s'不是'%s'的属性%s.", propName, targetClass.getSimpleName(), Jsql.callMeAt()));
                     return null;
                 }
             }
@@ -2059,7 +2061,7 @@ public class Jsql {
                 otherWhere.setParent(parent);
                 return (Logic<RESULT_CLASS, TARGET_CLASS>) otherWhere.subs().get(0);
             }
-            F.log().dbd(String.format("Jsql逻辑错误：Where语法对象缺少前置关联语法对象%s.", Jsql.callMeAt()));
+            // F.log().dbd(String.format("Jsql逻辑错误：Where语法对象缺少前置关联语法对象%s.", Jsql.callMeAt()));
             return null;
         }
     }
@@ -2079,7 +2081,7 @@ public class Jsql {
             Object target = this.target();
             // HQL的目标可以是一个类型或者是另外一个完整语法的结果对象
             if (target == null || !(target instanceof Class || target instanceof Select)) {
-                F.log().dbd(String.format("Jsql逻辑错误：没有为From语法指定有效的目标%s.", Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：没有为From语法指定有效的目标%s.", Jsql.callMeAt()));
                 return null;
             }
 
@@ -2103,15 +2105,15 @@ public class Jsql {
                         building.append(alias);
                     }
                 } else if (Jsql.this.isEnableDebug()){
-                    F.log().dbd(String.format("Jsql逻辑错误：From语法对象缺少前置的Select、Update或Delete语法对象%s.", Jsql.callMeAt()));
+                    // F.log().dbd(String.format("Jsql逻辑错误：From语法对象缺少前置的Select、Update或Delete语法对象%s.", Jsql.callMeAt()));
                 }
                 if (Jsql.this.isEnableDebug() && this.subs().size() != 1) {
-                    F.log().dbd(String.format("Jsql逻辑错误：From语法包含%d个Where语法对象%s.", this.subs().size(), Jsql.callMeAt()));
+                    // F.log().dbd(String.format("Jsql逻辑错误：From语法包含%d个Where语法对象%s.", this.subs().size(), Jsql.callMeAt()));
                 }
                 Grammar where = this.subs().size() > 0 ? this.subs().get(0) : null;
                 if (where == null || !(where instanceof Where)) {
                     if (Jsql.this.isEnableDebug()) {
-                        F.log().dbd(String.format("Jsql逻辑错误：缺少Where语法对象%s.", Jsql.callMeAt()));
+                        // F.log().dbd(String.format("Jsql逻辑错误：缺少Where语法对象%s.", Jsql.callMeAt()));
                     }
                     return null;
                 }
@@ -2241,10 +2243,10 @@ public class Jsql {
         public <TARGET_CLASS> Where<RESULT_CLASS, TARGET_CLASS> from(Class<TARGET_CLASS> targetClass) {
             Class<?> propCls = this.getPropertiesClass(targetClass, this.propName);
             if (propCls == null) {
-                F.log().dbd(String.format("Jsql逻辑错误：Select语法指定的'%s'不是'%s'的有效属性%s.", this.propName, targetClass.getSimpleName(), Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Select语法指定的'%s'不是'%s'的有效属性%s.", this.propName, targetClass.getSimpleName(), Jsql.callMeAt()));
                 return null;
             } else if (!propCls.equals(this.resultClass())) {
-                F.log().dbd(String.format("Jsql逻辑错误：Select语法指定的'%s'属性其类型(%s)与'%s.%s'的属性类型(%s)不一致%s.", this.propName, this.resultClass.getName(), targetClass.getSimpleName(), this.propName, propCls.getName(), Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Select语法指定的'%s'属性其类型(%s)与'%s.%s'的属性类型(%s)不一致%s.", this.propName, this.resultClass.getName(), targetClass.getSimpleName(), this.propName, propCls.getName(), Jsql.callMeAt()));
                 return null;
             }
 
@@ -2265,15 +2267,15 @@ public class Jsql {
         public <TARGET_CLASS> Where<RESULT_CLASS, TARGET_CLASS> from(Result<TARGET_CLASS> result) {
             Class<?> tagCls = result.resultClass();
             if (tagCls == null) {
-                F.log().dbd(String.format("Jsql逻辑错误：为From语法指定了未知类型的结果集作为操作目标%s.", Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：为From语法指定了未知类型的结果集作为操作目标%s.", Jsql.callMeAt()));
                 return null;
             }
             Class<?> propCls = this.getPropertiesClass(tagCls, this.propName);
             if (propCls == null) {
-                F.log().dbd(String.format("Jsql逻辑错误：Select语法指定的'%s'不是'%s'的有效属性%s.", this.propName, tagCls.getSimpleName(), Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Select语法指定的'%s'不是'%s'的有效属性%s.", this.propName, tagCls.getSimpleName(), Jsql.callMeAt()));
                 return null;
             } else if (!propCls.equals(this.resultClass())) {
-                F.log().dbd(String.format("Jsql逻辑错误：Select语法指定的'%s'属性其类型与'%s.%s'的属性类型不一致%s.", this.propName, tagCls.getSimpleName(), this.propName, Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Select语法指定的'%s'属性其类型与'%s.%s'的属性类型不一致%s.", this.propName, tagCls.getSimpleName(), this.propName, Jsql.callMeAt()));
                 return null;
             }
 
@@ -2504,11 +2506,11 @@ public class Jsql {
             }
 
             if (Jsql.this.isEnableDebug() && this.subs().size() != 1) {
-                F.log().dbd(String.format("Jsql逻辑错误：Select语法包含%d个From语法对象%s.", this.subs().size(), Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Select语法包含%d个From语法对象%s.", this.subs().size(), Jsql.callMeAt()));
             }
             Grammar from = this.subs().size() > 0 ? this.subs().get(0) : null;
             if (Jsql.this.isEnableDebug() && (from == null || !(from instanceof FromAbstract))) {
-                F.log().dbd(String.format("Jsql逻辑错误：Select语法缺少From语法对象%s.", Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Select语法缺少From语法对象%s.", Jsql.callMeAt()));
             }
             // 继续合成from部分的语法
             return from == null ? null : (from.build(building, params) == null ? null : this);
@@ -2705,7 +2707,7 @@ public class Jsql {
         public Grammar build(StringBuilder building, Map<String, Object> params) {
             building.append("SET ");
             if (this.args == null) {
-                F.log().dbd(String.format("Jsql逻辑错误：没有为Set语法指定有效的参数%s.", Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：没有为Set语法指定有效的参数%s.", Jsql.callMeAt()));
                 return null;
             }
             if (this.args.getClass().isArray()) {
@@ -2765,11 +2767,11 @@ public class Jsql {
             }
 
             if (Jsql.this.isEnableDebug() && this.subs().size() != 1) {
-                F.log().dbd(String.format("Jsql逻辑错误：Update语法包含%d个Where语法对象%s.", this.subs().size(), Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Update语法包含%d个Where语法对象%s.", this.subs().size(), Jsql.callMeAt()));
             }
             Grammar where = this.subs().size() > 0 ? this.subs().get(0) : null;
             if (Jsql.this.isEnableDebug() && (where == null || !(where instanceof Where))) {
-                F.log().dbd(String.format("Jsql逻辑错误：Update语法缺少Where语法对象%s.", Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Update语法缺少Where语法对象%s.", Jsql.callMeAt()));
             }
             // 继续合成where部分的语法
             return where == null ? null : (where.build(building, params) == null ? null : this);
@@ -2872,11 +2874,11 @@ public class Jsql {
             }
 
             if (Jsql.this.isEnableDebug() && (this.subs().size() != 1)) {
-                F.log().dbd(String.format("Jsql逻辑错误：Delete语法包含%d个Set语法对象%s.", this.subs().size(), Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Delete语法包含%d个Set语法对象%s.", this.subs().size(), Jsql.callMeAt()));
             }
             Grammar set = this.subs().size() > 0 ? this.subs().get(0) : null;
             if (Jsql.this.isEnableDebug() && (set == null || !(set instanceof Set))) {
-                F.log().dbd(String.format("Jsql逻辑错误：Delete语法缺少Set语法对象%s.", Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Delete语法缺少Set语法对象%s.", Jsql.callMeAt()));
             }
             // 继续合成set部分的语法
             return set == null ? null : (set.build(building, params) == null ? null : this);
@@ -2961,11 +2963,11 @@ public class Jsql {
             building.append(' ');
 
             if (Jsql.this.isEnableDebug() && this.subs().size() != 1) {
-                F.log().dbd(String.format("Jsql逻辑错误：Delete语法包含%d个Where语法对象%s.", this.subs().size(), Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Delete语法包含%d个Where语法对象%s.", this.subs().size(), Jsql.callMeAt()));
             }
             Grammar where = this.subs().size() > 0 ? this.subs().get(0) : null;
             if (Jsql.this.isEnableDebug() && (where == null || !(where instanceof Where))) {
-                F.log().dbd(String.format("Jsql逻辑错误：Delete语法缺少Where语法对象%s.", Jsql.callMeAt()));
+                // F.log().dbd(String.format("Jsql逻辑错误：Delete语法缺少Where语法对象%s.", Jsql.callMeAt()));
             }
             // 继续合成where部分的语法
             return where == null ? null : (where.build(building, params) == null ? null : this);
@@ -3001,7 +3003,7 @@ public class Jsql {
                         args.put(this.updatePropertyNameForRemove, this.updateValueForRemove);
                         return update.update(targetClass).setArgs(args);
                     } else {
-                        F.log().dbd(String.format("Jsql逻辑错误：逻辑删除参数指定的'%s'属性值类型与'%s.%s'的'%s'属性类型不一致%s.", this.updatePropertyNameForRemove, targetClass.getSimpleName(), this.updatePropertyNameForRemove, vc.getSimpleName(), Jsql.callMeAt()));
+                        // F.log().dbd(String.format("Jsql逻辑错误：逻辑删除参数指定的'%s'属性值类型与'%s.%s'的'%s'属性类型不一致%s.", this.updatePropertyNameForRemove, targetClass.getSimpleName(), this.updatePropertyNameForRemove, vc.getSimpleName(), Jsql.callMeAt()));
                         return null;
                     }
                 }
@@ -3041,7 +3043,7 @@ public class Jsql {
                         args.put(this.updatePropertyNameForRemove, this.updateValueForRemove);
                         return update.updateAll(targetClass).setArgs(args);
                     } else {
-                        F.log().dbd(String.format("Jsql逻辑错误：逻辑删除参数指定的'%s'属性值类型与'%s.%s'的'%s'属性类型不一致%s.", this.updatePropertyNameForRemove, targetClass.getSimpleName(), this.updatePropertyNameForRemove, vc.getSimpleName(), Jsql.callMeAt()));
+                        // F.log().dbd(String.format("Jsql逻辑错误：逻辑删除参数指定的'%s'属性值类型与'%s.%s'的'%s'属性类型不一致%s.", this.updatePropertyNameForRemove, targetClass.getSimpleName(), this.updatePropertyNameForRemove, vc.getSimpleName(), Jsql.callMeAt()));
                         return null;
                     }
                 }
@@ -3083,445 +3085,445 @@ public class Jsql {
     /**
      * <b>用来防止Jsql三个回调接口同线程重入的回调接口代理</b>
      */
-    private static class JsqlExecuteXProxy implements JsqlExecuteBefore, JsqlExecuteAfter, JsqlExecuteCompleted, JsqlExecuteBeanChang {
-        /**
-         * 用来标记回调接口是否已经进入的线程变量
-         */
-        private final static ThreadLocal<Boolean> currentThreadEntered = new ThreadLocal<Boolean>() {
-            protected Boolean initialValue(){
-                return false;
-            }
-        };
-        /**
-         * 当前Jsql对象的执行前回调接口
-         */
-        private JsqlExecuteBefore executeBefore;
-        /**
-         * 当前Jsql对象的执行后回调接口
-         */
-        private JsqlExecuteAfter executeAfter;
-        /**
-         * 当前Jsql对象的执行完成回调接口<br>
-         * 这个回调主要用于分析SQL执行效率
-         */
-        private JsqlExecuteCompleted executeCompleted;
-        /**
-         * 当前Jsql对象的持久化Bean对象修改操作回调接口<br>
-         * 这个回调主要为数据库同步提供支持
-         */
-        private JsqlExecuteBeanChang executeBeanChanged;
-
-        public JsqlExecuteBeanChang getExecuteBeanChanged() {
-            if (currentThreadEntered.get()) {
-                return null;
-            }
-            return this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged;
-        }
-
-        public void setExecuteBeanChanged(JsqlExecuteBeanChang executeBeanChanged) {
-            if (executeBeanChanged == null) {
-                this.executeBeanChanged = null;
-            } else {
-                JsqlExecuteBeanChang jsqlChang = this.getDefaultJsqlExecuteX().getExecuteBeanChanged();
-                if (jsqlChang == null || this.executeBeanChanged == null) {
-                    // 这里留下一个特殊应用模式，先把属性设置为null，再设置目标回调接口就可以绕过Jsql的缺省设置
-                    this.executeBeanChanged = executeBeanChanged;
-                } else {
-                    this.executeBeanChanged = new JsqlExecuteBeanChangSet(new JsqlExecuteBeanChang[]{executeBeanChanged, jsqlChang});
-                }
-                if (this.executeBeanChanged instanceof JsqlExecuteBeanChangSet) {
-                    List<JsqlExecuteBeanChang> changs = new ArrayList<JsqlExecuteBeanChang>();
-                    List<JsqlExecuteBeanChang> orders = new ArrayList<JsqlExecuteBeanChang>();
-                    Iterator<JsqlExecuteBeanChang> it = ((JsqlExecuteBeanChangSet) this.executeBeanChanged).getExecuteBeanChangSet().iterator();
-                    while (it.hasNext()) {
-                        JsqlExecuteBeanChang next = it.next();
-                        if (next instanceof JsqlExecuteXOrder) {
-                            orders.add(next);
-                        } else {
-                            changs.add(next);
-                        }
-                    }
-                    ((JsqlExecuteBeanChangSet) this.executeBeanChanged).getExecuteBeanChangSet().clear();
-                    if (changs.size() > 1) {
-                        ((JsqlExecuteBeanChangSet) this.executeBeanChanged).getExecuteBeanChangSet().addAll(changs);
-                    }
-                    if (orders.size() > 1) {
-                        Collections.sort(orders, new Comparator<JsqlExecuteBeanChang>(){
-
-                            @Override
-                            public int compare(JsqlExecuteBeanChang o1,
-                                               JsqlExecuteBeanChang o2) {
-                                return ((JsqlExecuteXOrder)o1).getExecuteOrderId() - ((JsqlExecuteXOrder)o2).getExecuteOrderId();
-                            }});
-                        it = orders.iterator();
-                        while (it.hasNext()) {
-                            JsqlExecuteBeanChang next = it.next();
-                            ((JsqlExecuteBeanChangSet) this.executeBeanChanged).getExecuteBeanChangSet().add(next);
-                        }
-                    }
-                }
-            }
-        }
-
-        public JsqlExecuteCompleted getExecuteCompleted() {
-            if (currentThreadEntered.get()) {
-                return null;
-            }
-            return this.executeCompleted == this ? this.getDefaultJsqlExecuteX().getExecuteCompleted() : this.executeCompleted;
-        }
-
-        public void setExecuteCompleted(JsqlExecuteCompleted executeCompleted) {
-            if (executeCompleted == null) {
-                this.executeCompleted = null;
-            } else {
-                JsqlExecuteCompleted jsqlCompleted = this.getDefaultJsqlExecuteX().getExecuteCompleted();
-                if (jsqlCompleted == null || this.executeCompleted == null) {
-                    // 这里留下一个特殊应用模式，先把属性设置为null，再设置目标回调接口就可以绕过Jsql的缺省设置
-                    this.executeCompleted = executeCompleted;
-                } else {
-                    this.executeCompleted = new JsqlExecuteCompletedSet(new JsqlExecuteCompleted[] {executeCompleted, jsqlCompleted});
-                }
-            }
-        }
-
-        public JsqlExecuteBefore getExecuteBefore() {
-            if (currentThreadEntered.get()) {
-                return null;
-            }
-            return this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore;
-        }
-
-        public void setExecuteBefore(JsqlExecuteBefore executeBefore) {
-            if (executeBefore == null) {
-                this.executeBefore = null;
-            } else {
-                JsqlExecuteBefore jsqlBefore = this.getDefaultJsqlExecuteX().getExecuteBefore();
-                if (jsqlBefore == null || this.executeBefore == null) {
-                    // 这里留下一个特殊应用模式，先把属性设置为null，再设置目标回调接口就可以绕过Jsql的缺省设置
-                    this.executeBefore = executeBefore;
-                } else {
-                    this.executeBefore = new JsqlExecuteBeforeSet(new JsqlExecuteBefore[]{executeBefore, jsqlBefore});
-                }
-            }
-        }
-
-        public JsqlExecuteAfter getExecuteAfter() {
-            if (currentThreadEntered.get()) {
-                return null;
-            }
-            return this.executeAfter == this ? this.getDefaultJsqlExecuteX().getExecuteAfter() : this.executeAfter;
-        }
-
-        public void setExecuteAfter(JsqlExecuteAfter executeAfter) {
-            if (executeAfter == null) {
-                this.executeAfter = null;
-            } else {
-                JsqlExecuteAfter jsqlAfter = this.getDefaultJsqlExecuteX().getExecuteAfter();
-                if (jsqlAfter == null || this.executeAfter == null) {
-                    // 这里留下一个特殊应用模式，先把属性设置为null，再设置目标回调接口就可以绕过Jsql的缺省设置
-                    this.executeAfter = executeAfter;
-                } else {
-                    this.executeAfter = new JsqlExecuteAfterSet(new JsqlExecuteAfter[]{executeAfter, jsqlAfter});
-                }
-            }
-        }
-
-        public JsqlExecuteXProxy() {
-            this.executeAfter = this;
-            this.executeBeanChanged = this;
-            this.executeBefore = this;
-            this.executeCompleted = this;
-        }
-
-        @Override
-        public void listBefore(Jsql jsql, Result<?> result, Class<?> targetClass) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).listBefore(jsql, result, targetClass);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void executeUpdateBefore(Jsql jsql, Result<?> result,
-                                        Class<?> targetClass, Object setArgs) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).executeUpdateBefore(jsql, result, targetClass, setArgs);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-        @Override
-        public void saveBefore(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).saveBefore(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-        @Override
-        public void updateBefore(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).updateBefore(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-        @Override
-        public void mergeBefore(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).mergeBefore(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-        @Override
-        public void deleteBefore(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).deleteBefore(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-        @Override
-        public boolean loadBefore(Jsql jsql, Class<?> targetClass,
-                                  Serializable pkValue) {
-            try {
-                currentThreadEntered.set(true);
-                return (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).loadBefore(jsql, targetClass, pkValue);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-        @Override
-        public boolean getBefore(Jsql jsql, Class<?> targetClass,
-                                 Serializable pkValue) {
-            try {
-                currentThreadEntered.set(true);
-                return (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).getBefore(jsql, targetClass, pkValue);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void listAfter(Jsql jsql, List<?> results) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeAfter == this ? this.getDefaultJsqlExecuteX().getExecuteAfter() : this.executeAfter).listAfter(jsql, results);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public Object getAfter(Jsql jsql, Object result) {
-            try {
-                currentThreadEntered.set(true);
-                return (this.executeAfter == this ? this.getDefaultJsqlExecuteX().getExecuteAfter() : this.executeAfter).getAfter(jsql, result);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public Object loadAfter(Jsql jsql, Object result) {
-            try {
-                currentThreadEntered.set(true);
-                return (this.executeAfter == this ? this.getDefaultJsqlExecuteX().getExecuteAfter() : this.executeAfter).loadAfter(jsql, result);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void listCompleted(Jsql jsql, Result<?> result, String hql,
-                                  long executeTime) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeCompleted == this ? this.getDefaultJsqlExecuteX().getExecuteCompleted() : this.executeCompleted).listCompleted(jsql, result, hql, executeTime);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void executeUpdateCompleted(Jsql jsql, Result<?> result,
-                                           String hql, long executeTime) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeCompleted == this ? this.getDefaultJsqlExecuteX().getExecuteCompleted() : this.executeCompleted).executeUpdateCompleted(jsql, result, hql, executeTime);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void saved(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).saved(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void deleted(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).deleted(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void updated(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).updated(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void batchDeleting(Jsql jsql, Delete deleter, Class<?> targetClass, UUID batchId) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).batchDeleting(jsql, deleter, targetClass, batchId);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void batchDeleted(Jsql jsql, Delete deleter, Class<?> targetClass, UUID batchId, int deletedObjects) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).batchDeleted(jsql, deleter, targetClass, batchId, deletedObjects);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void batchDeleteCanceled(Jsql jsql, Delete deleter, Class<?> targetClass, UUID batchId) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).batchDeleteCanceled(jsql, deleter, targetClass, batchId);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void batchUpdating(Jsql jsql, Update updater, Class<?> targetClass, UUID batchId) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).batchUpdating(jsql, updater, targetClass, batchId);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void batchUpdated(Jsql jsql, Update updater, Class<?> targetClass, UUID batchId, int updatedObjects) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).batchUpdated(jsql, updater, targetClass, batchId, updatedObjects);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void batchUpdateCanceled(Jsql jsql, Update updater, Class<?> targetClass, UUID batchId) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).batchUpdateCanceled(jsql, updater, targetClass, batchId);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void saving(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).saving(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void saveCanceled(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).saveCanceled(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void deleting(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).deleting(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void deleteCanceled(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).deleteCanceled(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void updating(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).updating(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-
-        @Override
-        public void updateCanceled(Jsql jsql, Object bean) {
-            try {
-                currentThreadEntered.set(true);
-                (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).updateCanceled(jsql, bean);
-            } finally {
-                currentThreadEntered.set(false);
-            }
-        }
-        private static DefaultJsqlExecuteX[] defaultJsqlExecuteX = new DefaultJsqlExecuteX[1];
-        private DefaultJsqlExecuteX getDefaultJsqlExecuteX() {
-            synchronized (defaultJsqlExecuteX) {
-                if (defaultJsqlExecuteX[0] == null) {
-                    defaultJsqlExecuteX[0] = new DefaultJsqlExecuteX();
-                }
-            }
-            return defaultJsqlExecuteX[0];
-        }
-    }
-    private JsqlExecuteXProxy executeXProxy = new JsqlExecuteXProxy();
+    // private static class JsqlExecuteXProxy implements JsqlExecuteBefore, JsqlExecuteAfter, JsqlExecuteCompleted, JsqlExecuteBeanChang {
+    //     /**
+    //      * 用来标记回调接口是否已经进入的线程变量
+    //      */
+    //     private final static ThreadLocal<Boolean> currentThreadEntered = new ThreadLocal<Boolean>() {
+    //         protected Boolean initialValue(){
+    //             return false;
+    //         }
+    //     };
+    //     /**
+    //      * 当前Jsql对象的执行前回调接口
+    //      */
+    //     private JsqlExecuteBefore executeBefore;
+    //     /**
+    //      * 当前Jsql对象的执行后回调接口
+    //      */
+    //     private JsqlExecuteAfter executeAfter;
+    //     /**
+    //      * 当前Jsql对象的执行完成回调接口<br>
+    //      * 这个回调主要用于分析SQL执行效率
+    //      */
+    //     private JsqlExecuteCompleted executeCompleted;
+    //     /**
+    //      * 当前Jsql对象的持久化Bean对象修改操作回调接口<br>
+    //      * 这个回调主要为数据库同步提供支持
+    //      */
+    //     private JsqlExecuteBeanChang executeBeanChanged;
+    //
+    //     public JsqlExecuteBeanChang getExecuteBeanChanged() {
+    //         if (currentThreadEntered.get()) {
+    //             return null;
+    //         }
+    //         return this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged;
+    //     }
+    //
+    //     public void setExecuteBeanChanged(JsqlExecuteBeanChang executeBeanChanged) {
+    //         if (executeBeanChanged == null) {
+    //             this.executeBeanChanged = null;
+    //         } else {
+    //             JsqlExecuteBeanChang jsqlChang = this.getDefaultJsqlExecuteX().getExecuteBeanChanged();
+    //             if (jsqlChang == null || this.executeBeanChanged == null) {
+    //                 // 这里留下一个特殊应用模式，先把属性设置为null，再设置目标回调接口就可以绕过Jsql的缺省设置
+    //                 this.executeBeanChanged = executeBeanChanged;
+    //             } else {
+    //                 this.executeBeanChanged = new JsqlExecuteBeanChangSet(new JsqlExecuteBeanChang[]{executeBeanChanged, jsqlChang});
+    //             }
+    //             if (this.executeBeanChanged instanceof JsqlExecuteBeanChangSet) {
+    //                 List<JsqlExecuteBeanChang> changs = new ArrayList<JsqlExecuteBeanChang>();
+    //                 List<JsqlExecuteBeanChang> orders = new ArrayList<JsqlExecuteBeanChang>();
+    //                 Iterator<JsqlExecuteBeanChang> it = ((JsqlExecuteBeanChangSet) this.executeBeanChanged).getExecuteBeanChangSet().iterator();
+    //                 while (it.hasNext()) {
+    //                     JsqlExecuteBeanChang next = it.next();
+    //                     if (next instanceof JsqlExecuteXOrder) {
+    //                         orders.add(next);
+    //                     } else {
+    //                         changs.add(next);
+    //                     }
+    //                 }
+    //                 ((JsqlExecuteBeanChangSet) this.executeBeanChanged).getExecuteBeanChangSet().clear();
+    //                 if (changs.size() > 1) {
+    //                     ((JsqlExecuteBeanChangSet) this.executeBeanChanged).getExecuteBeanChangSet().addAll(changs);
+    //                 }
+    //                 if (orders.size() > 1) {
+    //                     Collections.sort(orders, new Comparator<JsqlExecuteBeanChang>(){
+    //
+    //                         @Override
+    //                         public int compare(JsqlExecuteBeanChang o1,
+    //                                            JsqlExecuteBeanChang o2) {
+    //                             return ((JsqlExecuteXOrder)o1).getExecuteOrderId() - ((JsqlExecuteXOrder)o2).getExecuteOrderId();
+    //                         }});
+    //                     it = orders.iterator();
+    //                     while (it.hasNext()) {
+    //                         JsqlExecuteBeanChang next = it.next();
+    //                         ((JsqlExecuteBeanChangSet) this.executeBeanChanged).getExecuteBeanChangSet().add(next);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    //
+    //     public JsqlExecuteCompleted getExecuteCompleted() {
+    //         if (currentThreadEntered.get()) {
+    //             return null;
+    //         }
+    //         return this.executeCompleted == this ? this.getDefaultJsqlExecuteX().getExecuteCompleted() : this.executeCompleted;
+    //     }
+    //
+    //     public void setExecuteCompleted(JsqlExecuteCompleted executeCompleted) {
+    //         if (executeCompleted == null) {
+    //             this.executeCompleted = null;
+    //         } else {
+    //             JsqlExecuteCompleted jsqlCompleted = this.getDefaultJsqlExecuteX().getExecuteCompleted();
+    //             if (jsqlCompleted == null || this.executeCompleted == null) {
+    //                 // 这里留下一个特殊应用模式，先把属性设置为null，再设置目标回调接口就可以绕过Jsql的缺省设置
+    //                 this.executeCompleted = executeCompleted;
+    //             } else {
+    //                 this.executeCompleted = new JsqlExecuteCompletedSet(new JsqlExecuteCompleted[] {executeCompleted, jsqlCompleted});
+    //             }
+    //         }
+    //     }
+    //
+    //     public JsqlExecuteBefore getExecuteBefore() {
+    //         if (currentThreadEntered.get()) {
+    //             return null;
+    //         }
+    //         return this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore;
+    //     }
+    //
+    //     public void setExecuteBefore(JsqlExecuteBefore executeBefore) {
+    //         if (executeBefore == null) {
+    //             this.executeBefore = null;
+    //         } else {
+    //             JsqlExecuteBefore jsqlBefore = this.getDefaultJsqlExecuteX().getExecuteBefore();
+    //             if (jsqlBefore == null || this.executeBefore == null) {
+    //                 // 这里留下一个特殊应用模式，先把属性设置为null，再设置目标回调接口就可以绕过Jsql的缺省设置
+    //                 this.executeBefore = executeBefore;
+    //             } else {
+    //                 this.executeBefore = new JsqlExecuteBeforeSet(new JsqlExecuteBefore[]{executeBefore, jsqlBefore});
+    //             }
+    //         }
+    //     }
+    //
+    //     public JsqlExecuteAfter getExecuteAfter() {
+    //         if (currentThreadEntered.get()) {
+    //             return null;
+    //         }
+    //         return this.executeAfter == this ? this.getDefaultJsqlExecuteX().getExecuteAfter() : this.executeAfter;
+    //     }
+    //
+    //     public void setExecuteAfter(JsqlExecuteAfter executeAfter) {
+    //         if (executeAfter == null) {
+    //             this.executeAfter = null;
+    //         } else {
+    //             JsqlExecuteAfter jsqlAfter = this.getDefaultJsqlExecuteX().getExecuteAfter();
+    //             if (jsqlAfter == null || this.executeAfter == null) {
+    //                 // 这里留下一个特殊应用模式，先把属性设置为null，再设置目标回调接口就可以绕过Jsql的缺省设置
+    //                 this.executeAfter = executeAfter;
+    //             } else {
+    //                 this.executeAfter = new JsqlExecuteAfterSet(new JsqlExecuteAfter[]{executeAfter, jsqlAfter});
+    //             }
+    //         }
+    //     }
+    //
+    //     public JsqlExecuteXProxy() {
+    //         this.executeAfter = this;
+    //         this.executeBeanChanged = this;
+    //         this.executeBefore = this;
+    //         this.executeCompleted = this;
+    //     }
+    //
+    //     @Override
+    //     public void listBefore(Jsql jsql, Result<?> result, Class<?> targetClass) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).listBefore(jsql, result, targetClass);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void executeUpdateBefore(Jsql jsql, Result<?> result,
+    //                                     Class<?> targetClass, Object setArgs) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).executeUpdateBefore(jsql, result, targetClass, setArgs);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //     @Override
+    //     public void saveBefore(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).saveBefore(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //     @Override
+    //     public void updateBefore(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).updateBefore(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //     @Override
+    //     public void mergeBefore(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).mergeBefore(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //     @Override
+    //     public void deleteBefore(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).deleteBefore(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //     @Override
+    //     public boolean loadBefore(Jsql jsql, Class<?> targetClass,
+    //                               Serializable pkValue) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             return (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).loadBefore(jsql, targetClass, pkValue);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //     @Override
+    //     public boolean getBefore(Jsql jsql, Class<?> targetClass,
+    //                              Serializable pkValue) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             return (this.executeBefore == this ? this.getDefaultJsqlExecuteX().getExecuteBefore() : this.executeBefore).getBefore(jsql, targetClass, pkValue);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void listAfter(Jsql jsql, List<?> results) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeAfter == this ? this.getDefaultJsqlExecuteX().getExecuteAfter() : this.executeAfter).listAfter(jsql, results);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public Object getAfter(Jsql jsql, Object result) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             return (this.executeAfter == this ? this.getDefaultJsqlExecuteX().getExecuteAfter() : this.executeAfter).getAfter(jsql, result);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public Object loadAfter(Jsql jsql, Object result) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             return (this.executeAfter == this ? this.getDefaultJsqlExecuteX().getExecuteAfter() : this.executeAfter).loadAfter(jsql, result);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void listCompleted(Jsql jsql, Result<?> result, String hql,
+    //                               long executeTime) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeCompleted == this ? this.getDefaultJsqlExecuteX().getExecuteCompleted() : this.executeCompleted).listCompleted(jsql, result, hql, executeTime);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void executeUpdateCompleted(Jsql jsql, Result<?> result,
+    //                                        String hql, long executeTime) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeCompleted == this ? this.getDefaultJsqlExecuteX().getExecuteCompleted() : this.executeCompleted).executeUpdateCompleted(jsql, result, hql, executeTime);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void saved(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).saved(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void deleted(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).deleted(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void updated(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).updated(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void batchDeleting(Jsql jsql, Delete deleter, Class<?> targetClass, UUID batchId) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).batchDeleting(jsql, deleter, targetClass, batchId);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void batchDeleted(Jsql jsql, Delete deleter, Class<?> targetClass, UUID batchId, int deletedObjects) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).batchDeleted(jsql, deleter, targetClass, batchId, deletedObjects);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void batchDeleteCanceled(Jsql jsql, Delete deleter, Class<?> targetClass, UUID batchId) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).batchDeleteCanceled(jsql, deleter, targetClass, batchId);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void batchUpdating(Jsql jsql, Update updater, Class<?> targetClass, UUID batchId) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).batchUpdating(jsql, updater, targetClass, batchId);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void batchUpdated(Jsql jsql, Update updater, Class<?> targetClass, UUID batchId, int updatedObjects) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).batchUpdated(jsql, updater, targetClass, batchId, updatedObjects);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void batchUpdateCanceled(Jsql jsql, Update updater, Class<?> targetClass, UUID batchId) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).batchUpdateCanceled(jsql, updater, targetClass, batchId);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void saving(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).saving(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void saveCanceled(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).saveCanceled(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void deleting(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).deleting(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void deleteCanceled(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).deleteCanceled(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void updating(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).updating(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //
+    //     @Override
+    //     public void updateCanceled(Jsql jsql, Object bean) {
+    //         try {
+    //             currentThreadEntered.set(true);
+    //             (this.executeBeanChanged == this ? this.getDefaultJsqlExecuteX().getExecuteBeanChanged() : this.executeBeanChanged).updateCanceled(jsql, bean);
+    //         } finally {
+    //             currentThreadEntered.set(false);
+    //         }
+    //     }
+    //     private static DefaultJsqlExecuteX[] defaultJsqlExecuteX = new DefaultJsqlExecuteX[1];
+    //     private DefaultJsqlExecuteX getDefaultJsqlExecuteX() {
+    //         synchronized (defaultJsqlExecuteX) {
+    //             if (defaultJsqlExecuteX[0] == null) {
+    //                 defaultJsqlExecuteX[0] = new DefaultJsqlExecuteX();
+    //             }
+    //         }
+    //         return defaultJsqlExecuteX[0];
+    //     }
+    // }
+    // private JsqlExecuteXProxy executeXProxy = new JsqlExecuteXProxy();
     /**
      * 使用当前Jsql对象的应用系统的会话对象
      */
@@ -3537,55 +3539,55 @@ public class Jsql {
     /**
      * 当前Jsql对象的执行前回调接口
      */
-    public JsqlExecuteBefore getExecuteBefore() {
-        return this.executeXProxy.getExecuteBefore() == null ? null : this.executeXProxy;
-    }
+    // public JsqlExecuteBefore getExecuteBefore() {
+    //     return this.executeXProxy.getExecuteBefore() == null ? null : this.executeXProxy;
+    // }
     /**
      * 当前Jsql对象的执行前回调接口
      */
-    public void setExecuteBefore(JsqlExecuteBefore executeBefore) {
-        this.executeXProxy.setExecuteBefore(executeBefore);
-    }
+    // public void setExecuteBefore(JsqlExecuteBefore executeBefore) {
+    //     this.executeXProxy.setExecuteBefore(executeBefore);
+    // }
     /**
      * 当前Jsql对象的执行后回调接口
      */
-    public JsqlExecuteAfter getExecuteAfter() {
-        return this.executeXProxy.getExecuteAfter() == null ? null : this.executeXProxy;
-    }
+    // public JsqlExecuteAfter getExecuteAfter() {
+    //     return this.executeXProxy.getExecuteAfter() == null ? null : this.executeXProxy;
+    // }
     /**
      * 当前Jsql对象的执行后回调接口
      */
-    public void setExecuteAfter(JsqlExecuteAfter executeAfter) {
-        this.executeXProxy.setExecuteAfter(executeAfter);
-    }
+    // public void setExecuteAfter(JsqlExecuteAfter executeAfter) {
+    //     this.executeXProxy.setExecuteAfter(executeAfter);
+    // }
     /**
      * 当前Jsql对象的执行完成回调接口<br>
      * 这个回调主要用于分析SQL执行效率
      */
-    public JsqlExecuteCompleted getExecuteCompleted() {
-        return this.executeXProxy.getExecuteCompleted() == null ? null : this.executeXProxy;
-    }
+    // public JsqlExecuteCompleted getExecuteCompleted() {
+    //     return this.executeXProxy.getExecuteCompleted() == null ? null : this.executeXProxy;
+    // }
     /**
      * 当前Jsql对象的执行完成回调接口<br>
      * 这个回调主要用于分析SQL执行效率
      */
-    public void setExecuteCompleted(JsqlExecuteCompleted executed) {
-        this.executeXProxy.setExecuteCompleted(executed);
-    }
+    // public void setExecuteCompleted(JsqlExecuteCompleted executed) {
+    //     this.executeXProxy.setExecuteCompleted(executed);
+    // }
     /**
      * 当前Jsql对象的持久化Bean对象修改操作回调接口<br>
      * 这个回调主要为数据库同步提供支持
      */
-    public JsqlExecuteBeanChang getExecuteBeanChanged() {
-        return this.executeXProxy.getExecuteBeanChanged() == null ? null : this.executeXProxy;
-    }
+    // public JsqlExecuteBeanChang getExecuteBeanChanged() {
+    //     return this.executeXProxy.getExecuteBeanChanged() == null ? null : this.executeXProxy;
+    // }
     /**
      * 当前Jsql对象的持久化Bean对象修改操作回调接口<br>
      * 这个回调主要为数据库同步提供支持
      */
-    public void setExecuteBeanChanged(JsqlExecuteBeanChang executeBeanChanged) {
-        this.executeXProxy.setExecuteBeanChanged(executeBeanChanged);
-    }
+    // public void setExecuteBeanChanged(JsqlExecuteBeanChang executeBeanChanged) {
+    //     this.executeXProxy.setExecuteBeanChanged(executeBeanChanged);
+    // }
     /**
      * 是否开启调试模式
      */
@@ -3616,7 +3618,6 @@ public class Jsql {
     }
     /**
      * 因为完全原因已经取消<br>
-     * @see com.aj.frame.db.hibernate.jsql.Jsql#doWork
      * @return 当前Jsql对象内部的hibernate会话对象。
      */
     @Deprecated
@@ -3629,12 +3630,13 @@ public class Jsql {
      * @param forUpdate 如果为true表示需要改写数据，否则表示仅用于查询
      * @return 当前Jsql对象
      */
-    public Jsql doWork(JsqlWork work, boolean forUpdate) {
+    public Jsql doWork(JsqlWork work, boolean forUpdate) throws Exception {
         Session session = this.sessionBox.getSession(forUpdate);
         try {
             work.work(session);
         } catch (Exception e) {
-            throw new AJFrameRuntimeException(Ids.Ajf.DbErrors.数据库未知错误, e);
+            // throw new AJFrameRuntimeException(Ids.Ajf.DbErrors.数据库未知错误, e);
+            throw new Exception("数据库位置错误");
         } finally {
             this.sessionBox.freeSession(session);
         }
@@ -3646,7 +3648,7 @@ public class Jsql {
      * @param forUpdate 如果为true表示需要改写数据，否则表示仅用于查询
      * @return 当前Jsql对象
      */
-    public Jsql doWork(final Work work, boolean forUpdate) {
+    public Jsql doWork(final Work work, boolean forUpdate) throws Exception {
         this.doWork(new JsqlWork(){
             @Override
             public void work(Session session) throws Exception {
@@ -3725,7 +3727,7 @@ public class Jsql {
         }
         return this;
     }
-    public Jsql flush() {
+    public Jsql flush() throws Exception {
         this.doWork(new JsqlWork(){
             @Override
             public void work(Session session) throws Exception {
@@ -3733,7 +3735,7 @@ public class Jsql {
             }}, false);
         return this;
     }
-    public Jsql clear() {
+    public Jsql clear() throws Exception {
         this.doWork(new JsqlWork(){
             @Override
             public void work(Session session) throws Exception {
@@ -3743,11 +3745,11 @@ public class Jsql {
     }
     @SuppressWarnings("unchecked")
     public <T> T get(Class<T> cls, Serializable pkValue) {
-        if (this.getExecuteBefore() != null) {
-            if (this.getExecuteBefore().loadBefore(this, cls, pkValue)) {
-                return null;
-            }
-        }
+        // if (this.getExecuteBefore() != null) {
+        //     if (this.getExecuteBefore().loadBefore(this, cls, pkValue)) {
+        //         return null;
+        //     }
+        // }
         T obj = null;
         Session session = this.sessionBox.getSession(false);
         try {
@@ -3768,27 +3770,27 @@ public class Jsql {
                     }
                 }
             } else {
-                long time = System.currentTimeMillis();
-                obj = (T) session.get(cls, pkValue);
-                if (Jsql.this.getExecuteCompleted() != null) {
-                    Jsql.this.getExecuteCompleted().listCompleted(Jsql.this, null, String.format("get(%s, %s)", cls.getName(), pkValue.toString()), System.currentTimeMillis() - time);
-                }
+                // long time = System.currentTimeMillis();
+                // obj = (T) session.get(cls, pkValue);
+                // if (Jsql.this.getExecuteCompleted() != null) {
+                //     Jsql.this.getExecuteCompleted().listCompleted(Jsql.this, null, String.format("get(%s, %s)", cls.getName(), pkValue.toString()), System.currentTimeMillis() - time);
+                // }
             }
         } finally {
             this.sessionBox.freeSession(session);
         }
-        if (this.getExecuteAfter() != null) {
-            obj = (T)this.getExecuteAfter().getAfter(this, obj);
-        }
+        // if (this.getExecuteAfter() != null) {
+        //     obj = (T)this.getExecuteAfter().getAfter(this, obj);
+        // }
         return obj;
     }
     @SuppressWarnings("unchecked")
     public <T> T load(Class<T> cls, Serializable pkValue) {
-        if (this.getExecuteBefore() != null) {
-            if (this.getExecuteBefore().loadBefore(this, cls, pkValue)) {
-                return null;
-            }
-        }
+        // if (this.getExecuteBefore() != null) {
+        //     if (this.getExecuteBefore().loadBefore(this, cls, pkValue)) {
+        //         return null;
+        //     }
+        // }
         T obj = null;
         Session session = this.sessionBox.getSession(false);
         try {
@@ -3811,29 +3813,29 @@ public class Jsql {
             } else {
                 long time = System.currentTimeMillis();
                 obj = (T) session.load(cls, pkValue);
-                if (Jsql.this.getExecuteCompleted() != null) {
-                    Jsql.this.getExecuteCompleted().listCompleted(Jsql.this, null, String.format("load(%s, %s)", cls.getName(), pkValue.toString()), System.currentTimeMillis() - time);
-                }
+                // if (Jsql.this.getExecuteCompleted() != null) {
+                //     Jsql.this.getExecuteCompleted().listCompleted(Jsql.this, null, String.format("load(%s, %s)", cls.getName(), pkValue.toString()), System.currentTimeMillis() - time);
+                // }
             }
         } finally {
             this.sessionBox.freeSession(session);
         }
-        if (this.getExecuteAfter() != null) {
-            obj = (T)this.getExecuteAfter().loadAfter(this, obj);
-        }
+        // if (this.getExecuteAfter() != null) {
+        //     obj = (T)this.getExecuteAfter().loadAfter(this, obj);
+        // }
         return obj;
     }
     public <T> void delete(Class<T> cls, Object object) {
-        if (this.getExecuteBefore() != null) {
-            this.getExecuteBefore().deleteBefore(this, object);
-        }
+        // if (this.getExecuteBefore() != null) {
+        //     this.getExecuteBefore().deleteBefore(this, object);
+        // }
         boolean isOk = false;
         Session session = null;
         try {
             session = this.sessionBox.getSession(true);
-            if (this.getExecuteBeanChanged() != null) {
-                this.getExecuteBeanChanged().deleting(this, object);
-            }
+            // if (this.getExecuteBeanChanged() != null) {
+            //     this.getExecuteBeanChanged().deleting(this, object);
+            // }
             if (this.logicalizationConditionPropertyName != null && this.logicalizationConditionPropertyName.length() > 0
                 && this.logicalizationConditionOperator != null && this.logicalizationConditionOperator.length() > 0) {
                 // 如果当前对象已经指定了逻辑化操作相关参数则通过select语法实现load效果，籍此以统一的方式排出逻辑删除了的对象
@@ -3854,105 +3856,105 @@ public class Jsql {
                 session.delete(object);
                 isOk = true;
             }
-            if (this.getExecuteBeanChanged() != null) {
-                this.getExecuteBeanChanged().deleted(this, object);
-            }
+            // if (this.getExecuteBeanChanged() != null) {
+            //     this.getExecuteBeanChanged().deleted(this, object);
+            // }
         } finally {
-            try {
-                if (!isOk && this.getExecuteBeanChanged() != null) {
-                    this.getExecuteBeanChanged().deleteCanceled(this, object);
-                }
-            } finally {
+            // try {
+                // if (!isOk && this.getExecuteBeanChanged() != null) {
+                //     this.getExecuteBeanChanged().deleteCanceled(this, object);
+                // }
+            // } finally {
                 if (session != null) {
                     this.sessionBox.freeSession(session);
                 }
-            }
+            // }
         }
     }
     public Serializable save(final Object object) {
-        if (this.getExecuteBefore() != null) {
-            this.getExecuteBefore().saveBefore(this, object);
-        }
+        // if (this.getExecuteBefore() != null) {
+        //     this.getExecuteBefore().saveBefore(this, object);
+        // }
         boolean isOk = false;
         Serializable seri = null;
         Session session = null;
         try {
             session = this.sessionBox.getSession(true);
-            if (this.getExecuteBeanChanged() != null) {
-                this.getExecuteBeanChanged().saving(this, object);
-            }
+            // if (this.getExecuteBeanChanged() != null) {
+            //     this.getExecuteBeanChanged().saving(this, object);
+            // }
             seri = session.save(object);
             isOk = true;
-            if (this.getExecuteBeanChanged() != null) {
-                this.getExecuteBeanChanged().saved(this, object);
-            }
+            // if (this.getExecuteBeanChanged() != null) {
+            //     this.getExecuteBeanChanged().saved(this, object);
+            // }
         } finally {
-            try {
-                if (!isOk && this.getExecuteBeanChanged() != null) {
-                    this.getExecuteBeanChanged().saveCanceled(this, object);
-                }
-            } finally {
+            // try {
+                // if (!isOk && this.getExecuteBeanChanged() != null) {
+                //     this.getExecuteBeanChanged().saveCanceled(this, object);
+                // }
+            // } finally {
                 if (session != null) {
                     this.sessionBox.freeSession(session);
                 }
-            }
+            // }
         }
         return seri;
     }
     public void update(final Object object) {
-        if (this.getExecuteBefore() != null) {
-            this.getExecuteBefore().updateBefore(this, object);
-        }
+        // if (this.getExecuteBefore() != null) {
+        //     this.getExecuteBefore().updateBefore(this, object);
+        // }
         boolean isOk = false;
         Session session = null;
         try {
             session = this.sessionBox.getSession(true);
-            if (this.getExecuteBeanChanged() != null) {
-                this.getExecuteBeanChanged().updating(this, object);
-            }
+            // if (this.getExecuteBeanChanged() != null) {
+            //     this.getExecuteBeanChanged().updating(this, object);
+            // }
             session.update(object);
             isOk = true;
-            if (this.getExecuteBeanChanged() != null) {
-                this.getExecuteBeanChanged().updated(this, object);
-            }
+            // if (this.getExecuteBeanChanged() != null) {
+            //     this.getExecuteBeanChanged().updated(this, object);
+            // }
         } finally {
-            try {
-                if (!isOk && this.getExecuteBeanChanged() != null) {
-                    this.getExecuteBeanChanged().updateCanceled(this, object);
-                }
-            } finally {
+            // try {
+            //     if (!isOk && this.getExecuteBeanChanged() != null) {
+            //         this.getExecuteBeanChanged().updateCanceled(this, object);
+            //     }
+            // } finally {
                 if (session != null) {
                     this.sessionBox.freeSession(session);
                 }
-            }
+            // }
         }
     }
     public void merge(final Object object) {
-        if (this.getExecuteBefore() != null) {
-            this.getExecuteBefore().mergeBefore(this, object);
-        }
+        // if (this.getExecuteBefore() != null) {
+        //     this.getExecuteBefore().mergeBefore(this, object);
+        // }
         boolean isOk = false;
         Session session = null;
         try {
             session = this.sessionBox.getSession(true);
-            if (this.getExecuteBeanChanged() != null) {
-                this.getExecuteBeanChanged().updating(this, object);
-            }
+            // if (this.getExecuteBeanChanged() != null) {
+            //     this.getExecuteBeanChanged().updating(this, object);
+            // }
             session.merge(object);
             isOk = true;
-            if (this.getExecuteBeanChanged() != null) {
-                this.getExecuteBeanChanged().updated(this, object);
-            }
+            // if (this.getExecuteBeanChanged() != null) {
+            //     this.getExecuteBeanChanged().updated(this, object);
+            // }
         } finally {
-            try {
-                if (!isOk && this.getExecuteBeanChanged() != null) {
-                    this.getExecuteBeanChanged().updateCanceled(this, object);
-                }
-            } finally {
+            // try {
+            //     if (!isOk && this.getExecuteBeanChanged() != null) {
+            //         this.getExecuteBeanChanged().updateCanceled(this, object);
+            //     }
+            // } finally {
                 if (session != null) {
                     this.sessionBox.freeSession(session);
                 }
-            }
+            // }
         }
     }
     /**
@@ -4071,11 +4073,11 @@ public class Jsql {
                 }
             }
         } catch (Exception e) {
-            if (e instanceof SQLGrammarException && ((SQLGrammarException)e).getSQLException() != null) {
-                F.log().dbe(String.format("Jsql以'%s'为目标获取系统时间时出现运行时异常：%s.", entityName, ((SQLGrammarException)e).getSQLException().getMessage()));
-            } else {
-                F.log().dbe(String.format("Jsql以'%s'为目标获取系统时间时出现运行时异常：%s - %s.", entityName, e.getMessage(), e.getClass().getSimpleName()), e);
-            }
+            // if (e instanceof SQLGrammarException && ((SQLGrammarException)e).getSQLException() != null) {
+            //     F.log().dbe(String.format("Jsql以'%s'为目标获取系统时间时出现运行时异常：%s.", entityName, ((SQLGrammarException)e).getSQLException().getMessage()));
+            // } else {
+            //     F.log().dbe(String.format("Jsql以'%s'为目标获取系统时间时出现运行时异常：%s - %s.", entityName, e.getMessage(), e.getClass().getSimpleName()), e);
+            // }
         } finally {
             this.sessionBox.freeSession(session);
         }
@@ -4092,7 +4094,7 @@ public class Jsql {
         try {
             acm = session.getSessionFactory().getAllClassMetadata();
         } catch (Exception e) {
-            F.log().dbe(String.format("Jsql运行时异常：%s - %s.", e.getMessage(), e.getClass().getSimpleName()), e);
+            // F.log().dbe(String.format("Jsql运行时异常：%s - %s.", e.getMessage(), e.getClass().getSimpleName()), e);
         } finally {
             this.sessionBox.freeSession(session);
         }
