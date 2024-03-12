@@ -3614,7 +3614,10 @@ public class Jsql {
         this.sessionBox = sessionBox;
     }
     public Jsql(Session session, String dataSourceName) {
-        this.sessionBox = new DefaultHibernateSessionBox(session).setDataSourceName(dataSourceName);
+        DefaultHibernateSessionBox sessionBox = new DefaultHibernateSessionBox(session);
+        sessionBox.setDataSourceName(dataSourceName);
+        this.sessionBox = sessionBox;
+        sessionBox.setSystemTimeFactory(getSystemTimeFactory());
     }
     /**
      * 因为完全原因已经取消<br>
