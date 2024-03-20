@@ -1,10 +1,6 @@
 package com.xkyss.json.jackson;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
-import com.fasterxml.jackson.core.JsonTokenId;
+import com.fasterxml.jackson.core.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import java.io.Closeable;
@@ -12,6 +8,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -35,12 +32,34 @@ import static java.time.format.DateTimeFormatter.ISO_INSTANT;
 @SuppressWarnings({"unchecked", "unused", "rawtypes"})
 public class JacksonCodec implements JsonCodec {
 
-    private static final JsonFactory factory = new JsonFactory();
-
-    static {
-        // Non-standard JSON but we allow C style comments in our JSON
-        factory.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+  private static JsonFactory buildFactory() {
+    TSFBuilder<?, ?> builder = JsonFactory.builder();
+    try {
+      // Use reflection to configure the recycler pool
+      Method[] methods = builder.getClass().getMethods();
+      for (Method method : methods) {
+        if (method.getName().equals("recyclerPool")) {
+          method.invoke(builder, JacksonPoolHolder.pool);
+          break;
+        }
+      }
+    } catch (Throwable e) {
+      // Ignore: most likely no Recycler Pool with Jackson < 2.16
     }
+    return builder.build();
+  }
+
+  private static final class JacksonPoolHolder {
+    // Use Initialization-on-demand holder idiom to lazy load the HybridJacksonPool only when we know that we are on Jackson 2.16+
+    private static final Object pool = HybridJacksonPool.getInstance();
+  }
+
+  static final JsonFactory factory = buildFactory();
+
+  static {
+    // Non-standard JSON but we allow C style comments in our JSON
+    JacksonCodec.factory.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+  }
 
     @Override
     public <T> T fromString(String json, Class<T> clazz) throws DecodeException {

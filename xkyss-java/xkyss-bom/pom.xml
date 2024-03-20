@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.xkyss</groupId>
         <artifactId>xkyss</artifactId>
-        <version>2023.8.2</version>
+        <version>2024.03.20</version>
     </parent>
 
     <properties>
@@ -24,11 +24,10 @@
         <hutool.version>5.8.11</hutool.version>
         <generex.version>1.0.2</generex.version>
         <bouncycastle.version>1.72</bouncycastle.version>
+        <hibernate.version>4.3.5.Final</hibernate.version>
         <!-- same as vert.x 4.5.4 and quarkus 3.8.3-->
         <jackson-bom.version>2.16.1</jackson-bom.version>
-        <hibernate.version>4.3.5.Final</hibernate.version>
     </properties>
-
 
     <dependencyManagement>
         <dependencies>
