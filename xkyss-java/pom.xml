@@ -19,6 +19,7 @@
         <maven-shade-plugin.version>3.4.1</maven-shade-plugin.version>
         <proguard-maven-plugin.version>2.6.0</proguard-maven-plugin.version>
         <junit.version>5.9.0</junit.version>
+        <vertx.version>4.5.4</vertx.version>
     </properties>
 
     <modules>
