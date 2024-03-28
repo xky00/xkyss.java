@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-public class HttpTest {
+public class HttpClientTest {
 
     @Test
     public void test_01() throws InterruptedException, ExecutionException {
