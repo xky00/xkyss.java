@@ -10,6 +10,10 @@
     <version>2024.03.20</version>
     <packaging>pom</packaging>
 
+    <modules>
+        <module>xkyss-test-etcd</module>
+    </modules>
+
     <properties>
         <!-- project -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,6 +23,7 @@
         <maven-shade-plugin.version>3.4.1</maven-shade-plugin.version>
         <proguard-maven-plugin.version>2.6.0</proguard-maven-plugin.version>
         <junit.version>5.9.0</junit.version>
+        <slf4j.version>2.0.7</slf4j.version>
     </properties>
 
 
@@ -29,6 +34,11 @@
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
     </dependencies>
 
