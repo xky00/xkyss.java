@@ -12,7 +12,6 @@
     <artifactId>xkyss-test-kafka</artifactId>
     <name>xkyss-test :: Etcd</name>
 
-
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -25,6 +24,11 @@
         </dependencies>
     </dependencyManagement>
 
+    <properties>
+        <kafka.version>3.5.0</kafka.version>
+        <debezium.version>1.8.0.Final</debezium.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -33,6 +37,24 @@
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-kafka-client</artifactId>
+        </dependency>
+
+        <!-- For running Kafka easily -->
+        <dependency>
+            <groupId>io.debezium</groupId>
+            <artifactId>debezium-core</artifactId>
+            <version>${debezium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.debezium</groupId>
+            <artifactId>debezium-core</artifactId>
+            <version>${debezium.version}</version>
+            <type>test-jar</type>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.12</artifactId>
+            <version>${kafka.version}</version>
         </dependency>
     </dependencies>
 
