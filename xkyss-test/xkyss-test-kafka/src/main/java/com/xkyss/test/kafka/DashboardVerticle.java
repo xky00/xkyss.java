@@ -20,7 +20,7 @@ public class DashboardVerticle extends AbstractVerticle {
         // Aggregates metrics in the dashboard
         consumer.handler(record -> {
             JsonObject obj = record.value();
-            System.out.println(String.format("Receive %d: %d", obj.getString("Id"), System.currentTimeMillis()));
+            System.out.println(String.format("Receive %d: %d", obj.getLong("id"), System.currentTimeMillis()));
         });
 
         // Subscribe to Kafka
