@@ -12,7 +12,6 @@ import org.apache.kafka.clients.consumer.OffsetResetStrategy;
 import java.io.File;
 import java.util.Map;
 
-
 public class MainVerticle extends AbstractVerticle {
 
     public static void main(String[] args) {

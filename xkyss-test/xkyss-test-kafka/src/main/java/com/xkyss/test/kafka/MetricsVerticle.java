@@ -32,7 +32,8 @@ public class MetricsVerticle extends AbstractVerticle {
             JsonObject metrics = new JsonObject();
             metrics.put("CPU", systemMBean.getProcessCpuLoad());
             metrics.put("Mem", systemMBean.getTotalPhysicalMemorySize() - systemMBean.getFreePhysicalMemorySize());
-            System.out.println("Send " + id);
+            metrics.put("Id", id);
+            System.out.println(String.format("Send %d: %d", id, System.currentTimeMillis()));
             producer.write(new ProducerRecord<>("the_topic", new JsonObject().put(pid, metrics)));
         });
     }
