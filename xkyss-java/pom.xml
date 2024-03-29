@@ -28,7 +28,6 @@
         <module>xkyss-json</module>
         <module>xkyss-security</module>
         <module>xkyss-bom</module>
-        <module>xkyss-test</module>
         <module>xkyss-jsql</module>
     </modules>
 
