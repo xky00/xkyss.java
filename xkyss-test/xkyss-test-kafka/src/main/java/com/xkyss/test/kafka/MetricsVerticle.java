@@ -29,8 +29,9 @@ public class MetricsVerticle extends AbstractVerticle {
 
         // Publish the metircs in Kafka
         vertx.setPeriodic(1000, id -> {
-            System.out.println(String.format("Send %d: %d", id, System.currentTimeMillis()));
-            producer.write(new ProducerRecord<>("the_topic", new JsonObject().put("id", id)));
+            long c = System.currentTimeMillis();
+            System.out.println(String.format("Send : %d", System.currentTimeMillis()));
+            producer.write(new ProducerRecord<>("the_topic", new JsonObject().put("t", c)));
         });
     }
 

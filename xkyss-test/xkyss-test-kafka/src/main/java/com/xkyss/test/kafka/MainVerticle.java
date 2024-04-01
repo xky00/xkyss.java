@@ -47,7 +47,7 @@ public class MainVerticle extends AbstractVerticle {
 
         // Deploy the metrics collector : 3 times
         {
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 1; i++) {
                 System.out.println("Deploy the_producer-" + i);
                 JsonObject producerConfig = JsonObject.of(
                     ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092",
