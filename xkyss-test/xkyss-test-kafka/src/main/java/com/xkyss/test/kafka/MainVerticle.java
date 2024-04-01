@@ -33,7 +33,7 @@ public class MainVerticle extends AbstractVerticle {
             JsonObject consumerConfig = JsonObject.of(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092",
                 ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest",
-                ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false",
+                ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true",
                 ConsumerConfig.GROUP_ID_CONFIG, "th_group",
                 ConsumerConfig.CLIENT_ID_CONFIG, "th_client"
             );

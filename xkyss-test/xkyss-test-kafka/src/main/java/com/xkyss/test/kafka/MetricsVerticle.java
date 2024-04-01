@@ -8,6 +8,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 
 import java.lang.management.ManagementFactory;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class MetricsVerticle extends AbstractVerticle {
 
@@ -27,11 +28,15 @@ public class MetricsVerticle extends AbstractVerticle {
         // Create the producer
         producer = KafkaWriteStream.create(vertx, config.getMap(), String.class, JsonObject.class);
 
-        // Publish the metircs in Kafka
-        vertx.setPeriodic(1000, id -> {
-            long c = System.currentTimeMillis();
-            System.out.println(String.format("Send : %d", System.currentTimeMillis()));
-            producer.write(new ProducerRecord<>("the_topic", new JsonObject().put("t", c)));
+        vertx.setTimer(5000, id0 -> {
+            AtomicLong ct = new AtomicLong(0);
+            // Publish the metircs in Kafka
+            vertx.setPeriodic(100, id1 -> {
+                long c = ct.getAndIncrement();
+                long t = System.currentTimeMillis();
+                System.out.println(String.format("Send %d: %d", c, t));
+                producer.write(new ProducerRecord<>("the_topic", JsonObject.of("c", c, "t", t)));
+            });
         });
     }
 

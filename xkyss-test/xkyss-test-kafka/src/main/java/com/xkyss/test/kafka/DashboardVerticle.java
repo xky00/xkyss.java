@@ -21,11 +21,11 @@ public class DashboardVerticle extends AbstractVerticle {
         // Create the consumer
         KafkaReadStream<String, JsonObject> consumer = KafkaReadStream.create(vertx, config.getMap(), String.class, JsonObject.class);
 
-        // Aggregates metrics in the dashboard
-        consumer.handler(record -> {
-            JsonObject obj = record.value();
-            System.out.println(String.format("Receive %d: %d", obj.getLong("id"), System.currentTimeMillis()));
-        });
+        // // Aggregates metrics in the dashboard
+        // consumer.handler(record -> {
+        //     JsonObject obj = record.value();
+        //     System.out.println(String.format("Receive %d: %d", obj.getLong("id"), System.currentTimeMillis()));
+        // });
 
         // consumer.assign(Collections.singleton(new TopicPartition("the_topic", 0)))
         //     .onSuccess(v -> System.out.println("assign to the the_topic partition 0"))
@@ -46,20 +46,32 @@ public class DashboardVerticle extends AbstractVerticle {
         //     .onSuccess(v -> System.out.println("Seeked to the beginning"))
         //     .onFailure(Throwable::printStackTrace);
 
-        consumer.subscribe(Collections.singleton("the_topic"));
+        consumer.subscribe(Collections.singleton("the_topic"))
+            .onSuccess(v -> {
+                // 一段时间后,拉一次数据
+                vertx.setPeriodic(3000, t -> {
+                    consumer.poll(Duration.ofMillis(5000))
+                        .onSuccess(records -> {
+                            System.out.println("Polled " + records.count() + " records");
+                            for (ConsumerRecord<String, JsonObject> record : records) {
+                                System.out.println("key=" + record.key() + ",value=" + record.value() +
+                                    ",partition=" + record.partition() + ",offset=" + record.offset());
+                            }
+                            // 从头开始拉取
+                            if (!records.isEmpty()) {
+                                // seek to a specific offset
+                                TopicPartition topicPartition = new TopicPartition("the_topic", 0);
+                                consumer
+                                    .seekToBeginning(Collections.singleton(topicPartition))
+                                    .onSuccess(v1 -> System.out.println("Seeked to the beginning"))
+                                    .onFailure(Throwable::printStackTrace);
+                            }
+                        })
+                        .onFailure(Throwable::printStackTrace);
+                });
+            })
+            .onFailure(Throwable::printStackTrace);
 
-        // 一段时间后,拉一次数据
-        vertx.setPeriodic(3000, t -> {
-            consumer.poll(Duration.ofMillis(3000))
-                .onSuccess(records -> {
-                    System.out.println("Polled " + records.count() + " records");
-                    for (ConsumerRecord<String, JsonObject> record : records) {
-                        System.out.println("key=" + record.key() + ",value=" + record.value() +
-                            ",partition=" + record.partition() + ",offset=" + record.offset());
-                    }
-                })
-                .onFailure(Throwable::printStackTrace);
-        });
     }
 
     @Override

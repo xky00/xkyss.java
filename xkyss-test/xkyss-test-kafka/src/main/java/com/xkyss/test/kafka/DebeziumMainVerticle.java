@@ -7,6 +7,7 @@ import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.json.JsonObject;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.OffsetResetStrategy;
 
 import java.io.File;
@@ -44,6 +45,7 @@ public class DebeziumMainVerticle extends AbstractVerticle {
             JsonObject consumerConfig = new JsonObject((Map) kafkaCluster.useTo()
                 .getConsumerProperties("the_group", "the_client", OffsetResetStrategy.LATEST));
             System.out.println("Deploy the_client " + OffsetResetStrategy.LATEST);
+            consumerConfig.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, Boolean.TRUE.toString());
 
             vertx.deployVerticle(
                 DashboardVerticle.class.getName(),
@@ -51,7 +53,7 @@ public class DebeziumMainVerticle extends AbstractVerticle {
             );
 
             // Deploy the metrics collector : 3 times
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 1; i++) {
                 System.out.println("Deploy the_producer-" + i);
                 JsonObject producerConfig = new JsonObject((Map) kafkaCluster.useTo()
                     .getProducerProperties("the_producer-" + i));
