@@ -14,6 +14,7 @@
         <module>xkyss-test-etcd</module>
         <module>xkyss-test-kafka</module>
         <module>xkyss-test-vertx</module>
+        <module>xkyss-test-redis</module>
     </modules>
 
     <properties>
@@ -43,9 +44,9 @@
     <dependencies>
         <!-- 全局单元测试 -->
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>${junit.version}</version>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-junit5</artifactId>
+            <version>${vertx.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
