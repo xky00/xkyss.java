@@ -9,9 +9,11 @@ import io.vertx.redis.client.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 
 public class RedisTest {
@@ -257,6 +259,9 @@ public class RedisTest {
             .compose(r -> redis.scan(Arrays.asList("0", "MATCH", "*", "COUNT", "100")))
             .compose(r -> {
                 Response response = r.get(1);
+                List<String> collect = response.stream()
+                    .map(Response::toString)
+                    .collect(Collectors.toList());
                 for (Object o : response) {
                     System.out.println(o.getClass() + ": " + o);
                 }
@@ -264,6 +269,31 @@ public class RedisTest {
             })
             .onComplete(testContext.succeedingThenComplete())
             .onSuccess(r -> System.out.println("ok: " + r))
+            .onFailure(e -> System.out.println("fail: " + e))
+        ;
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void test_mget() throws InterruptedException {
+
+        VertxTestContext testContext = new VertxTestContext();
+        Redis client = Redis.createClient(vertx, REDIS_HOST);
+        RedisAPI redis = RedisAPI.api(client);
+
+        client.connect()
+            .compose(r -> redis.set(Arrays.asList("test:a", "11"))) // set test:a 11
+            .compose(r -> redis.set(Arrays.asList("test:b", "22"))) // set test:b 22
+            .compose(r -> redis.mget(Arrays.asList("test:a", "test:b"))) // mget test:a test:b 
+            .onComplete(testContext.succeedingThenComplete())
+            .onSuccess(r -> {
+                System.out.println("ok: " + r);
+                Assertions.assertTrue(r.isArray());
+                Assertions.assertEquals(2, r.size());
+                Assertions.assertEquals("11", r.get(0).toString());
+                Assertions.assertEquals("22", r.get(1).toString());
+            })
             .onFailure(e -> System.out.println("fail: " + e))
         ;
 
