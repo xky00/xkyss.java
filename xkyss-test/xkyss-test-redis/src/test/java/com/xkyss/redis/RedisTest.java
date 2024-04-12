@@ -1,21 +1,18 @@
 package com.xkyss.redis;
 
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
-import io.vertx.redis.client.RedisConnection;
 import io.vertx.redis.client.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RedisTest {
 
@@ -247,5 +244,29 @@ public class RedisTest {
 
         // TODO: 会返回false
         testContext2.awaitCompletion(1, TimeUnit.SECONDS);
+    }
+
+    @Test
+    public void test_scan_02() throws InterruptedException {
+
+        VertxTestContext testContext = new VertxTestContext();
+        Redis client = Redis.createClient(vertx, REDIS_HOST);
+        RedisAPI redis = RedisAPI.api(client);
+
+        client.connect()
+            .compose(r -> redis.scan(Arrays.asList("0", "MATCH", "*", "COUNT", "100")))
+            .compose(r -> {
+                Response response = r.get(1);
+                for (Object o : response) {
+                    System.out.println(o.getClass() + ": " + o);
+                }
+                return Future.succeededFuture();
+            })
+            .onComplete(testContext.succeedingThenComplete())
+            .onSuccess(r -> System.out.println("ok: " + r))
+            .onFailure(e -> System.out.println("fail: " + e))
+        ;
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
     }
 }
