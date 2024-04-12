@@ -5,6 +5,7 @@ import io.vertx.junit5.VertxTestContext;
 import io.vertx.redis.client.Redis;
 import io.vertx.redis.client.RedisAPI;
 import io.vertx.redis.client.RedisConnection;
+import io.vertx.redis.client.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -164,5 +165,87 @@ public class RedisTest {
             });
 
         Assertions.assertTrue(testContext.awaitCompletion(5, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void test_config_get_dir() throws InterruptedException {
+        VertxTestContext testContext = new VertxTestContext();
+        Redis client = Redis.createClient(vertx, REDIS_HOST);
+        RedisAPI redis = RedisAPI.api(client);
+
+        client.connect()
+            .onComplete(testContext.succeedingThenComplete())
+            .onSuccess(r -> System.out.println("connect ok: " + r))
+            .onFailure(e -> System.out.println("connect fail: " + e))
+        ;
+
+        Assertions.assertTrue(testContext.awaitCompletion(2, TimeUnit.SECONDS));
+
+        redis.config(Arrays.asList("GET", "dir"), r -> {
+            if (r.succeeded()) {
+                System.out.println("get dir ok: " + r.result().get("dir").toString());
+            } else {
+                System.out.println("get dir fail: " + r.cause());
+            }
+            testContext.succeedingThenComplete();
+        });
+
+        Assertions.assertTrue(testContext.awaitCompletion(2, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void test_scan() throws InterruptedException {
+        VertxTestContext testContext = new VertxTestContext();
+        Redis client = Redis.createClient(vertx, REDIS_HOST);
+        RedisAPI redis = RedisAPI.api(client);
+
+        client.connect()
+            .onComplete(testContext.succeedingThenComplete())
+            .onSuccess(r -> System.out.println("connect ok: " + r))
+            .onFailure(e -> System.out.println("connect fail: " + e))
+        ;
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+
+        redis.scan(Arrays.asList("0", "MATCH", "*", "COUNT", "100"), r -> {
+            if (r.succeeded()) {
+                System.out.println("scan ok: " + r.result().get(1).size());
+            } else {
+                System.out.println("scan fail: " + r.cause());
+            }
+            testContext.succeedingThenComplete();
+        });
+        Assertions.assertTrue(testContext.awaitCompletion(2, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void test_save_02() throws InterruptedException {
+        VertxTestContext testContext = new VertxTestContext();
+        Redis client = Redis.createClient(vertx, REDIS_HOST);
+        RedisAPI redis = RedisAPI.api(client);
+
+        client.connect()
+            .onComplete(testContext.succeedingThenComplete())
+            .onSuccess(r -> System.out.println("connect ok: " + r))
+            .onFailure(e -> System.out.println("connect fail: " + e))
+        ;
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+
+        VertxTestContext testContext2 = new VertxTestContext();
+        redis.save(r -> {
+            if (r.succeeded()) {
+                System.out.println("save ok: " + r.result());
+                // TODO: 无法判断容器宿主的文件目录
+                boolean b = vertx.fileSystem().existsBlocking("D:\\Code\\thzt\\mlcache\\doc\\docker\\mlcache-dashboard-dev\\data\\redis\\data\\20240411-092730-325.rdb");
+                System.out.println("\t file exists: " + b);
+            } else {
+                System.out.println("save fail: " + r.cause());
+            }
+            testContext2.succeedingThenComplete();
+        });
+
+        // TODO: 会返回false
+        testContext2.awaitCompletion(1, TimeUnit.SECONDS);
     }
 }
