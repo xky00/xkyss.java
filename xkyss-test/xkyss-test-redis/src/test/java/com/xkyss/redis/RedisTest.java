@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Array;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -285,7 +287,7 @@ public class RedisTest {
         client.connect()
             .compose(r -> redis.set(Arrays.asList("test:a", "11"))) // set test:a 11
             .compose(r -> redis.set(Arrays.asList("test:b", "22"))) // set test:b 22
-            .compose(r -> redis.mget(Arrays.asList("test:a", "test:b"))) // mget test:a test:b 
+            .compose(r -> redis.mget(Arrays.asList("test:a", "test:b"))) // mget test:a test:b
             .onComplete(testContext.succeedingThenComplete())
             .onSuccess(r -> {
                 System.out.println("ok: " + r);
@@ -298,5 +300,78 @@ public class RedisTest {
         ;
 
         Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void test_compose() throws InterruptedException {
+        Redis client = Redis.createClient(vertx, REDIS_HOST);
+        RedisAPI redis = RedisAPI.api(client);
+
+        {
+            VertxTestContext testContext = new VertxTestContext();
+            client.connect()
+                .onComplete(testContext.succeedingThenComplete())
+                .onSuccess(r -> System.out.println("connect ok: " + r))
+                .onFailure(e -> System.out.println("connect fail: " + e))
+            ;
+            Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+        }
+
+        {
+            String filename = "20230411-092730-425.rdb";
+            VertxTestContext testContext = new VertxTestContext();
+            redis.config(Arrays.asList("SET", "dbfilename", filename))
+                .compose(r -> {
+                    System.out.println("[STEP 1]: set dbfilename: " + r);
+                    return Future.succeededFuture();
+                })
+
+                .compose(r -> {
+                    System.out.println("[STEP 2]: save: " + r);
+                    return redis.config(Arrays.asList("rewrite"));
+                })
+                .compose(r -> {
+                    System.out.println("[STEP 3]: config rewrite: " + r);
+                    return redis.scan(Arrays.asList("0", "MATCH", "mlcache:*"));
+                })
+                .onComplete(testContext.succeedingThenComplete())
+                .onSuccess(r -> System.out.println("ok: " + r.get(0)))
+                .onFailure(e -> System.out.println("fail: " + e))
+            ;
+
+            Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+        }
+    }
+
+    @Test
+    public void test_get_dbfilename() throws InterruptedException {
+        Redis client = Redis.createClient(vertx, REDIS_HOST);
+        RedisAPI redis = RedisAPI.api(client);
+
+        {
+            VertxTestContext testContext = new VertxTestContext();
+            client.connect()
+                .onComplete(testContext.succeedingThenComplete())
+                .onSuccess(r -> System.out.println("connect ok: " + r))
+                .onFailure(e -> System.out.println("connect fail: " + e))
+            ;
+            Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+        }
+
+        {
+            VertxTestContext testContext = new VertxTestContext();
+            redis.config(Arrays.asList("GET", "dbfilename"))
+                .compose(r -> {
+                    System.out.println("[STEP 1]: get dbfilename: " + r);
+                    System.out.println("[STEP 1]: get dbfilename: " + r.get("dbfilename"));
+                    return Future.succeededFuture();
+                })
+                .onComplete(testContext.succeedingThenComplete())
+                .onSuccess(r -> System.out.println("ok: " + r))
+                .onFailure(e -> System.out.println("fail: " + e))
+            ;
+
+            Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+        }
     }
 }
