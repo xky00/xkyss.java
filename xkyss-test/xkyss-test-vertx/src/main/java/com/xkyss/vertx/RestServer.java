@@ -24,6 +24,7 @@ public class RestServer extends AbstractVerticle {
         Vertx vertx = Vertx.vertx(options);
         vertx.deployVerticle(new RestServer());
     }
+
     private Map<String, JsonObject> products = new HashMap<>();
 
     @Override
