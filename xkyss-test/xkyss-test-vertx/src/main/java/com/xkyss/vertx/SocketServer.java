@@ -94,11 +94,36 @@ public class SocketServer extends AbstractVerticle {
                                 }
                                 // PUT
                                 else if (type == 2) {
+                                    Buffer buf = Buffer.buffer();
 
+                                    String r = "1"; // 更新的数量
+
+                                    // body_offset
+                                    buf.appendIntLE(0x10 + r.length());
+                                    // header
+                                    buf.appendLongLE(rid);
+                                    buf.appendIntLE(r.length());
+                                    buf.appendIntLE(type);
+                                    // body
+                                    buf.appendString(r);
+                                    socket.write(buf);
                                 }
                                 // REMOVE
                                 else if (type == 3) {
 
+                                    Buffer buf = Buffer.buffer();
+
+                                    String r = "1"; // 删除的数量
+
+                                    // body_offset
+                                    buf.appendIntLE(0x10 + r.length());
+                                    // header
+                                    buf.appendLongLE(rid);
+                                    buf.appendIntLE(r.length());
+                                    buf.appendIntLE(type);
+                                    // body
+                                    buf.appendString(r);
+                                    socket.write(buf);
                                 }
                                 else {
                                     logger.error("Unknown type: {}", type);
