@@ -75,13 +75,20 @@ public class SocketServer extends AbstractVerticle {
                                 // GET
                                 if (type == 1) {
                                     Buffer buf = Buffer.buffer();
-                                    cm.setValue(cm.getKey() + " - Value");
 
-                                    String r = Json.encode(cm);
+                                    User u = new User();
+                                    u.setName("name-" + cm.getKey());
+                                    u.setCode("code-" + cm.getKey());
+                                    u.setAge((int)rid);
+                                    String r = Json.encode(u);
 
+                                    // body_offset
+                                    buf.appendIntLE(0x10 + r.length());
+                                    // header
                                     buf.appendLongLE(rid);
                                     buf.appendIntLE(r.length());
                                     buf.appendIntLE(type);
+                                    // body
                                     buf.appendString(r);
                                     socket.write(buf);
                                 }
