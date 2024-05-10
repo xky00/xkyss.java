@@ -2,6 +2,7 @@ package com.xkyss.vertx;
 
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.logging.SLF4JLogDelegateFactory;
 import io.vertx.core.net.NetClient;
@@ -38,12 +39,12 @@ public class SocketClient extends AbstractVerticle {
                 socket.handler(buffer -> {
                     logger.info("Received data: {}", buffer.toString("UTF-8"));
                 });
-                socket.write("Hello");
+                Buffer buffer = Buffer.buffer();
+                buffer.appendString("Hello").appendByte((byte) 0);
+                socket.write(buffer);
+                // socket.write("Hello");
             })
             .onFailure(e -> logger.error("Failed to connect.", e));
             ;
-
-        EventBus eb = vertx.eventBus();
-        eb.send("mlcache-demo", "yay! Someone kicked a ball.");
     }
 }

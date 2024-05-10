@@ -1,8 +1,13 @@
 package com.xkyss.vertx;
 
+import io.netty.buffer.ByteBuf;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 import io.vertx.core.logging.SLF4JLogDelegateFactory;
 import io.vertx.core.net.NetServer;
 import io.vertx.core.net.NetServerOptions;
@@ -36,8 +41,70 @@ public class SocketServer extends AbstractVerticle {
 
         server
             .connectHandler(socket -> {
-                // 换行粘包处理
-                // RecordParser.newDelimited("\n", socket)
+                int headerLength = 0x10;
+                RecordParser parser = RecordParser.newFixed(headerLength, socket);
+                // 根据长度拆包
+                parser
+                    .endHandler(v -> socket.close())
+                    .exceptionHandler(e -> {
+                        logger.error("Error", e);
+                        socket.close();
+                    })
+                    .handler(new Handler<Buffer>() {
+                        private boolean parseHeader = true;
+                        private long rid;
+                        private int bodyLen;
+                        private int type;
+
+                        @Override
+                        public void handle(Buffer buffer) {
+                            if (parseHeader) {
+                                rid = buffer.getLongLE(0x00);
+                                bodyLen = buffer.getIntLE(0x08);
+                                type = buffer.getIntLE(0x0C);
+                                logger.info("rid: {}, bodyLen: {}, type: {}", rid, bodyLen, type);
+                                parseHeader = false;
+                                parser.fixedSizeMode(bodyLen);
+                            }
+                            else {
+                                String body = buffer.toString("UTF-8");
+                                logger.info("body: {}", body);
+
+                                CacheModel cm = Json.decodeValue(body, CacheModel.class);
+
+                                // GET
+                                if (type == 1) {
+                                    Buffer buf = Buffer.buffer();
+                                    cm.setValue(cm.getKey() + " - Value");
+
+                                    String r = Json.encode(cm);
+
+                                    buf.appendLongLE(rid);
+                                    buf.appendIntLE(r.length());
+                                    buf.appendIntLE(type);
+                                    buf.appendString(r);
+                                    socket.write(buf);
+                                }
+                                // PUT
+                                else if (type == 2) {
+
+                                }
+                                // REMOVE
+                                else if (type == 3) {
+
+                                }
+                                else {
+                                    logger.error("Unknown type: {}", type);
+                                }
+
+                                parseHeader = true;
+                                parser.fixedSizeMode(headerLength);
+                            }
+                        }
+                    });
+
+                // // 粘包处理
+                // RecordParser.newDelimited("\0", socket)
                 //     .endHandler(v -> socket.close())
                 //     .exceptionHandler(e -> {
                 //         logger.error("Error", e);
@@ -46,65 +113,113 @@ public class SocketServer extends AbstractVerticle {
                 //     .handler(buffer -> {
                 //         String data = buffer.toString("UTF-8");
                 //         logger.info("Received data: {}", data);
-                //         // socket.write("Hello " + name + "\n", "UTF-8");
+                //
+                //         CacheModel cache = Json.decodeValue(buffer, CacheModel.class);
+                //
+                //         User user = new User();
+                //         user.setName("name-" + cache.getKey());
+                //         user.setCode("code-" + cache.getKey());
+                //         user.setAge(cache.getRid().intValue());
+                //         cache.setValue(Json.encode(user));
+                //
+                //         // 返回
+                //         Buffer respBuffer = Json.encodeToBuffer(cache);
+                //         respBuffer.appendByte((byte) 0);
+                //         socket.write(respBuffer);
                 //     });
 
-                // Json粘包处理
-                JsonParser parser = JsonParser.newParser(socket);
-                parser.objectValueMode()
-                    .endHandler(v -> socket.close())
-                    .exceptionHandler(e -> {
-                        logger.error("Error", e);
-                        socket.close();
-                    })
-                    .handler(event -> {
-                        Message message = event.mapTo(Message.class);
-                        logger.info("Received message: {}", message.toString());
-
-                    });
+                // // Json粘包处理
+                // JsonParser parser = JsonParser.newParser(socket);
+                // parser.objectValueMode()
+                //     .endHandler(v -> socket.close())
+                //     .exceptionHandler(e -> {
+                //         logger.error("Error", e);
+                //         socket.close();
+                //     })
+                //     .handler(event -> {
+                //         Message message = event.mapTo(Message.class);
+                //         logger.info("Received message: {}", message.toString());
+                //
+                //     });
             })
             .listen();
-
-        EventBus eb = vertx.eventBus();
-        eb.consumer("mlcache-demo")
-            .handler(message -> {
-                logger.info("Received message: {}", message.body());
-            })
-            .completionHandler(res -> {
-                if (res.succeeded()) {
-                    logger.info("Subscribed to mlcache-demo");
-                } else {
-                    logger.error("Failed to subscribe to mlcache-demo", res.cause());
-                }
-            });
     }
 
-    static class Message {
-        private String data;
-        private String index;
+    static class CacheModel {
+        private String area;
+        private String cacheName;
+        private String key;
+        private String value;
 
-        public String getData() {
-            return data;
+        public String getArea() {
+            return area;
         }
 
-        public void setData(String data) {
-            this.data = data;
+        public void setArea(String area) {
+            this.area = area;
         }
 
-        public String getIndex() {
-            return index;
+        public String getCacheName() {
+            return cacheName;
         }
 
-        public void setIndex(String index) {
-            this.index = index;
+        public void setCacheName(String cacheName) {
+            this.cacheName = cacheName;
+        }
+
+        public String getKey() {
+            return key;
+        }
+
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+    }
+
+    static class User {
+        String name;
+        String code;
+        Integer age;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+        public Integer getAge() {
+            return age;
+        }
+
+        public void setAge(Integer age) {
+            this.age = age;
         }
 
         @Override
         public String toString() {
-            return "Message{" +
-                "data='" + data + '\'' +
-                ", index='" + index + '\'' +
+            return "User{" +
+                "name='" + name + '\'' +
+                ", code='" + code + '\'' +
+                ", age=" + age +
                 '}';
-        }
+            }
     }
 }
