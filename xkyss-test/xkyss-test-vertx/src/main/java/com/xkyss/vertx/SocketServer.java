@@ -76,21 +76,33 @@ public class SocketServer extends AbstractVerticle {
                                 if (type == 1) {
                                     Buffer buf = Buffer.buffer();
 
-                                    User u = new User();
-                                    u.setName("name-" + cm.getKey());
-                                    u.setCode("code-" + cm.getKey());
-                                    u.setAge((int)rid);
-                                    String r = Json.encode(u);
+                                    if (cm.getKey().startsWith("compute")) {
 
-                                    // body_offset
-                                    buf.appendIntLE(0x10 + r.length());
-                                    // header
-                                    buf.appendLongLE(rid);
-                                    buf.appendIntLE(r.length());
-                                    buf.appendIntLE(type);
-                                    // body
-                                    buf.appendString(r);
-                                    socket.write(buf);
+                                        // body_offset
+                                        buf.appendIntLE(0x10);
+                                        // header
+                                        buf.appendLongLE(rid);
+                                        buf.appendIntLE(0);
+                                        buf.appendIntLE(type);
+                                        socket.write(buf);
+                                    }
+                                    else {
+                                        User u = new User();
+                                        u.setName("name-" + cm.getKey());
+                                        u.setCode("code-" + cm.getKey());
+                                        u.setAge((int)rid);
+                                        String r = Json.encode(u);
+
+                                        // body_offset
+                                        buf.appendIntLE(0x10 + r.length());
+                                        // header
+                                        buf.appendLongLE(rid);
+                                        buf.appendIntLE(r.length());
+                                        buf.appendIntLE(type);
+                                        // body
+                                        buf.appendString(r);
+                                        socket.write(buf);
+                                    }
                                 }
                                 // PUT
                                 else if (type == 2) {
