@@ -17,6 +17,8 @@ import io.vertx.core.parsetools.RecordParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 import static io.vertx.core.logging.LoggerFactory.LOGGER_DELEGATE_FACTORY_CLASS_NAME;
 import static java.lang.System.setProperty;
 
@@ -56,6 +58,10 @@ public class SocketServer extends AbstractVerticle {
                         private int bodyLen;
                         private int type;
 
+                        // 为配合测试,仅对一次连接有效
+                        // id - User
+                        private Map<Integer, User> users = new java.util.HashMap<>();
+
                         @Override
                         public void handle(Buffer buffer) {
                             if (parseHeader) {
@@ -75,9 +81,9 @@ public class SocketServer extends AbstractVerticle {
                                 // GET
                                 if (type == 1) {
                                     Buffer buf = Buffer.buffer();
-
-                                    if (cm.getKey().startsWith("compute")) {
-
+                                    Integer id = toInt(cm.getKey());
+                                    User user = users.get(id);
+                                    if (user == null) {
                                         // body_offset
                                         buf.appendIntLE(0x10);
                                         // header
@@ -86,12 +92,8 @@ public class SocketServer extends AbstractVerticle {
                                         buf.appendIntLE(type);
                                         socket.write(buf);
                                     }
-                                    else {
-                                        User u = new User();
-                                        u.setName("name-" + cm.getKey());
-                                        u.setCode("code-" + cm.getKey());
-                                        u.setAge((int)rid);
-                                        String r = Json.encode(u);
+                                    else{
+                                        String r = Json.encode(user);
 
                                         // body_offset
                                         buf.appendIntLE(0x10 + r.length());
@@ -107,8 +109,9 @@ public class SocketServer extends AbstractVerticle {
                                 // PUT
                                 else if (type == 2) {
                                     Buffer buf = Buffer.buffer();
-
-                                    String r = "1"; // 更新的数量
+                                    User user = Json.decodeValue(cm.getValue(), User.class);
+                                    users.put(user.getId(), user);
+                                    String r = user.getId().toString();
 
                                     // body_offset
                                     buf.appendIntLE(0x10 + r.length());
@@ -189,6 +192,15 @@ public class SocketServer extends AbstractVerticle {
             .listen();
     }
 
+    static Integer toInt(String s) {
+        try {
+            return Integer.parseInt(s);
+        }
+        catch (Exception e) {
+            return -1;
+        }
+    }
+
     static class CacheModel {
         private String area;
         private String cacheName;
@@ -229,9 +241,18 @@ public class SocketServer extends AbstractVerticle {
     }
 
     static class User {
+        Integer id;
         String name;
         String code;
         Integer age;
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
+        }
 
         public String getName() {
             return name;
