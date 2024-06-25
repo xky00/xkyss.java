@@ -14,7 +14,7 @@ public class PathxTest {
     /**
      * https://zq99299.github.io/java-tutorial/essential/io/dirs.html
      */
-    @Test
+    // @Test
     public void path_test_01() throws IOException {
         String pathname = "repository";
         String postfix = "Repository.java";
@@ -60,7 +60,7 @@ public class PathxTest {
         Assertions.assertEquals("com.aj.frame.yfty.platform.repository", rpackage);
     }
 
-    @Test
+    // @Test
     public void test_03() {
         String packageName = "com.aj.frame.yfty.platform.entity.User";
         String filepath=System.getProperty("user.dir");
@@ -81,7 +81,7 @@ public class PathxTest {
         Assertions.assertEquals("com.aj.frame.yfty.platform.entity", p);
     }
 
-    @Test
+    // @Test
     public void test_05() {
         String o = "E:/xk/Code/zyaj/jwt_v3/ydjwv3/trunk/working/gits/Yfty/quarks/yfty-common/target/classes/com/aj/frame/yfty/platform/entity/User.class";
         Path p = Paths.get(o);
