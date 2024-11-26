@@ -27,6 +27,7 @@ public interface JsonFactory {
      *
      * <p> When the default Jackson codec is used and {@code jackson-databind} is available then a codec using it
      * will be used otherwise the codec will only use {@code jackson-core} and provide best effort mapping.
+     * @return the loaded factory
      */
     static JsonFactory load() {
         List<JsonFactory> factories = new ArrayList<>(Servicex.loadFactories(JsonFactory.class));
@@ -41,7 +42,7 @@ public interface JsonFactory {
     /**
      * The order of the factory. If there is more than one matching factory they will be tried in ascending order.
      *
-     * @implSpec returns {@link Integer#MAX_VALUE}
+     * returns {@link Integer#MAX_VALUE}
      *
      * @return  the order
      */

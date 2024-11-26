@@ -166,10 +166,12 @@ public class Jsql {
         protected abstract Grammar rootLogic();
         /**
          * Jsql执行回调机制开关
+         * @return 是否开启
          */
         protected abstract boolean isEnableExecuteCallback();
         /**
          * Jsql执行回调机制开关
+         * @param enableExecuteCallback 是否开启
          */
         protected abstract void setEnableExecuteCallback(boolean enableExecuteCallback);
     }
@@ -1758,7 +1760,7 @@ public class Jsql {
         }
         /**
          * 条件判断语法
-         * @param operator 断言符号，如：=、>、<、LIKE等
+         * @param operator 断言符号，如：{@code =}、{@code >}、{@code <}、LIKE等
          * @param value 断言值
          * @return 当前条件对象所属的逻辑语法对象
          */
@@ -2168,6 +2170,7 @@ public class Jsql {
         /**
          * from语法
          * @param targetClass from语法的目标类型
+         * @param <TARGET_CLASS> 目标类型类型
          * @return 用于后续语法拼接的where语法对象
          */
         public <TARGET_CLASS> Where<TARGET_CLASS, TARGET_CLASS> from(Class<TARGET_CLASS> targetClass) {
@@ -2184,6 +2187,7 @@ public class Jsql {
          * from语法<br>
          * 注意：参数result对象所在的语法树结构会被破坏，其Where语法的条件对象会被摘除
          * @param result from语法的目标结果，result指定另外一个select语法树的结果对象作为当前from语法的目标
+         * @param <RESULT_CLASS> 目标结果类型
          * @return 用于后续语法拼接的where语法对象
          */
         public <RESULT_CLASS> Where<RESULT_CLASS, RESULT_CLASS> from(Result<RESULT_CLASS> result) {
@@ -2238,6 +2242,7 @@ public class Jsql {
         /**
          * from语法
          * @param targetClass from语法的目标类型
+         * @param <TARGET_CLASS> 目标类型
          * @return 用于后续语法拼接的where语法对象
          */
         public <TARGET_CLASS> Where<RESULT_CLASS, TARGET_CLASS> from(Class<TARGET_CLASS> targetClass) {
@@ -2262,6 +2267,7 @@ public class Jsql {
          * from语法
          * 注意：参数result对象所在的语法树结构会被破坏，其Where语法的条件对象会被摘除
          * @param result from语法的目标结果，result指定另外一个select语法树的结果对象作为当前from语法的目标
+         * @param <TARGET_CLASS> 目标类型
          * @return 用于后续语法拼接的where语法对象
          */
         public <TARGET_CLASS> Where<RESULT_CLASS, TARGET_CLASS> from(Result<TARGET_CLASS> result) {
@@ -2312,18 +2318,21 @@ public class Jsql {
         }
         /**
          * Jsql执行回调机制开关
+         * @param enableExecuteCallback 是否
          */
         protected void setEnableExecuteCallback(boolean enableExecuteCallback) {
             this.enableExecuteCallback = enableExecuteCallback;
         }
         /**
          * 逻辑化操作开关
+         * @return 是否
          */
         public boolean isEnableLogicalization() {
             return this.enableLogicalization;
         }
         /**
          * 逻辑化操作开关
+         * @param enableLogicalization 是否开启
          */
         @SuppressWarnings("unchecked")
         public T setEnableLogicalization(boolean enableLogicalization) {
@@ -2431,6 +2440,7 @@ public class Jsql {
         /**
          * count标记<br>
          * 指定当前Select语法是查询内容还是数量
+         * @return 是否数量
          */
         protected boolean isForCount() {
             return forCount;
@@ -2438,6 +2448,7 @@ public class Jsql {
         /**
          * count标记<br>
          * 指定当前Select语法是查询内容还是数量
+         * @param forCount 是否数量
          */
         protected void setForCount(boolean forCount) {
             this.forCount = forCount;
@@ -2555,6 +2566,7 @@ public class Jsql {
          * 指定了结果属性名的构造
          * @param sessionBox 用来获取有效的hibernate会话对象的对象
          * @param propName 结果属性名
+         * @param distinct 是否去重
          */
         private Select(HibernateSessionBox sessionBox, String propName, boolean distinct) {
             this.sessionBox = sessionBox;
@@ -2563,19 +2575,21 @@ public class Jsql {
         }
         private boolean distinct;
         /**
-         * 等同于"select <propName> "
+         * 等同于{@code select <propName>}
          * @param propType 属性类型，其值决定最终结果集的数据类型
          * @param propName 属性名
+         * @param <RESULT_CLASS> 属性类型类型
          * @return From语法对象
          */
         public <RESULT_CLASS> FromT<RESULT_CLASS> select(Class<RESULT_CLASS> propType, String propName) {
             return this.select(propType, propName, false);
         }
         /**
-         * 等同于"select <propName> "
+         * 等同于{@code select <propName>}
          * @param propType 属性类型，其值决定最终结果集的数据类型
          * @param propName 属性名
          * @param distinct 排重标记
+         * @param <RESULT_CLASS> 属性类型类型
          * @return From语法对象
          */
         public <RESULT_CLASS> FromT<RESULT_CLASS> select(Class<RESULT_CLASS> propType, String propName, boolean distinct) {
@@ -2598,6 +2612,7 @@ public class Jsql {
         /**
          * 缺省分页大小<br>
          * 用于在执行查询类操作时，未指定PagingInfo对象或者指定的PagingInfo对象未指定有效的pageSize属性。
+         * @return 缺省分页大小
          */
         protected Integer getDefaultPageSize() {
             return defaultPageSize;
@@ -2605,6 +2620,7 @@ public class Jsql {
         /**
          * 缺省分页大小<br>
          * 用于在执行查询类操作时，未指定PagingInfo对象或者指定的PagingInfo对象未指定有效的pageSize属性。
+         * @param defaultPageSize 缺省分页大小
          */
         protected void setDefaultPageSize(Integer defaultPageSize) {
             this.defaultPageSize = defaultPageSize;
@@ -2682,7 +2698,7 @@ public class Jsql {
     }
     /**
      * <b>set语法定义类</b>
-     * @param <TARGET_CLASS>
+     * @param <TARGET_CLASS> 语法类型
      */
     public class Set<TARGET_CLASS> extends GrammarAbstract {
         @Override
@@ -2886,6 +2902,7 @@ public class Jsql {
         /**
          * update语法
          * @param targetClass update语法的目标类型
+         * @param <TARGET_CLASS> 目标类型类型
          * @return 用于后续语法拼接的set语法对象
          */
         public <TARGET_CLASS> Set<TARGET_CLASS> update(Class<TARGET_CLASS> targetClass) {
@@ -2901,6 +2918,7 @@ public class Jsql {
         /**
          * 支持无条件更新的update语法
          * @param targetClass update语法的目标类型
+         * @param <TARGET_CLASS> 目标类型类型
          * @return 用于后续语法拼接的set语法对象
          */
         public <TARGET_CLASS> Set<TARGET_CLASS> updateAll(Class<TARGET_CLASS> targetClass) {
@@ -2983,6 +3001,7 @@ public class Jsql {
          * 如果创建当前Delete语法对象的Jsql对象配置了有效逻辑删除参数，并且当前Delete语法对象的逻辑化操作未被禁止，则<br>
          * 删除操作将通过Update语法实现逻辑删除效果。
          * @param targetClass delete语法的目标类型
+         * @param <TARGET_CLASS> 目标类型类型
          * @return 用于后续语法拼接的where语法对象
          */
         public <TARGET_CLASS> Where<TARGET_CLASS, TARGET_CLASS> delete(Class<TARGET_CLASS> targetClass) {
@@ -3022,7 +3041,8 @@ public class Jsql {
          * 支持无条件删除的delete语法<br>
          * 如果创建当前Delete语法对象的Jsql对象配置了有效逻辑删除参数，并且当前Delete语法对象的逻辑化操作未被禁止，则<br>
          * 删除操作将通过Update语法实现逻辑删除效果。
-         * @param targetClass delete语法的目标类型
+         * @param targetClass delete语法的目标类型.
+         * @param <TARGET_CLASS> 目标类型类型
          * @return 用于后续执行的结果对象
          */
         public <TARGET_CLASS> Result<TARGET_CLASS> deleteAll(Class<TARGET_CLASS> targetClass) {
@@ -3526,12 +3546,14 @@ public class Jsql {
     // private JsqlExecuteXProxy executeXProxy = new JsqlExecuteXProxy();
     /**
      * 使用当前Jsql对象的应用系统的会话对象
+     * @return 会话对象
      */
     public Object getApplicationSession() {
         return applicationSession;
     }
     /**
      * 使用当前Jsql对象的应用系统的会话对象
+     * @param applicationSession 会话对象
      */
     public void setApplicationSession(Object applicationSession) {
         this.applicationSession = applicationSession;
@@ -3590,18 +3612,21 @@ public class Jsql {
     // }
     /**
      * 是否开启调试模式
+     * @return 是否
      */
     public boolean isEnableDebug() {
         return enableDebug;
     }
     /**
      * 是否开启调试模式
+     * @param enableDebug 是否
      */
     public void setEnableDebug(boolean enableDebug) {
         this.enableDebug = enableDebug;
     }
     /**
      * 当前Jsql对象所使用的数据源名称
+     * @return 数据源名称
      */
     public String getDataSourceName() {
         String ds = this.sessionBox == null ? null : this.sessionBox.getDataSourceName();
@@ -3632,6 +3657,7 @@ public class Jsql {
      * @param work 回调接口
      * @param forUpdate 如果为true表示需要改写数据，否则表示仅用于查询
      * @return 当前Jsql对象
+     * @throws Exception 异常
      */
     public Jsql doWork(JsqlWork work, boolean forUpdate) throws Exception {
         Session session = this.sessionBox.getSession(forUpdate);
@@ -3650,6 +3676,7 @@ public class Jsql {
      * @param work hibernate的jdbc应用回调接口
      * @param forUpdate 如果为true表示需要改写数据，否则表示仅用于查询
      * @return 当前Jsql对象
+     * @throws Exception 异常
      */
     public Jsql doWork(final Work work, boolean forUpdate) throws Exception {
         this.doWork(new JsqlWork(){
@@ -3987,7 +4014,7 @@ public class Jsql {
     /**
      * 设置逻辑化查询条件
      * @param propName 属性名称
-     * @param operator 条件判定的操作符（=、>、<等）
+     * @param operator 条件判定的操作符（{@code =}, {@code <}, {@code >}等）
      * @param value 条件判定值
      * @return 当前Jsql对象
      */
@@ -4011,6 +4038,7 @@ public class Jsql {
     /**
      * 缺省分页大小<br>
      * 用于在执行查询类操作时，未指定PagingInfo对象或者指定的PagingInfo对象未指定有效的pageSize属性。
+     * @return 缺省分页大小
      */
     public Integer getDefaultPageSize() {
         return defaultPageSize;
@@ -4018,6 +4046,7 @@ public class Jsql {
     /**
      * 缺省分页大小<br>
      * 用于在执行查询类操作时，未指定PagingInfo对象或者指定的PagingInfo对象未指定有效的pageSize属性。
+     * @param defaultPageSize 缺省分页大小
      */
     public void setDefaultPageSize(Integer defaultPageSize) {
         this.defaultPageSize = defaultPageSize;
@@ -4113,6 +4142,11 @@ public class Jsql {
         }
         return new Date();
     }
+
+    /**
+     * create selector
+     * @return Select
+     */
     public Select createSelector() {
         Select select = new Select(this.sessionBox);
         select.setLogicalizationCondition(this.logicalizationConditionPropertyName, this.logicalizationConditionOperator, this.logicalizationConditionValue);
@@ -4120,26 +4154,28 @@ public class Jsql {
         return select;
     }
     /**
-     * 等同于"select * "
+     * 等同于{@code select *}
      * @return From语法对象
      */
     public From select() {
         return this.createSelector().select();
     }
     /**
-     * 等同于"select <propName> "
+     * 等同于{@code select <propName>}
      * @param propType 属性类型，其值决定最终结果集的数据类型
      * @param propName 属性名
+     * @param <RESULT_CLASS> 属性类型类型
      * @return From语法对象
      */
     public <RESULT_CLASS> FromT<RESULT_CLASS> select(Class<RESULT_CLASS> propType, String propName) {
         return this.createSelector().select(propType, propName);
     }
     /**
-     * 等同于"select <propName> "
+     * 等同于{@code select <propName> }
      * @param propType 属性类型，其值决定最终结果集的数据类型
      * @param propName 属性名
      * @param distinct 排重标记
+     * @param <RESULT_CLASS> 属性类型类型
      * @return From语法对象
      */
     public <RESULT_CLASS> FromT<RESULT_CLASS> select(Class<RESULT_CLASS> propType, String propName, boolean distinct) {
@@ -4153,6 +4189,7 @@ public class Jsql {
     /**
      * delete语法
      * @param targetClass delete语法的目标类型
+     * @param <TARGET_CLASS> 目标类型类型
      * @return 用于后续语法拼接的where语法对象
      */
     public <TARGET_CLASS> Where<TARGET_CLASS, TARGET_CLASS> delete(Class<TARGET_CLASS> targetClass) {
@@ -4161,11 +4198,17 @@ public class Jsql {
     /**
      * 支持无条件删除的delete语法
      * @param targetClass delete语法的目标类型
+     * @param <TARGET_CLASS> 目标类型类型
      * @return 用于后续执行的结果对象
      */
     public <TARGET_CLASS> Result<TARGET_CLASS> deleteAll(Class<TARGET_CLASS> targetClass) {
         return this.createDeleter().deleteAll(targetClass);
     }
+
+    /**
+     * create updater
+     * @return Update
+     */
     public Update createUpdater() {
         Update update = new Update(this.sessionBox);
         update.setLogicalizationCondition(this.logicalizationConditionPropertyName, this.logicalizationConditionOperator, this.logicalizationConditionValue);
@@ -4174,6 +4217,7 @@ public class Jsql {
     /**
      * update语法
      * @param targetClass update语法的目标类型
+     * @param <TARGET_CLASS> 目标类型类型
      * @return 用于后续语法拼接的set语法对象
      */
     public <TARGET_CLASS> Set<TARGET_CLASS> update(Class<TARGET_CLASS> targetClass) {
@@ -4182,6 +4226,7 @@ public class Jsql {
     /**
      * 支持无条件更新的update语法
      * @param targetClass update语法的目标类型
+     * @param <TARGET_CLASS> 目标类型类型
      * @return 用于后续语法拼接的set语法对象
      */
     public <TARGET_CLASS> Set<TARGET_CLASS> updateAll(Class<TARGET_CLASS> targetClass) {
@@ -4193,6 +4238,8 @@ public class Jsql {
      * @param resCls 条件对象适用的Select语法的返回类型
      * @param tagCls 条件对象适用的Select语法的源类型
      * @param propName 条件所指的目标对象属性
+     * @param <TARGET_CLASS> 目标类型类型
+     * @param <RESULT_CLASS> 属性类型类型
      * @return 独立的新条件对象
      */
     public <RESULT_CLASS, TARGET_CLASS> Condition<RESULT_CLASS, TARGET_CLASS> createNewCondition(Class<RESULT_CLASS> resCls, Class<TARGET_CLASS> tagCls, String propName) {
@@ -4207,6 +4254,8 @@ public class Jsql {
      * @param resCls 条件对象适用的Select语法的返回类型
      * @param tagCls 条件对象适用的Select语法的源类型
      * @param propName 条件所指的目标对象属性
+     * @param <TARGET_CLASS> 目标类型类型
+     * @param <RESULT_CLASS> 属性类型类型
      * @return 独立的新条件对象
      */
     public <RESULT_CLASS, TARGET_CLASS> Condition<RESULT_CLASS, TARGET_CLASS> cnc(Class<RESULT_CLASS> resCls, Class<TARGET_CLASS> tagCls, String propName) {
@@ -4217,6 +4266,8 @@ public class Jsql {
      * @param resCls 样本对象适用的Select语法的返回类型
      * @param tagCls 样本对象适用的Select语法的源类型
      * @param examples 样本对象
+     * @param <TARGET_CLASS> 目标类型类型
+     * @param <RESULT_CLASS> 返回类型类型
      * @return 以样本对象为准构建的独立逻辑对象
      */
     public <RESULT_CLASS, TARGET_CLASS> Logic<RESULT_CLASS, TARGET_CLASS> createNewLogic(Class<RESULT_CLASS> resCls, Class<TARGET_CLASS> tagCls, List<TARGET_CLASS> examples) {
@@ -4227,6 +4278,8 @@ public class Jsql {
      * @param resCls 样本对象适用的Select语法的返回类型
      * @param tagCls 样本对象适用的Select语法的源类型
      * @param examples 样本对象
+     * @param <TARGET_CLASS> 目标类型类型
+     * @param <RESULT_CLASS> 返回类型类型
      * @return 以样本对象为准构建的独立逻辑对象
      */
     public <RESULT_CLASS, TARGET_CLASS> Logic<RESULT_CLASS, TARGET_CLASS> cnl(Class<RESULT_CLASS> resCls, Class<TARGET_CLASS> tagCls, List<TARGET_CLASS> examples) {
@@ -4237,6 +4290,8 @@ public class Jsql {
      * @param resCls 样本对象适用的Select语法的返回类型
      * @param tagCls 样本对象适用的Select语法的源类型
      * @param example 样本对象
+     * @param <TARGET_CLASS> 目标类型类型
+     * @param <RESULT_CLASS> 返回类型类型
      * @return 以样本对象为准构建的独立逻辑对象
      */
     public <RESULT_CLASS, TARGET_CLASS> Logic<RESULT_CLASS, TARGET_CLASS> cnl(Class<RESULT_CLASS> resCls, Class<TARGET_CLASS> tagCls, TARGET_CLASS example) {
@@ -4249,6 +4304,8 @@ public class Jsql {
      * @param resCls 样本对象适用的Select语法的返回类型
      * @param tagCls 样本对象适用的Select语法的源类型
      * @param examples 样本对象
+     * @param <TARGET_CLASS> 目标类型类型
+     * @param <RESULT_CLASS> 返回类型类型
      * @return 以样本对象为准构建的独立逻辑对象
      */
     public <RESULT_CLASS, TARGET_CLASS> Logic<RESULT_CLASS, TARGET_CLASS> cnl(Class<RESULT_CLASS> resCls, Class<TARGET_CLASS> tagCls, TARGET_CLASS[] examples) {

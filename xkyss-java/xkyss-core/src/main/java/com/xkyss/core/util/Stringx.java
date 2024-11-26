@@ -84,6 +84,7 @@ public class Stringx {
      * 以[Slf4j MessageFormatter]样式格式化字符串
      * @param pattern 字符串模板
      * @param arg 数组参数
+     * @param <T> 数组item
      * @return 格式化后的字符串
      */
     public static <T> String arrayFormat(String pattern, T[] arg) {

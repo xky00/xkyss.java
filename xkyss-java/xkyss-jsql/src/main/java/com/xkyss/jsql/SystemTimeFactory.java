@@ -19,6 +19,7 @@ public class SystemTimeFactory {
 	/**
 	 * 最后修正时间的毫秒值<br>
 	 * 这个值来源于System.currentTimeMillis()
+	 * @return 毫秒值
 	 */
 	public long getLastFixTime() {
 		return lastFixTime;

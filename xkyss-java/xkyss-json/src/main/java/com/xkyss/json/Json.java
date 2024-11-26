@@ -17,9 +17,10 @@ public class Json {
     /**
      * Load the factory with the {@code ServiceLoader}, when no factory is found then a factory
      * using Jackson will be returned.
-     * <br/>
+     * <br>
      * When {@code jackson-databind} is available then a codec using it will be used otherwise
      * the codec will only use {@code jackson-core} and provide best effort mapping.
+     * @return a factory instance
      */
     public static JsonFactory load() {
         return JsonFactory.load();

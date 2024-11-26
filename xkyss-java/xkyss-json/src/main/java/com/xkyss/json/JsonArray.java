@@ -30,7 +30,7 @@ public class JsonArray implements Iterable<Object> {
 
     /**
      * Create an instance from a String of JSON, this string must be a valid array otherwise an exception will be thrown.
-     * <p/>
+     * <p>
      * If you are unsure of the value, you should use instead {@link Json#decodeValue(String)} and check the result is
      * a JSON array.
      *
@@ -85,6 +85,7 @@ public class JsonArray implements Iterable<Object> {
      *
      * @param values The objects into JsonArray.
      * @throws NullPointerException if the args is null.
+     * @return JsonArray
      */
     public static JsonArray of(Object... values) {
         // implicit nullcheck of values
@@ -416,6 +417,7 @@ public class JsonArray implements Iterable<Object> {
     /**
      * Set a null value to the JSON array at position {@code pos}.
      *
+     * @param pos position in the array
      * @return a reference to this, so the API can be used fluently
      */
     public JsonArray setNull(int pos) {

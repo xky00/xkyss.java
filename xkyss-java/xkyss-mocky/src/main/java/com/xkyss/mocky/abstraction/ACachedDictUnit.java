@@ -32,6 +32,7 @@ public abstract class ACachedDictUnit<T, TIn> implements MockUnit<T> {
 
     /**
      * 指定字典路径
+     * @return 字典路径
      */
     protected abstract String path();
 

@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
 /**
  * 命名转换器
  * @author xkyii
- * @date 2022-10-20
+ * @since 2022-10-20
  * @see "https://github.com/jawira/case-converter"
  */
 @SuppressWarnings("ALL")
@@ -150,6 +150,7 @@ public class Converter {
      * <pre>
      *     Ada_Case_Name
      * </pre>
+     * @return adaCaseName
      */
     public String toAda() {
         return Arrays.stream(this.words)
@@ -163,6 +164,7 @@ public class Converter {
      * <pre>
      *     camelCaseName
      * </pre>
+     * @return camelCaseName
      */
     public String toCamel() {
         return IntStream.range(0, this.words.length)
@@ -177,6 +179,7 @@ public class Converter {
      * <pre>
      *     COBEL-CASE-NAME
      * </pre>
+     * @return cobolCaseName
      */
     public String toCobol() {
         return Arrays.stream(this.words)
@@ -189,6 +192,7 @@ public class Converter {
      * <pre>
      *     lower_case_name
      * </pre>
+     * @return lowerCaseName
      */
     public String toMacro() {
         return Arrays.stream(this.words)
@@ -201,6 +205,7 @@ public class Converter {
      * <pre>
      *     dot.case.name
      * </pre>
+     * @return dotCaseName
      */
     public String toDot() {
         return Arrays.stream(this.words)
@@ -213,6 +218,7 @@ public class Converter {
      * <pre>
      *     dot-case-name
      * </pre>
+     * @return kebabCaseName
      */
     public String toKebab() {
         return Arrays.stream(this.words)
@@ -225,6 +231,7 @@ public class Converter {
      * <pre>
      *     lower case name
      * </pre>
+     * @return lowerCaseName
      */
     public String toLower() {
         return Arrays.stream(this.words)
@@ -237,6 +244,7 @@ public class Converter {
      * <pre>
      *     CamelCaseName
      * </pre>
+     * @return pascalCaseName
      */
     public String toPascal() {
         return Arrays.stream(this.words)
@@ -250,6 +258,7 @@ public class Converter {
      * <pre>
      *     Sentence case name
      * </pre>
+     * @return sentenceCaseName
      */
     public String toSentence() {
         return IntStream.range(0, this.words.length)
@@ -264,6 +273,7 @@ public class Converter {
      * <pre>
      *     snake_case_name
      * </pre>
+     * @return snakeCaseName
      */
     public String toSnake() {
         return Arrays.stream(this.words)
@@ -276,6 +286,7 @@ public class Converter {
      * <pre>
      *     Title Case Name
      * </pre>
+     * @return titleCaseName
      */
     public String toTitle() {
         return Arrays.stream(this.words)
@@ -289,6 +300,7 @@ public class Converter {
      * <pre>
      *     Title-Case-Name
      * </pre>
+     * @return trainCaseName
      */
     public String toTrain() {
         return Arrays.stream(this.words)
@@ -302,6 +314,7 @@ public class Converter {
      * <pre>
      *     UPPER CASE NAME
      * </pre>
+     * @return upperCaseName
      */
     public String toUpper() {
         return Arrays.stream(this.words)

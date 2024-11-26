@@ -14,7 +14,7 @@ import static org.apache.commons.lang3.Validate.notNull;
  * Everything is MockUnit
  * @param <T> 数据类型
  * @author xkyii
- * @date 2022-10-24
+ * @since 2022-10-24
  */
 public interface MockUnit<T> extends Supplier<T> {
 

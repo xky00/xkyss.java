@@ -371,11 +371,12 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
     /**
      * Create a JsonObject from the fields of a Java object.
      * Faster than calling `new JsonObject(Json.encode(obj))`.
-     * <p/
+     * <p>
      * Returns {@code null} when {@code obj} is {@code null}.
      *
      * @param obj The object to convert to a JsonObject.
      * @throws IllegalArgumentException if conversion fails due to an incompatible type.
+     * @return a JsonObject containing the fields of the object.
      */
     @SuppressWarnings("unchecked")
     public static JsonObject mapFrom(Object obj) {
@@ -391,7 +392,9 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
      * Faster than calling `Json.decodeValue(Json.encode(jsonObject), type)`.
      *
      * @param type The type to instantiate from the JsonObject.
+     * @param <T> The type to instantiate.
      * @throws IllegalArgumentException if the type cannot be instantiated.
+     * @return the Java object.
      */
     public <T> T mapTo(Class<T> type) {
         return Json.CODEC.fromValue(map, type);
@@ -1112,6 +1115,7 @@ public class JsonObject implements Iterable<Map.Entry<String, Object>> {
 
     /**
      * Remove all the entries in this JSON object
+     * @return a reference to this, so the API can be used fluently
      */
     public JsonObject clear() {
         map.clear();

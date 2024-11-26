@@ -14,6 +14,7 @@ public interface JsonCodec {
      *
      * @param json the json string
      * @param clazz the required object's class
+     * @param <T> the type of the object
      * @return the instance
      * @throws DecodeException anything preventing the decoding
      */
@@ -26,11 +27,18 @@ public interface JsonCodec {
 
     /**
      * Like {@link #fromString(String, Class)} but with a json {@code Object}
+     * @param json the json object
+     * @param toValueType the type of the object
+     * @param <T> the type of the object
+     * @return the instance
      */
     <T> T fromValue(Object json, Class<T> toValueType);
 
     /**
      * Encode the specified {@code object} to a string.
+     * @param object the object to encode
+     * @return the json encoded string
+     * @throws DecodeException anything preventing the encoding
      */
     default String toString(Object object) throws EncodeException {
         return toString(object, false);
