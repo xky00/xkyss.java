@@ -12,7 +12,7 @@
     <parent>
         <groupId>com.xkyss</groupId>
         <artifactId>xkyss-quarkus-server-parent</artifactId>
-        <version>2024.3.1</version>
+        <version>1.24.1</version>
     </parent>
 
     <dependencies>
