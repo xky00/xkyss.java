@@ -15,6 +15,28 @@
     </description>
     <url>https://github.com/xkyss/xkyss.java</url>
 
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>xkyss</id>
+            <name>xkyss</name>
+            <email>xkyss@foxmail.com</email>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/xkyss/xkyss.java.git
+        </connection>
+        <developerConnection>
+            scm:git:https://github.com/xkyss/xkyss.java.git
+        </developerConnection>
+        <url>https://github.com/xkyss/xkyss.java</url>
+    </scm>
+
     <properties>
         <!-- project -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -45,28 +67,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <id>xkyss</id>
-            <name>xkyss</name>
-            <email>xkyss@foxmail.com</email>
-        </developer>
-    </developers>
-    <scm>
-        <connection>scm:git:https://github.com/xkyss/xkyss.java.git
-        </connection>
-        <developerConnection>
-            scm:git:https://github.com/xkyss/xkyss.java.git
-        </developerConnection>
-        <url>https://github.com/xkyss/xkyss.java</url>
-    </scm>
 
     <build>
         <pluginManagement>

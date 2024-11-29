@@ -10,6 +10,33 @@
     <packaging>pom</packaging>
     <name>Xkyss Quarkus</name>
 
+    <description>
+        xkyss quarkus toolkit.
+    </description>
+    <url>https://github.com/xkyss/xkyss.java</url>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>xkyss</id>
+            <name>xkyss</name>
+            <email>xkyss@foxmail.com</email>
+        </developer>
+    </developers>
+    <scm>
+        <connection>scm:git:https://github.com/xkyss/xkyss.java.git
+        </connection>
+        <developerConnection>
+            scm:git:https://github.com/xkyss/xkyss.java.git
+        </developerConnection>
+        <url>https://github.com/xkyss/xkyss.java</url>
+    </scm>
+
     <modules>
         <module>xkyss-quarkus-bom</module>
         <module>xkyss-quarkus-server</module>
@@ -133,6 +160,82 @@
                 <skipITs>false</skipITs>
                 <quarkus.package.type>native</quarkus.package.type>
             </properties>
+        </profile>
+
+        <profile>
+            <id>sonatype</id>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-gpg-plugin</artifactId>
+                            <version>1.6</version>
+                            <executions>
+                                <execution>
+                                    <id>sign-artifacts</id>
+                                    <phase>verify</phase>
+                                    <goals>
+                                        <goal>sign</goal>
+                                    </goals>
+                                    <configuration>
+                                        <gpgArguments>
+                                            <arg>--pinentry-mode</arg>
+                                            <arg>loopback</arg>
+                                        </gpgArguments>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.6.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-source</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.11.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
