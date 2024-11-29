@@ -16,7 +16,7 @@
     </parent>
 
     <properties>
-        <xkyss.version>2023.8.2</xkyss.version>
+        <xkyss.version>1.24.1</xkyss.version>
         <mysql.version>8.0.30</mysql.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
     </properties>
