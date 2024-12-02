@@ -32,7 +32,7 @@
             <!-- xkyss-quarkus -->
             <dependency>
                 <groupId>com.xkyss</groupId>
-                <artifactId>xkyss-quarkus-server</artifactId>
+                <artifactId>xkyss-quarkus-rest</artifactId>
                 <version>${xkyss.version}</version>
             </dependency>
             <!-- mapstruct -->

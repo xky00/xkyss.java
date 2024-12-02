@@ -39,7 +39,7 @@
 
     <modules>
         <module>xkyss-quarkus-bom</module>
-        <module>xkyss-quarkus-server</module>
+        <module>xkyss-quarkus-rest</module>
     </modules>
 
     <properties>
