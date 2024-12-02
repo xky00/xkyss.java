@@ -33,7 +33,7 @@
             <dependency>
                 <groupId>com.xkyss</groupId>
                 <artifactId>xkyss-quarkus-rest</artifactId>
-                <version>${xkyss.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <!-- mapstruct -->
             <dependency>
