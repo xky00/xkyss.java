@@ -6,4 +6,4 @@ metadata:
   #  guide: ... # To create and publish this guide, see https://github.com/quarkiverse/quarkiverse/wiki#documenting-your-extension
   categories:
     - "xkyss"
-  status: "preview"
+  status: "stable"
