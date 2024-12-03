@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.xkyss.quarkus.rest.runtime.constant.Constants.CONFIG_REST_PREFIX;
+import static com.xkyss.quarkus.rest.constant.Constants.CONFIG_REST_PREFIX;
 
 
 @ConfigMapping(prefix = CONFIG_REST_PREFIX)

@@ -30,7 +30,7 @@ public class ExceptionMapper implements jakarta.ws.rs.ext.ExceptionMapper<Except
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("cause", e.getClass().getName());
 
-        com.xkyss.quarkus.rest.runtime.dto.Response<Object> r = com.xkyss.quarkus.rest.runtime.dto.Response.exception();
+        com.xkyss.quarkus.rest.dto.Response<Object> r = com.xkyss.quarkus.rest.dto.Response.exception();
         r.setMessage(ems.getMessage(r.getCode()));
         r.setData(map);
 

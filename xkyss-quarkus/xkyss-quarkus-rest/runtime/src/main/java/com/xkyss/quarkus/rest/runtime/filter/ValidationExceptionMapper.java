@@ -1,7 +1,7 @@
 package com.xkyss.quarkus.rest.runtime.filter;
 
-import com.xkyss.quarkus.rest.runtime.dto.ValidateInfo;
-import com.xkyss.quarkus.rest.runtime.error.ErrorCode;
+import com.xkyss.quarkus.rest.dto.ValidateInfo;
+import com.xkyss.quarkus.rest.error.ErrorCode;
 import com.xkyss.quarkus.rest.runtime.service.ErrorMessageService;
 import io.quarkus.arc.properties.IfBuildProperty;
 import jakarta.inject.Inject;
@@ -52,7 +52,7 @@ public class ValidationExceptionMapper implements ExceptionMapper<ValidationExce
             })
             .collect(Collectors.toList());
 
-        com.xkyss.quarkus.rest.runtime.dto.Response<List<ValidateInfo>> r = new com.xkyss.quarkus.rest.runtime.dto.Response<>(
+        com.xkyss.quarkus.rest.dto.Response<List<ValidateInfo>> r = new com.xkyss.quarkus.rest.dto.Response<>(
             ErrorCode.参数校验失败, errorMessageService.getMessage(ErrorCode.参数校验失败), outputs, null);
         builder.entity(r);
         builder.type(MediaType.APPLICATION_JSON_TYPE);

@@ -1,7 +1,7 @@
 package com.xkyss.quarkus.rest.runtime.filter;
 
 import com.xkyss.quarkus.rest.runtime.config.RuntimeConfig;
-import com.xkyss.quarkus.rest.runtime.constant.Constants;
+import com.xkyss.quarkus.rest.constant.Constants;
 import io.quarkus.arc.properties.IfBuildProperty;
 import io.quarkus.runtime.util.StringUtil;
 import io.vertx.core.Handler;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
-import static com.xkyss.quarkus.rest.runtime.constant.Constants.KEY_LOG_ENTITY;
+import static com.xkyss.quarkus.rest.constant.Constants.KEY_LOG_ENTITY;
 
 
 @ApplicationScoped

@@ -1,6 +1,6 @@
 package com.xkyss.quarkus.rest.runtime.filter;
 
-import com.xkyss.quarkus.rest.runtime.error.RestException;
+import com.xkyss.quarkus.rest.error.RestException;
 import com.xkyss.quarkus.rest.runtime.service.ErrorMessageService;
 import io.quarkus.arc.properties.IfBuildProperty;
 import jakarta.inject.Inject;
@@ -36,7 +36,7 @@ public class RestExceptionMapper implements ExceptionMapper<RestException> {
         //noinspection DuplicatedCode
         map.put("cause", e.getClass().getName());
 
-        com.xkyss.quarkus.rest.runtime.dto.Response<Object> r = com.xkyss.quarkus.rest.runtime.dto.Response.exception();
+        com.xkyss.quarkus.rest.dto.Response<Object> r = com.xkyss.quarkus.rest.dto.Response.exception();
         r.setMessage(ems.getMessage(r.getCode()));
         r.setData(map);
 

@@ -9,7 +9,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import static com.xkyss.quarkus.rest.runtime.constant.Constants.ROUTE_PREFIX;
+import static com.xkyss.quarkus.rest.constant.Constants.ROUTE_PREFIX;
 
 
 @IfBuildProfile(anyOf = { "dev", "test", "build" })
@@ -35,13 +35,13 @@ public class DemoResource {
 
     @GET
     @Path("getKsResponse")
-    public com.xkyss.quarkus.rest.runtime.dto.Response<String> getKsResponse() {
-        return com.xkyss.quarkus.rest.runtime.dto.Response.success(Response.class.getName());
+    public com.xkyss.quarkus.rest.dto.Response<String> getKsResponse() {
+        return com.xkyss.quarkus.rest.dto.Response.success(Response.class.getName());
     }
 
     @GET
     @Path("getUniKsResponse")
-    public Uni<com.xkyss.quarkus.rest.runtime.dto.Response<String>> getUniKsResponse() {
-        return Uni.createFrom().item(com.xkyss.quarkus.rest.runtime.dto.Response.success(Response.class.getName()));
+    public Uni<com.xkyss.quarkus.rest.dto.Response<String>> getUniKsResponse() {
+        return Uni.createFrom().item(com.xkyss.quarkus.rest.dto.Response.success(Response.class.getName()));
     }
 }

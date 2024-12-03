@@ -1,4 +1,4 @@
-package com.xkyss.quarkus.rest.runtime.dto;
+package com.xkyss.quarkus.rest.dto;
 
 public class Page {
     /**

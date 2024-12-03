@@ -13,7 +13,7 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 
-import static com.xkyss.quarkus.rest.runtime.constant.Constants.ROUTE_PREFIX;
+import static com.xkyss.quarkus.rest.constant.Constants.ROUTE_PREFIX;
 
 
 @IfBuildProfile(anyOf = { "dev", "test", "build" })

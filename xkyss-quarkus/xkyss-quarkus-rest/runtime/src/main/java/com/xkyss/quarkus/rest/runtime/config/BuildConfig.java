@@ -5,8 +5,8 @@ import io.quarkus.runtime.annotations.ConfigRoot;
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
 
-import static com.xkyss.quarkus.rest.runtime.constant.Constants.CONFIG_BUILD_REST_PREFIX;
-import static com.xkyss.quarkus.rest.runtime.constant.Constants.I18N_VALIDATION;
+import static com.xkyss.quarkus.rest.constant.Constants.CONFIG_BUILD_REST_PREFIX;
+import static com.xkyss.quarkus.rest.constant.Constants.I18N_VALIDATION;
 
 
 @ConfigMapping(prefix = CONFIG_BUILD_REST_PREFIX)

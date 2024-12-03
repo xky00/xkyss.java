@@ -1,6 +1,6 @@
 package com.xkyss.quarkus.rest.runtime.service;
 
-import com.xkyss.quarkus.rest.runtime.constant.Constants;
+import com.xkyss.quarkus.rest.constant.Constants;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.hibernate.validator.resourceloading.AggregateResourceBundleLocator;
 import org.hibernate.validator.spi.resourceloading.ResourceBundleLocator;
