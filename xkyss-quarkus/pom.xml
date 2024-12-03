@@ -43,110 +43,22 @@
     </modules>
 
     <properties>
-        <skipITs>true</skipITs>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <maven.compiler.release>21</maven.compiler.release>
+
+        <!-- quarkus extension -->
+        <compiler-plugin.version>3.13.0</compiler-plugin.version>
+        <failsafe-plugin.version>${surefire-plugin.version}</failsafe-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
-        <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.17.0</quarkus.platform.version>
-        <compiler-plugin.version>3.13.0</compiler-plugin.version>
+        <quarkus.version>3.17.2</quarkus.version>
         <surefire-plugin.version>3.5.0</surefire-plugin.version>
+
+        <!-- other -->
         <jandex.version>3.1.1</jandex.version>
         <xkyss.version>1.24.1</xkyss.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <!-- quarkus -->
-            <dependency>
-                <groupId>${quarkus.platform.group-id}</groupId>
-                <artifactId>${quarkus.platform.artifact-id}</artifactId>
-                <version>${quarkus.platform.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>io.smallrye</groupId>
-                    <artifactId>jandex-maven-plugin</artifactId>
-                    <version>${jandex.version}</version>
-                </plugin>
-                <plugin>
-                    <groupId>${quarkus.platform.group-id}</groupId>
-                    <artifactId>quarkus-maven-plugin</artifactId>
-                    <version>${quarkus.platform.version}</version>
-                    <extensions>true</extensions>
-                    <configuration>
-                        <systemProperties>
-                            <file.encoding>UTF-8</file.encoding>
-                            <project.version>${project.version}</project.version>
-                            <!-- picocli用到 -->
-                            <sun.stdout.encoding>UTF-8</sun.stdout.encoding>
-                            <sun.stderr.encoding>UTF-8</sun.stderr.encoding>
-                        </systemProperties>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>build</goal>
-                                <goal>generate-code</goal>
-                                <goal>generate-code-tests</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${compiler-plugin.version}</version>
-                    <configuration>
-                        <compilerArgs>
-                            <arg>-parameters</arg>
-                        </compilerArgs>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${surefire-plugin.version}</version>
-                    <configuration>
-                        <systemPropertyVariables>
-                            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                            <maven.home>${maven.home}</maven.home>
-                        </systemPropertyVariables>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-failsafe-plugin</artifactId>
-                    <version>${surefire-plugin.version}</version>
-                    <executions>
-                        <execution>
-                            <goals>
-                                <goal>integration-test</goal>
-                                <goal>verify</goal>
-                            </goals>
-                            <configuration>
-                                <systemPropertyVariables>
-                                    <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                                    <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                                    <maven.home>${maven.home}</maven.home>
-                                </systemPropertyVariables>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
 
     <profiles>
         <profile>

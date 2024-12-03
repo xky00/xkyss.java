@@ -1,9 +1,9 @@
-name: Xkyss Rest
-description: Xkyss Rest
+name: Xkyss Quarkus Rest
+#description: Do something useful.
 metadata:
-  #  keywords:
-  #    - xkyss-quarkus-rest
-  #  guide: ... # To create and publish this guide, see https://github.com/quarkiverse/quarkiverse/wiki#documenting-your-extension
-  categories:
-    - "xkyss"
-  status: "preview"
+#  keywords:
+#    - xkyss-quarkus-rest
+#  guide: ... # To create and publish this guide, see https://github.com/quarkiverse/quarkiverse/wiki#documenting-your-extension
+#  categories:
+#    - "miscellaneous"
+#  status: "preview"
