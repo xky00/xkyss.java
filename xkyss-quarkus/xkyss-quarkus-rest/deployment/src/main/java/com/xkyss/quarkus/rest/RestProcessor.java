@@ -13,7 +13,7 @@ public class RestProcessor {
 
     private static final Logger LOGGER = Logger.getLogger(RestProcessor.class.getName());
 
-    private static final String FEATURE = "xkyss-server";
+    private static final String FEATURE = "xkyss-rest";
 
     @BuildStep
     FeatureBuildItem feature() {

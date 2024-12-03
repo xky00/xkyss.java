@@ -1,8 +1,8 @@
-name: Xkyss Server
-description: Xkyss Server
+name: Xkyss Rest
+description: Xkyss Rest
 metadata:
   #  keywords:
-  #    - xkyss-quarkus-server
+  #    - xkyss-quarkus-rest
   #  guide: ... # To create and publish this guide, see https://github.com/quarkiverse/quarkiverse/wiki#documenting-your-extension
   categories:
     - "xkyss"

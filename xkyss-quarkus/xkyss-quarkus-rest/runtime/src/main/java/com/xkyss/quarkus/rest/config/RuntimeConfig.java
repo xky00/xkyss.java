@@ -18,6 +18,24 @@ import static com.xkyss.quarkus.rest.constant.Constants.CONFIG_REST_PREFIX;
 public interface RuntimeConfig {
 
     /**
+     * App name
+     * @return app name
+     */
+    String appName();
+
+    /**
+     * App sn
+     * @return app sn
+     */
+    String appSn();
+
+    /**
+     * App version
+     * @return app version
+     */
+    String appVersion();
+
+    /**
      * Response filter config
      * @return config
      */
