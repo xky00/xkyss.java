@@ -400,4 +400,22 @@ public class RedisTest {
             Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
         }
     }
+
+
+    @Test
+    public void test_dbsize() throws InterruptedException {
+
+        Redis client = Redis.createClient(vertx, REDIS_HOST);
+        RedisAPI redis = RedisAPI.api(client);
+
+        {
+            VertxTestContext testContext = new VertxTestContext();
+            client.connect()
+                .onComplete(testContext.succeedingThenComplete())
+                .onSuccess(r -> System.out.println("connect ok: " + r))
+                .onFailure(e -> System.out.println("connect fail: " + e))
+            ;
+            Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+        }
+    }
 }
