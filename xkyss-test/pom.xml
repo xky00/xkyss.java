@@ -15,6 +15,7 @@
         <module>xkyss-test-kafka</module>
         <module>xkyss-test-vertx</module>
         <module>xkyss-test-redis</module>
+        <module>xkyss-test-cdc</module>
     </modules>
 
     <properties>
