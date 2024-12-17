@@ -9,15 +9,15 @@
         <version>2024.03.20</version>
     </parent>
 
-    <artifactId>xkyss-test-cdc</artifactId>
+    <artifactId>xkyss-test :: CDC</artifactId>
 
     <properties>
         <java.version>8</java.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <scala.binary.version>2.12</scala.binary.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Enforce single fork execution due to heavy mini cluster use in the tests -->
         <flink.forkCount>1</flink.forkCount>
         <flink.reuseForks>true</flink.reuseForks>
@@ -102,7 +102,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.xkyss.test.cdc.CdcTest</mainClass>
+                            <mainClass>com.xkyss.test.cdc.MySqlTest</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -200,9 +200,7 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
-
 
 </project>
