@@ -16,6 +16,9 @@ import io.vertx.core.net.impl.NetSocketInternal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Redis Proxy Server 实现
+ */
 public class RedisServerImpl implements RedisServer {
     private static final Logger log = LoggerFactory.getLogger(RedisServerImpl.class);
 
@@ -39,15 +42,23 @@ public class RedisServerImpl implements RedisServer {
         server.connectHandler(so -> {
             NetSocketInternal soi = (NetSocketInternal) so;
             ChannelPipeline pipeline = soi.channelHandlerContext().pipeline();
+
             initChannel(pipeline);
+            RedisConnection conn = new RedisConnection(soi);
 
             soi.eventHandler(e -> {
                 log.info("eventHandler.");
                 ReferenceCountUtil.release(e);
             });
 
+            soi.handler(buffer -> {
+                log.info("handler.");
+            });
+
             soi.messageHandler(m -> {
-                log.info("messageHandler.");
+                synchronized (conn) {
+                    conn.handleMessage(m);
+                }
             });
         });
         return server.listen(port, host).map(this);
@@ -63,6 +74,7 @@ public class RedisServerImpl implements RedisServer {
         pipeline.addBefore("handler", "redisBulkStringAggregator", new RedisBulkStringAggregator());
         pipeline.addBefore("handler", "redisArrayAggregator", new RedisArrayAggregator());
         pipeline.addBefore("handler", "redisEncoder", new RedisEncoder());
+
         // pipeline.addBefore("handler", "resultsHandler", new ResultsHandler());
         // pipeline.addBefore("handler", "commandHandler", new CommandHandler());
     }

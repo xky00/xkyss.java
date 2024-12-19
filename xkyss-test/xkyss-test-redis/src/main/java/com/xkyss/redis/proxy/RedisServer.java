@@ -4,6 +4,9 @@ import com.xkyss.redis.proxy.impl.RedisServerImpl;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 
+/**
+ * Redis Proxy Server 接口
+ */
 public interface RedisServer {
 
     static RedisServer create(Vertx vertx, RedisServerOption options) {
