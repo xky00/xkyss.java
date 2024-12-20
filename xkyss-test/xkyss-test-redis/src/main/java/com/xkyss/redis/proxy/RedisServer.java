@@ -2,6 +2,7 @@ package com.xkyss.redis.proxy;
 
 import com.xkyss.redis.proxy.impl.RedisServerImpl;
 import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 
 /**
@@ -9,12 +10,12 @@ import io.vertx.core.Vertx;
  */
 public interface RedisServer {
 
-    static RedisServer create(Vertx vertx, RedisServerOption options) {
+    static RedisServer create(Vertx vertx, RedisServerOptions options) {
         return new RedisServerImpl(vertx, options);
     }
 
     static RedisServer create(Vertx vertx) {
-        return new RedisServerImpl(vertx, new RedisServerOption());
+        return new RedisServerImpl(vertx, new RedisServerOptions());
     }
 
     /**
@@ -42,4 +43,22 @@ public interface RedisServer {
      * @return a {@code Future} completed with this server instance
      */
     Future<RedisServer> listen(int port);
+
+    /**
+     * Set the endpoint handler for the server. If an Redis client connect to the server a
+     * new RedisEndpoint instance will be created and passed to the handler
+     *
+     * @param handler the endpoint handler
+     * @return a reference to this, so the API can be used fluently
+     */
+    RedisServer endpointHandler(Handler<RedisEndpoint> handler);
+
+    /**
+     * Set an exception handler for the server, that will be called when an error happens independantly of an
+     * accepted {@link RedisEndpoint}, like a rejected connection
+     *
+     * @param handler the exception handler
+     * @return a reference to this, so the API can be used fluently
+     */
+    RedisServer exceptionHandler(Handler<Throwable> handler);
 }

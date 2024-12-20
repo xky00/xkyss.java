@@ -1,7 +1,8 @@
 package com.xkyss.redis.proxy.impl;
 
+import com.xkyss.redis.proxy.RedisEndpoint;
 import com.xkyss.redis.proxy.RedisServer;
-import com.xkyss.redis.proxy.RedisServerOption;
+import com.xkyss.redis.proxy.RedisServerOptions;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.redis.RedisArrayAggregator;
 import io.netty.handler.codec.redis.RedisBulkStringAggregator;
@@ -9,6 +10,7 @@ import io.netty.handler.codec.redis.RedisDecoder;
 import io.netty.handler.codec.redis.RedisEncoder;
 import io.netty.util.ReferenceCountUtil;
 import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.net.NetServer;
@@ -24,9 +26,12 @@ public class RedisServerImpl implements RedisServer {
 
     private final VertxInternal vertx;
     private final NetServer server;
-    private RedisServerOption options;
+    private RedisServerOptions options;
 
-    public RedisServerImpl(Vertx vertx, RedisServerOption options) {
+    private Handler<RedisEndpoint> endpointHandler;
+    private Handler<Throwable> exceptionHandler;
+
+    public RedisServerImpl(Vertx vertx, RedisServerOptions options) {
         this.vertx = (VertxInternal) vertx;
         this.server = vertx.createNetServer(options);
         this.options = options;
@@ -39,20 +44,24 @@ public class RedisServerImpl implements RedisServer {
 
     @Override
     public Future<RedisServer> listen(int port, String host) {
+        Handler<RedisEndpoint> h1 = endpointHandler;
+        Handler<Throwable> h2 = exceptionHandler;
+
+        if (h1 == null) {
+            return vertx.getOrCreateContext().failedFuture(
+                new IllegalStateException("Please set endpointHandler before server is listening"));
+        }
+
         server.connectHandler(so -> {
             NetSocketInternal soi = (NetSocketInternal) so;
             ChannelPipeline pipeline = soi.channelHandlerContext().pipeline();
 
             initChannel(pipeline);
-            RedisConnection conn = new RedisConnection(soi);
+            RedisConnection conn = new RedisConnection(soi, h1, h2, options);
 
             soi.eventHandler(e -> {
                 log.info("eventHandler.");
                 ReferenceCountUtil.release(e);
-            });
-
-            soi.handler(buffer -> {
-                log.info("handler.");
             });
 
             soi.messageHandler(m -> {
@@ -67,6 +76,18 @@ public class RedisServerImpl implements RedisServer {
     @Override
     public Future<RedisServer> listen(int port) {
         return listen(port, this.options.getHost());
+    }
+
+    @Override
+    public RedisServerImpl endpointHandler(Handler<RedisEndpoint> handler) {
+        this.endpointHandler = handler;
+        return this;
+    }
+
+    @Override
+    public RedisServerImpl exceptionHandler(Handler<Throwable> handler) {
+        this.exceptionHandler = handler;
+        return this;
     }
 
     private void initChannel(ChannelPipeline pipeline) {
