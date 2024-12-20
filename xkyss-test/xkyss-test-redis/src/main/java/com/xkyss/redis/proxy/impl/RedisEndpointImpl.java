@@ -1,12 +1,15 @@
 package com.xkyss.redis.proxy.impl;
 
+import com.xkyss.redis.proxy.RedisContext;
 import com.xkyss.redis.proxy.RedisEndpoint;
+import com.xkyss.redis.proxy.middleware.MiddlewareDelegate;
 import io.vertx.core.Handler;
 import io.vertx.core.net.impl.NetSocketInternal;
 
 public class RedisEndpointImpl implements RedisEndpoint {
 
     private final NetSocketInternal so;
+    private final MiddlewareDelegate<RedisContext> middleware;
 
     // handler to call when the endpoint is isClosed
     private Handler<Void> closeHandler;
@@ -16,8 +19,9 @@ public class RedisEndpointImpl implements RedisEndpoint {
     private boolean isConnected;
     private boolean isClosed;
 
-    public RedisEndpointImpl(NetSocketInternal so) {
+    public RedisEndpointImpl(NetSocketInternal so, MiddlewareDelegate<RedisContext> middleware) {
         this.so = so;
+        this.middleware = middleware;
         this.isConnected = true;
     }
 
@@ -57,7 +61,6 @@ public class RedisEndpointImpl implements RedisEndpoint {
      * @param t exception raised
      */
     void handleException(Throwable t) {
-
         synchronized (this.so) {
             if (this.exceptionHandler != null) {
                 this.exceptionHandler.handle(t);
@@ -69,7 +72,6 @@ public class RedisEndpointImpl implements RedisEndpoint {
      * Used for calling the close handler when the remote Redis client closes the connection
      */
     void handleClosed() {
-
         synchronized (this.so) {
             this.cleanup();
 
@@ -87,5 +89,10 @@ public class RedisEndpointImpl implements RedisEndpoint {
             this.isClosed = true;
             this.isConnected = false;
         }
+    }
+
+    @Override
+    public void handle(RedisContext rc) {
+        this.middleware.handle(rc);
     }
 }

@@ -1,12 +1,16 @@
 package com.xkyss.redis.proxy.impl;
 
+import com.xkyss.redis.proxy.RedisContext;
 import com.xkyss.redis.proxy.RedisEndpoint;
 import com.xkyss.redis.proxy.RedisServerOptions;
+import com.xkyss.redis.proxy.middleware.MiddlewareBuilder;
+import com.xkyss.redis.proxy.middleware.MiddlewareDelegate;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.redis.ArrayRedisMessage;
 import io.netty.handler.codec.redis.FullBulkStringRedisMessage;
 import io.netty.handler.codec.redis.RedisMessage;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.impl.NetSocketInternal;
@@ -21,7 +25,7 @@ import java.util.List;
  * Redis 连接
  */
 public class RedisConnection {
-    private static final Logger log = LoggerFactory.getLogger(RedisConnection.class);
+    private static final Logger logger = LoggerFactory.getLogger(RedisConnection.class);
 
     private final NetSocketInternal so;
     private final ChannelHandlerContext ctx;
@@ -31,6 +35,8 @@ public class RedisConnection {
     private final Handler<RedisEndpoint> endpointHandler;
 
     private final Handler<Throwable> exceptionHandler;
+
+    private final MiddlewareBuilder<RedisContext> middlewareBuilder;
 
     public RedisConnection(
         NetSocketInternal so,
@@ -43,6 +49,10 @@ public class RedisConnection {
         this.exceptionHandler = exceptionHandler;
         this.options = options;
         this.ctx = so.channelHandlerContext();
+        this.middlewareBuilder = new MiddlewareBuilder<>(ctx -> {
+            logger.info("fallback middleware.");
+            return Future.succeededFuture();
+        });
     }
 
     /**
@@ -55,7 +65,7 @@ public class RedisConnection {
             this.ctx.fireExceptionCaught(new Exception("Wrong m type " + m.getClass().getName()));
         }
 
-        log.info("messageHandler. m.getClass: {}", m.getClass());
+        logger.info("messageHandler. m.getClass: {}", m.getClass());
 
         if (m instanceof ArrayRedisMessage) {
             parseCommand((ArrayRedisMessage) m);
@@ -74,7 +84,7 @@ public class RedisConnection {
 
         String cmdName = msgToString(commands.get(0));
         Command cmd = Command.create(cmdName);
-        log.info("Command: {}", cmd.toString());
+        logger.info("Command: {}", cmd.toString());
 
         Request request = Request.cmd(cmd);
         for (int i = 1; i < commands.size(); i++) {
@@ -85,10 +95,15 @@ public class RedisConnection {
             }
         }
 
-        log.info("Request: \n{}", request);
+        logger.info("Request: \n{}", request);
 
+        RedisContext rc = new RedisContext().request(request);
         if (request.command().toString().equals("ping")) {
             handlePing();
+        }
+
+        if (checkConnected()) {
+            this.endpoint.handle(rc);
         }
     }
 
@@ -98,7 +113,13 @@ public class RedisConnection {
             return;
         }
 
-        endpoint = new RedisEndpointImpl(this.so);
+        MiddlewareDelegate<RedisContext> delegate = this.middlewareBuilder
+            .use(next -> {
+                logger.info("default middleware.");
+                return next;
+            })
+            .build();
+        endpoint = new RedisEndpointImpl(this.so, delegate);
 
         this.so.exceptionHandler(e -> this.endpoint.handleException(e));
         this.so.closeHandler(v -> this.endpoint.handleClosed());
@@ -126,5 +147,20 @@ public class RedisConnection {
             return Buffer.buffer(content);
         }
         return Buffer.buffer();
+    }
+    /**
+     * Check if the endpoint was created and is connected
+     *
+     * @return  status of the endpoint (connected or not)
+     */
+    private boolean checkConnected() {
+        synchronized (this.so) {
+            if ((this.endpoint != null) && (this.endpoint.isConnected())) {
+                return true;
+            } else {
+                so.close();
+                throw new IllegalArgumentException("Received an Redis packet from a not connected client (CONNECT not sent yet)");
+            }
+        }
     }
 }

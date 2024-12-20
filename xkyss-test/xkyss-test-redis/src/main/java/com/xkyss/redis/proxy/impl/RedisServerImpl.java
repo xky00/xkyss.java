@@ -18,6 +18,10 @@ import io.vertx.core.net.impl.NetSocketInternal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Redis Proxy Server 实现
  */
@@ -30,6 +34,8 @@ public class RedisServerImpl implements RedisServer {
 
     private Handler<RedisEndpoint> endpointHandler;
     private Handler<Throwable> exceptionHandler;
+
+    private Map<String, RedisEndpoint> endpoints = new ConcurrentHashMap<>();
 
     public RedisServerImpl(Vertx vertx, RedisServerOptions options) {
         this.vertx = (VertxInternal) vertx;
@@ -44,13 +50,13 @@ public class RedisServerImpl implements RedisServer {
 
     @Override
     public Future<RedisServer> listen(int port, String host) {
-        Handler<RedisEndpoint> h1 = endpointHandler;
+        Handler<RedisEndpoint> h1 = ep -> {
+            endpoints.put(UUID.randomUUID().toString(), ep);
+            if (this.endpointHandler != null) {
+                this.endpointHandler.handle(ep);
+            }
+        };
         Handler<Throwable> h2 = exceptionHandler;
-
-        if (h1 == null) {
-            return vertx.getOrCreateContext().failedFuture(
-                new IllegalStateException("Please set endpointHandler before server is listening"));
-        }
 
         server.connectHandler(so -> {
             NetSocketInternal soi = (NetSocketInternal) so;
