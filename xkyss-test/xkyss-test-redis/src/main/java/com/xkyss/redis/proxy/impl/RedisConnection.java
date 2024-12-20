@@ -3,8 +3,10 @@ package com.xkyss.redis.proxy.impl;
 import com.xkyss.redis.proxy.RedisContext;
 import com.xkyss.redis.proxy.RedisEndpoint;
 import com.xkyss.redis.proxy.RedisServerOptions;
+import com.xkyss.redis.proxy.middleware.FallbackMiddleware;
 import com.xkyss.redis.proxy.middleware.MiddlewareBuilder;
 import com.xkyss.redis.proxy.middleware.MiddlewareDelegate;
+import com.xkyss.redis.proxy.middleware.PluginMiddleware;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.redis.ArrayRedisMessage;
@@ -49,10 +51,7 @@ public class RedisConnection {
         this.exceptionHandler = exceptionHandler;
         this.options = options;
         this.ctx = so.channelHandlerContext();
-        this.middlewareBuilder = new MiddlewareBuilder<>(ctx -> {
-            logger.info("fallback middleware.");
-            return Future.succeededFuture();
-        });
+        this.middlewareBuilder = new MiddlewareBuilder<>();
     }
 
     /**
@@ -113,11 +112,9 @@ public class RedisConnection {
             return;
         }
 
-        MiddlewareDelegate<RedisContext> delegate = this.middlewareBuilder
-            .use(next -> {
-                logger.info("default middleware.");
-                return next;
-            })
+        MiddlewareDelegate<RedisContext> delegate = this.middlewareBuilder.newBuilder()
+            .use(new PluginMiddleware())
+            .use(new FallbackMiddleware())
             .build();
         endpoint = new RedisEndpointImpl(this.so, delegate);
 

@@ -5,9 +5,12 @@ import com.xkyss.redis.proxy.RedisEndpoint;
 import com.xkyss.redis.proxy.middleware.MiddlewareDelegate;
 import io.vertx.core.Handler;
 import io.vertx.core.net.impl.NetSocketInternal;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RedisEndpointImpl implements RedisEndpoint {
 
+    private static final Logger log = LoggerFactory.getLogger(RedisEndpointImpl.class);
     private final NetSocketInternal so;
     private final MiddlewareDelegate<RedisContext> middleware;
 
@@ -93,6 +96,8 @@ public class RedisEndpointImpl implements RedisEndpoint {
 
     @Override
     public void handle(RedisContext rc) {
-        this.middleware.handle(rc);
+        this.middleware.handle(rc).onComplete(v -> {
+            log.info("handle complete.");
+        });
     }
 }
