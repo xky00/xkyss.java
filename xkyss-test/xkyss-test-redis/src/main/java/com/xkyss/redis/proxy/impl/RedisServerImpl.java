@@ -112,8 +112,5 @@ public class RedisServerImpl implements RedisServer {
         pipeline.addBefore("handler", "redisBulkStringAggregator", new RedisBulkStringAggregator());
         pipeline.addBefore("handler", "redisArrayAggregator", new RedisArrayAggregator());
         pipeline.addBefore("handler", "redisEncoder", new RedisEncoder());
-
-        // pipeline.addBefore("handler", "resultsHandler", new ResultsHandler());
-        // pipeline.addBefore("handler", "commandHandler", new CommandHandler());
     }
 }

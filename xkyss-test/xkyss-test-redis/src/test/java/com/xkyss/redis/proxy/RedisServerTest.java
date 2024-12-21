@@ -3,8 +3,10 @@ package com.xkyss.redis.proxy;
 import com.xkyss.redis.proxy.middleware.FallbackMiddleware;
 import com.xkyss.redis.proxy.middleware.MiddlewareBuilder;
 import com.xkyss.redis.proxy.middleware.PluginMiddleware;
+import com.xkyss.redis.proxy.middleware.RemoteForwardHandler;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
+import io.vertx.redis.client.RedisOptions;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -22,11 +24,12 @@ public class RedisServerTest {
         RedisServerOptions options = new RedisServerOptions()
             .setHost("localhost")
             .setPort(6479);
+        RemoteForwardHandler remoteForwardHandler = new RemoteForwardHandler(vertx, new RedisOptions());
         RedisServer server = RedisServer.create(this.vertx, options)
             .endpointHandler(endpoint -> {
                 logger.info("endpoint: {}", endpoint);
             })
-            .middlewareBuilder(() -> new MiddlewareBuilder<RedisContext>()
+            .middlewareBuilder(() -> new MiddlewareBuilder<RedisContext>(remoteForwardHandler)
                 .use(new PluginMiddleware())
                 .use(new FallbackMiddleware())
                 .build());
