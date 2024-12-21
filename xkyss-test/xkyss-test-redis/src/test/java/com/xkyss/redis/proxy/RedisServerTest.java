@@ -1,5 +1,8 @@
 package com.xkyss.redis.proxy;
 
+import com.xkyss.redis.proxy.middleware.FallbackMiddleware;
+import com.xkyss.redis.proxy.middleware.MiddlewareBuilder;
+import com.xkyss.redis.proxy.middleware.PluginMiddleware;
 import io.vertx.core.Vertx;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Assertions;
@@ -19,10 +22,14 @@ public class RedisServerTest {
         RedisServerOptions options = new RedisServerOptions()
             .setHost("localhost")
             .setPort(6479);
-        RedisServer server = RedisServer.create(this.vertx, options);
-        server.endpointHandler(endpoint -> {
-            logger.info("endpoint: {}", endpoint);
-        });
+        RedisServer server = RedisServer.create(this.vertx, options)
+            .endpointHandler(endpoint -> {
+                logger.info("endpoint: {}", endpoint);
+            })
+            .middlewareBuilder(() -> new MiddlewareBuilder<RedisContext>()
+                .use(new PluginMiddleware())
+                .use(new FallbackMiddleware())
+                .build());
 
         VertxTestContext testContext = new VertxTestContext();
         server.listen()

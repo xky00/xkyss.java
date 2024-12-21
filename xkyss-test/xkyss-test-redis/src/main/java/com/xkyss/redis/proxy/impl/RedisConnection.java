@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Redis 连接
@@ -37,21 +38,21 @@ public class RedisConnection {
     private final Handler<RedisEndpoint> endpointHandler;
 
     private final Handler<Throwable> exceptionHandler;
-
-    private final MiddlewareBuilder<RedisContext> middlewareBuilder;
+    private final Supplier<MiddlewareDelegate<RedisContext>> middlewareBuilder;
 
     public RedisConnection(
         NetSocketInternal so,
         Handler<RedisEndpoint> endpointHandler,
         Handler<Throwable> exceptionHandler,
-        RedisServerOptions options) {
+        RedisServerOptions options,
+        Supplier<MiddlewareDelegate<RedisContext>> middlewareBuilder) {
 
         this.so = so;
         this.endpointHandler = endpointHandler;
         this.exceptionHandler = exceptionHandler;
         this.options = options;
         this.ctx = so.channelHandlerContext();
-        this.middlewareBuilder = new MiddlewareBuilder<>();
+        this.middlewareBuilder = middlewareBuilder;
     }
 
     /**
@@ -112,11 +113,7 @@ public class RedisConnection {
             return;
         }
 
-        MiddlewareDelegate<RedisContext> delegate = this.middlewareBuilder.newBuilder()
-            .use(new PluginMiddleware())
-            .use(new FallbackMiddleware())
-            .build();
-        endpoint = new RedisEndpointImpl(this.so, delegate);
+        endpoint = new RedisEndpointImpl(this.so, this.middlewareBuilder.get());
 
         this.so.exceptionHandler(e -> this.endpoint.handleException(e));
         this.so.closeHandler(v -> this.endpoint.handleClosed());

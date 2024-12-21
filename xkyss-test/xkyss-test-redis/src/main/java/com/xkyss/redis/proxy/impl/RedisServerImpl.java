@@ -1,8 +1,11 @@
 package com.xkyss.redis.proxy.impl;
 
+import com.xkyss.redis.proxy.RedisContext;
 import com.xkyss.redis.proxy.RedisEndpoint;
 import com.xkyss.redis.proxy.RedisServer;
 import com.xkyss.redis.proxy.RedisServerOptions;
+import com.xkyss.redis.proxy.middleware.MiddlewareBuilder;
+import com.xkyss.redis.proxy.middleware.MiddlewareDelegate;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.redis.RedisArrayAggregator;
 import io.netty.handler.codec.redis.RedisBulkStringAggregator;
@@ -21,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 /**
  * Redis Proxy Server 实现
@@ -34,6 +38,8 @@ public class RedisServerImpl implements RedisServer {
 
     private Handler<RedisEndpoint> endpointHandler;
     private Handler<Throwable> exceptionHandler;
+    private Supplier<MiddlewareDelegate<RedisContext>> middlewareBuilder;
+
 
     private Map<String, RedisEndpoint> endpoints = new ConcurrentHashMap<>();
 
@@ -56,14 +62,13 @@ public class RedisServerImpl implements RedisServer {
                 this.endpointHandler.handle(ep);
             }
         };
-        Handler<Throwable> h2 = exceptionHandler;
 
         server.connectHandler(so -> {
             NetSocketInternal soi = (NetSocketInternal) so;
             ChannelPipeline pipeline = soi.channelHandlerContext().pipeline();
 
             initChannel(pipeline);
-            RedisConnection conn = new RedisConnection(soi, h1, h2, options);
+            RedisConnection conn = new RedisConnection(soi, h1, exceptionHandler, options, middlewareBuilder);
 
             soi.eventHandler(e -> {
                 log.info("eventHandler.");
@@ -76,6 +81,7 @@ public class RedisServerImpl implements RedisServer {
                 }
             });
         });
+
         return server.listen(port, host).map(this);
     }
 
@@ -93,6 +99,12 @@ public class RedisServerImpl implements RedisServer {
     @Override
     public RedisServerImpl exceptionHandler(Handler<Throwable> handler) {
         this.exceptionHandler = handler;
+        return this;
+    }
+
+    @Override
+    public RedisServer middlewareBuilder(Supplier<MiddlewareDelegate<RedisContext>> supplier) {
+        this.middlewareBuilder = supplier;
         return this;
     }
 

@@ -1,9 +1,13 @@
 package com.xkyss.redis.proxy;
 
 import com.xkyss.redis.proxy.impl.RedisServerImpl;
+import com.xkyss.redis.proxy.middleware.MiddlewareBuilder;
+import com.xkyss.redis.proxy.middleware.MiddlewareDelegate;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+
+import java.util.function.Supplier;
 
 /**
  * Redis Proxy Server 接口
@@ -61,4 +65,11 @@ public interface RedisServer {
      * @return a reference to this, so the API can be used fluently
      */
     RedisServer exceptionHandler(Handler<Throwable> handler);
+
+    /**
+     * Set middlerware builder
+     * @param builder middleware builder
+     * @return a reference to this, so the API can be used fluently
+     */
+    RedisServer middlewareBuilder(Supplier<MiddlewareDelegate<RedisContext>> builder);
 }
