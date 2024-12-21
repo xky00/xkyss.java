@@ -10,7 +10,7 @@ public class PluginMiddleware implements Middleware<RedisContext> {
     private static final Logger logger = LoggerFactory.getLogger(PluginMiddleware.class);
 
     @Override
-    public Future<Void> invoke(MiddlewareDelegate<RedisContext> next, RedisContext ctx) {
+    public Future<Void> invoke(MiddlewareHandler<RedisContext> next, RedisContext ctx) {
         logger.info("PluginMiddleware.invoke");
 
         return before(ctx)

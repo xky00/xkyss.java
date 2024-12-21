@@ -4,8 +4,7 @@ import com.xkyss.redis.proxy.RedisContext;
 import com.xkyss.redis.proxy.RedisEndpoint;
 import com.xkyss.redis.proxy.RedisServer;
 import com.xkyss.redis.proxy.RedisServerOptions;
-import com.xkyss.redis.proxy.middleware.MiddlewareBuilder;
-import com.xkyss.redis.proxy.middleware.MiddlewareDelegate;
+import com.xkyss.redis.proxy.middleware.MiddlewareHandler;
 import io.netty.channel.ChannelPipeline;
 import io.netty.handler.codec.redis.RedisArrayAggregator;
 import io.netty.handler.codec.redis.RedisBulkStringAggregator;
@@ -38,7 +37,7 @@ public class RedisServerImpl implements RedisServer {
 
     private Handler<RedisEndpoint> endpointHandler;
     private Handler<Throwable> exceptionHandler;
-    private Supplier<MiddlewareDelegate<RedisContext>> middlewareBuilder;
+    private Supplier<MiddlewareHandler<RedisContext>> middlewareBuilder;
 
 
     private Map<String, RedisEndpoint> endpoints = new ConcurrentHashMap<>();
@@ -103,7 +102,7 @@ public class RedisServerImpl implements RedisServer {
     }
 
     @Override
-    public RedisServer middlewareBuilder(Supplier<MiddlewareDelegate<RedisContext>> supplier) {
+    public RedisServer middlewareBuilder(Supplier<MiddlewareHandler<RedisContext>> supplier) {
         this.middlewareBuilder = supplier;
         return this;
     }

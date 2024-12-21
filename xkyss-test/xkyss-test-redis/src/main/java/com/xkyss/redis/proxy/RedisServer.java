@@ -1,8 +1,7 @@
 package com.xkyss.redis.proxy;
 
 import com.xkyss.redis.proxy.impl.RedisServerImpl;
-import com.xkyss.redis.proxy.middleware.MiddlewareBuilder;
-import com.xkyss.redis.proxy.middleware.MiddlewareDelegate;
+import com.xkyss.redis.proxy.middleware.MiddlewareHandler;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -71,5 +70,5 @@ public interface RedisServer {
      * @param builder middleware builder
      * @return a reference to this, so the API can be used fluently
      */
-    RedisServer middlewareBuilder(Supplier<MiddlewareDelegate<RedisContext>> builder);
+    RedisServer middlewareBuilder(Supplier<MiddlewareHandler<RedisContext>> builder);
 }

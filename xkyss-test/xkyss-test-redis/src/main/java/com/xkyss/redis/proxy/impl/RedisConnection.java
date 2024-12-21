@@ -3,16 +3,12 @@ package com.xkyss.redis.proxy.impl;
 import com.xkyss.redis.proxy.RedisContext;
 import com.xkyss.redis.proxy.RedisEndpoint;
 import com.xkyss.redis.proxy.RedisServerOptions;
-import com.xkyss.redis.proxy.middleware.FallbackMiddleware;
-import com.xkyss.redis.proxy.middleware.MiddlewareBuilder;
-import com.xkyss.redis.proxy.middleware.MiddlewareDelegate;
-import com.xkyss.redis.proxy.middleware.PluginMiddleware;
+import com.xkyss.redis.proxy.middleware.MiddlewareHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.redis.ArrayRedisMessage;
 import io.netty.handler.codec.redis.FullBulkStringRedisMessage;
 import io.netty.handler.codec.redis.RedisMessage;
-import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.net.impl.NetSocketInternal;
@@ -38,14 +34,14 @@ public class RedisConnection {
     private final Handler<RedisEndpoint> endpointHandler;
 
     private final Handler<Throwable> exceptionHandler;
-    private final Supplier<MiddlewareDelegate<RedisContext>> middlewareBuilder;
+    private final Supplier<MiddlewareHandler<RedisContext>> middlewareBuilder;
 
     public RedisConnection(
         NetSocketInternal so,
         Handler<RedisEndpoint> endpointHandler,
         Handler<Throwable> exceptionHandler,
         RedisServerOptions options,
-        Supplier<MiddlewareDelegate<RedisContext>> middlewareBuilder) {
+        Supplier<MiddlewareHandler<RedisContext>> middlewareBuilder) {
 
         this.so = so;
         this.endpointHandler = endpointHandler;

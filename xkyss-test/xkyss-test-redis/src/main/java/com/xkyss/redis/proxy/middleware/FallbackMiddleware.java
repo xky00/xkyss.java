@@ -10,7 +10,7 @@ public class FallbackMiddleware implements Middleware<RedisContext> {
     private static final Logger logger = LoggerFactory.getLogger(FallbackMiddleware.class);
 
     @Override
-    public Future<Void> invoke(MiddlewareDelegate<RedisContext> next, RedisContext rc) {
+    public Future<Void> invoke(MiddlewareHandler<RedisContext> next, RedisContext rc) {
         logger.info("FallbackMiddleware.invoke");
         return next.handle(rc);
     }

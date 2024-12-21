@@ -2,7 +2,7 @@ package com.xkyss.redis.proxy.impl;
 
 import com.xkyss.redis.proxy.RedisContext;
 import com.xkyss.redis.proxy.RedisEndpoint;
-import com.xkyss.redis.proxy.middleware.MiddlewareDelegate;
+import com.xkyss.redis.proxy.middleware.MiddlewareHandler;
 import io.vertx.core.Handler;
 import io.vertx.core.net.impl.NetSocketInternal;
 import org.slf4j.Logger;
@@ -12,7 +12,7 @@ public class RedisEndpointImpl implements RedisEndpoint {
 
     private static final Logger log = LoggerFactory.getLogger(RedisEndpointImpl.class);
     private final NetSocketInternal so;
-    private final MiddlewareDelegate<RedisContext> middleware;
+    private final MiddlewareHandler<RedisContext> middleware;
 
     // handler to call when the endpoint is isClosed
     private Handler<Void> closeHandler;
@@ -22,7 +22,7 @@ public class RedisEndpointImpl implements RedisEndpoint {
     private boolean isConnected;
     private boolean isClosed;
 
-    public RedisEndpointImpl(NetSocketInternal so, MiddlewareDelegate<RedisContext> middleware) {
+    public RedisEndpointImpl(NetSocketInternal so, MiddlewareHandler<RedisContext> middleware) {
         this.so = so;
         this.middleware = middleware;
         this.isConnected = true;

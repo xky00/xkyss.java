@@ -14,5 +14,5 @@ public interface Middleware<TContext> {
      * @param context 上下文
      * @return Future
      */
-    Future<Void> invoke(MiddlewareDelegate<TContext> next, TContext context);
+    Future<Void> invoke(MiddlewareHandler<TContext> next, TContext context);
 }
