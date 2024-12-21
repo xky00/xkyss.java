@@ -3,8 +3,11 @@ package com.xkyss.redis.proxy.impl;
 import com.xkyss.redis.proxy.RedisContext;
 import com.xkyss.redis.proxy.RedisEndpoint;
 import com.xkyss.redis.proxy.middleware.MiddlewareHandler;
+import io.netty.handler.codec.redis.SimpleStringRedisMessage;
+import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.net.impl.NetSocketInternal;
+import io.vertx.redis.client.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,10 +97,15 @@ public class RedisEndpointImpl implements RedisEndpoint {
         }
     }
 
-    @Override
     public void handle(RedisContext rc) {
         this.middleware.handle(rc).onComplete(v -> {
             log.info("handle complete.");
         });
+    }
+
+    @Override
+    public Future<Void> send(Response response) {
+        SimpleStringRedisMessage m = new SimpleStringRedisMessage(response.toString());
+        return this.so.writeMessage(m);
     }
 }

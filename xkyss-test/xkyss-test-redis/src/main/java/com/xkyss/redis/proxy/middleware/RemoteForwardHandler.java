@@ -30,7 +30,7 @@ public class RemoteForwardHandler implements MiddlewareHandler<RedisContext> {
             .compose(v -> redis.send(ctx.getRequest()))
             .compose(r -> {
                 logger.info("{}, {}", ctx.getRequest(), r.toString());
-                return Future.succeededFuture();
+                return ctx.getEndpoint().send(r);
             });
     }
 

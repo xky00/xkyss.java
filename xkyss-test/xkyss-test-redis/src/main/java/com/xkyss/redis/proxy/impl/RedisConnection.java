@@ -93,12 +93,12 @@ public class RedisConnection {
 
         logger.info("Request: \n{}", request);
 
-        RedisContext rc = new RedisContext().request(request);
         if (request.command().toString().equals("ping")) {
             handlePing();
         }
 
         if (checkConnected()) {
+            RedisContext rc = new RedisContext().request(request).endpoint(this.endpoint);
             this.endpoint.handle(rc);
         }
     }
