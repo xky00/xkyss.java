@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>xkyss-redis-client</artifactId>
+    <name>xkyss :: Redis Client</name>
+
+    <parent>
+        <groupId>com.xkyss</groupId>
+        <artifactId>xkyss</artifactId>
+        <version>1.24.1</version>
+    </parent>
+
+    <properties>
+        <vertx.version>4.5.12</vertx.version>
+        <jar.manifest>${project.basedir}/src/main/resources/META-INF/MANIFEST.MF</jar.manifest>
+        <generated.dir>${project.basedir}/src/main/generated</generated.dir>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-dependencies</artifactId>
+                <version>${vertx.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-codegen</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!-- Generate sources before compilation -->
+            <plugin>
+                <groupId>org.bsc.maven</groupId>
+                <artifactId>maven-processor-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <goals>
+                            <goal>process</goal>
+                        </goals>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <systemProperties>
+                                <java.util.logging.SimpleFormatter.format>%4$s: %3$s - %5$s %6$s%n</java.util.logging.SimpleFormatter.format>
+                            </systemProperties>
+                            <processors>
+                                <processor>io.vertx.codegen.CodeGenProcessor</processor>
+<!--                                <processor>io.vertx.docgen.JavaDocGenProcessor</processor>-->
+                            </processors>
+                            <optionMap>
+                                <codegen.output>${project.basedir}/src/main</codegen.output>
+                                <!-- Data object converters are placed in src/main/generated -->
+                                <codegen.output.data_object_converters>generated</codegen.output.data_object_converters>
+<!--                                <docgen.source>${asciidoc.dir}/*.adoc</docgen.source>-->
+                                <docgen.output>${project.build.directory}/asciidoc/java</docgen.output>
+                                <maven.groupId>${project.groupId}</maven.groupId>
+                                <maven.artifactId>${project.artifactId}</maven.artifactId>
+                                <maven.version>${project.version}</maven.version>
+                            </optionMap>
+                            <defaultOutputDirectory>${project.build.directory}/generated-sources/codegen</defaultOutputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>add-source</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>${generated.dir}</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

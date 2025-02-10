@@ -1,0 +1,2 @@
+Automatic-Module-Name: com.xkyss.client.redis
+
