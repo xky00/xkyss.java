@@ -46,7 +46,7 @@
         <maven-shade-plugin.version>3.4.1</maven-shade-plugin.version>
         <proguard-maven-plugin.version>2.6.0</proguard-maven-plugin.version>
         <junit.version>5.9.0</junit.version>
-        <vertx.version>4.5.4</vertx.version>
+        <vertx.version>4.5.12</vertx.version>
     </properties>
 
     <modules>
@@ -65,6 +65,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-junit5</artifactId>
+            <version>${vertx.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
