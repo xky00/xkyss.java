@@ -174,6 +174,18 @@ final class ReadableBuffer {
     offset = mark;
   }
 
+  void reset(int n) {
+    if (n < 0) {
+      final int m = this.buffer.length() + n;
+      this.offset = m;
+      this.mark = m;
+    }
+    else {
+      this.offset = n;
+      this.mark = n;
+    }
+  }
+
   int offset() {
     return offset;
   }

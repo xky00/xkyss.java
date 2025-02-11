@@ -65,30 +65,31 @@ public final class RESPBufferParser implements Handler<Buffer> {
         final int start = buffer.offset();
         final int eol = buffer.findLineEnd();
 
-        // keep first byte
-        buffer.reset();
-
         // not found at all
         if (eol == -1) {
+          buffer.reset();
           break;
         }
 
         // special case for sync messages or messages that report the wrong length
         if (start == eol) {
+          buffer.reset();
           break;
         }
 
         switch (type) {
-          case '+':
+          case '+': // Simple Strings
             handleSimpleString(start, eol);
             break;
-          case '-':
+          case '-': // Simple Errors
+            handleSimpleErrors(eol);
+            break;
           case '!':
             handleError(eol);
             break;
-          case ':':
-          case ',':
-          case '(':
+          case ':': // Integers
+          case ',': // Doubles
+          case '(': // Big numbers
             handleNumber(type, eol);
             break;
           case '=':
@@ -126,7 +127,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
           handleResponse(BulkType.EMPTY, false);
         } else {
           // fixed length parsing && read the required bytes
-          handleResponse(BulkType.create(buffer.readBytes(bytesNeeded), verbatim), false);
+          //handleResponse(BulkType.create(buffer.readBytes(bytesNeeded), verbatim), false);
+          handleResponse(bytesNeeded + 2, false);
           // clear the verbatim
           verbatim = false;
         }
@@ -142,21 +144,14 @@ public final class RESPBufferParser implements Handler<Buffer> {
     }
   }
 
+  private void handleSimpleErrors(int eol) {
+    buffer.reset();
+    handler.handle(buffer.readBytes(1+eol));
+  }
+
   private void handleNumber(byte type, int eol) {
-    switch (type) {
-      case ':':
-        handleResponse(NumberType.create(buffer.readNumber(eol, ReadableBuffer.NumericType.INTEGER)), false);
-        break;
-      case ',':
-        handleResponse(NumberType.create(buffer.readNumber(eol, ReadableBuffer.NumericType.DECIMAL)), false);
-        break;
-      case '(':
-        handleResponse(NumberType.create(buffer.readNumber(eol, ReadableBuffer.NumericType.BIGINTEGER)), false);
-        break;
-      default:
-        handler.fail(new NumberFormatException("Invalid REDIS format: [" + (char) type + "]"));
-        break;
-    }
+    buffer.reset();
+    handler.handle(buffer.readBytes(1+eol));
   }
 
   private long handleLength(int eol) {
@@ -224,6 +219,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private void handleSimpleString(int start, int eol) {
+    buffer.reset();
     handler.handle(buffer.readBytes(start+eol));
   }
 
@@ -309,6 +305,55 @@ public final class RESPBufferParser implements Handler<Buffer> {
         // so we can handle the response directly
         // to the listener
         handler.handle(null);
+      }
+    }
+  }
+
+  private void handleResponse(int length, boolean push) {
+    final Multi multi = stack.peek();
+    // verify if there are multi's on the stack
+    if (multi != null) {
+      // add the parsed response to the multi
+      // multi.add(response);
+      // push the given response to the stack
+      if (push) {
+        // stack.push(response);
+      } else {
+        // break the chain and verify end condition
+        Multi m = multi;
+        // clean up complete messages
+        while (m.complete()) {
+          stack.pop();
+
+          // in case of chaining we need to take into account
+          // if the stack is empty or not
+          if (stack.empty()) {
+            if (m.type() != ResponseType.ATTRIBUTE) {
+              // handle the multi to the listener
+              handler.handle(null);
+            }
+            return;
+          }
+          // peek into the next entry
+          m = stack.peek();
+
+          if (m == null) {
+            handler.fail(ErrorType.create("ILLEGAL_STATE Multi can't be null"));
+            return;
+          }
+        }
+      }
+    } else {
+      if (push) {
+        // stack.push(response);
+      } else {
+        // there's nothing on the stack
+        // so we can handle the response directly
+        // to the listener
+        final int offset = buffer.offset();
+        buffer.reset(0);
+        handler.handle(buffer.readBytes(offset + length));
+        buffer.reset(-1);
       }
     }
   }
