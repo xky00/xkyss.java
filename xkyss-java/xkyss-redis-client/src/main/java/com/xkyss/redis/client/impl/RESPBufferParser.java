@@ -104,10 +104,10 @@ public final class RESPBufferParser implements Handler<Buffer> {
             handleMulti(type, eol);
             break;
           case '_':
-            handleNull();
+            handleNull(eol);
             break;
           case '#':
-            handleBoolean();
+            handleBoolean(eol);
             break;
           case '|':
             handleAttribute(eol);
@@ -167,7 +167,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
     if (integer < 0) {
       if (integer == -1L) {
         // this is a NULL array
-        handleResponse(null, false);
+        handleResponse(0, false);
         return -1;
       }
       // other negative values are not valid
@@ -202,16 +202,14 @@ public final class RESPBufferParser implements Handler<Buffer> {
     }
   }
 
-  private void handleBoolean() {
+  private void handleBoolean(int eol) {
     byte value = buffer.readByte();
     switch (value) {
       case 't':
-        buffer.skipEOL();
-        handleResponse(BooleanType.TRUE, false);
-        break;
       case 'f':
-        buffer.skipEOL();
-        handleResponse(BooleanType.FALSE, false);
+        buffer.reset();
+        handler.handle(buffer.readBytes(1+eol));
+        buffer.mark();
         break;
       default:
         handler.fail(ErrorType.create("Invalid boolean value: " + ((char) value)));
@@ -257,10 +255,9 @@ public final class RESPBufferParser implements Handler<Buffer> {
     }
   }
 
-  private void handleNull() {
-    // clean up the buffer, skip to the last \r\n
-    buffer.skipEOL();
-    handleResponse(null, false);
+  private void handleNull(int eol) {
+    buffer.reset();
+    handler.handle(buffer.readBytes(1+eol));
   }
 
   private void handleResponse(Response response, boolean push) {

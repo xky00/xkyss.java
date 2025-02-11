@@ -226,4 +226,107 @@ public class BufferParserTest {
 
         Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
     }
+
+    @Test
+    public void testParseBulkStrings() throws InterruptedException {
+
+        VertxTestContext testContext = new VertxTestContext();
+
+        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+            @Override
+            public void handle(Buffer buffer) {
+                logger.info(buffer.toString());
+                Assertions.assertArrayEquals("$6\r\nfoobar\r\n".getBytes(), buffer.getBytes());
+                testContext.completeNow();
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer("$6\r\n"));
+        parser.handle(Buffer.buffer("foobar\r\n"));
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void testParseNullBulk() throws InterruptedException {
+        VertxTestContext testContext = new VertxTestContext();
+
+        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+            @Override
+            public void handle(Buffer buffer) {
+                logger.info(buffer.toString());
+                Assertions.assertArrayEquals("$-1\r\n".getBytes(), buffer.getBytes());
+                testContext.completeNow();
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer("$-1\r\n"));
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void testParseNull() throws InterruptedException {
+
+        VertxTestContext testContext = new VertxTestContext();
+
+        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+            @Override
+            public void handle(Buffer buffer) {
+                logger.info(buffer.toString());
+                Assertions.assertArrayEquals("_\r\n".getBytes(), buffer.getBytes());
+                testContext.completeNow();
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer("_\r\n"));
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void testParseBoolean() throws InterruptedException {
+        final AtomicInteger counter = new AtomicInteger();
+        VertxTestContext testContext = new VertxTestContext();
+
+        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+            @Override
+            public void handle(Buffer buffer) {
+                logger.info(buffer.toString());
+                int c = counter.incrementAndGet();
+                if (c == 1) {
+                    Assertions.assertArrayEquals("#t\r\n".getBytes(), buffer.getBytes());
+                }
+                else if (c == 2) {
+                    Assertions.assertArrayEquals("#f\r\n".getBytes(), buffer.getBytes());
+                    testContext.completeNow();
+                }
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer("#t\r\n"));
+        parser.handle(Buffer.buffer("#f\r\n"));
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
 }
