@@ -12,22 +12,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ResponseTest {
-    private static final Logger logger = LoggerFactory.getLogger(ResponseTest.class);
+public class BufferParserTest {
+    private static final Logger logger = LoggerFactory.getLogger(BufferParserTest.class);
 
     @Test
     public void testParseSimple() throws InterruptedException {
-        final AtomicInteger counter = new AtomicInteger();
 
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPParser parser = new RESPParser(new ParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
             @Override
-            public void handle(Response response) {
-                logger.info(response.toString());
-                if (counter.incrementAndGet() == 4) {
-                    testContext.completeNow();
-                }
+            public void handle(Buffer buffer) {
+                logger.info(buffer.toString());
+                Assertions.assertArrayEquals("+PONG\r\n".getBytes(), buffer.getBytes());
+                testContext.completeNow();
             }
 
             @Override
@@ -36,7 +34,7 @@ public class ResponseTest {
             }
         }, 16);
 
-        parser.handle(Buffer.buffer("+PONG\r\n+PONG\r\n+PONG\r\n+PONG\r\n"));
+        parser.handle(Buffer.buffer("+PONG\r\n"));
 
         Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
     }
