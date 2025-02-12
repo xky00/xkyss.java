@@ -459,7 +459,7 @@ public class BufferParserTest {
             @Override
             public void handle(Buffer buffer) {
                 logger.info(buffer.toString());
-                // Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
+                Assertions.assertArrayEquals("%2\r\n+first\r\n:1\r\n+second\r\n:2\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
             }
 

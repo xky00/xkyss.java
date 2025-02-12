@@ -144,18 +144,19 @@ public final class RESPBufferParser implements Handler<Buffer> {
     }
   }
 
-  private void handleBytes(int len) {
-    buffer.reset();
-    handler.handle(buffer.readBytes(len));
-    buffer.mark();
+  private void handleBytes(int eol) {
+    int length = eol - buffer.offset() + 1;
+    handleResponse(new Counter(1, length), false);
   }
 
   private void handleSimpleError(int eol) {
-    handleBytes(eol + 1);
+    int length = eol - buffer.offset() + 1;
+    handleResponse(new Counter(1, length), false);
   }
 
   private void handleNumber(byte type, int eol) {
-    handleBytes(eol + 1);
+    int length = eol - buffer.offset() + 1;
+    handleResponse(new Counter(1, length), false);
   }
 
   private long handleLength(int eol) {
@@ -171,7 +172,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
     if (integer < 0) {
       if (integer == -1L) {
         // this is a NULL array
-        handleResponse(new Counter(0), false);
+        buffer.reset();
+        handleResponse(new Counter(1, 5), false);
         return -1;
       }
       // other negative values are not valid
@@ -212,7 +214,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
     switch (value) {
       case 't':
       case 'f':
-        handleBytes(eol + 1);
+        handleBytes(eol);
         break;
       default:
         handler.fail(ErrorType.create("Invalid boolean value: " + ((char) value)));
@@ -220,8 +222,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private void handleSimpleString(int start, int eol) {
-    // handleBytes(eol + start);
-    handleResponse(new Counter(1, eol), false);
+    int length = eol - buffer.offset() + 1;
+    handleResponse(new Counter(1, length), false);
   }
 
   private void handleBulkError(int eol) {
@@ -261,7 +263,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private void handleNull(int eol) {
-    handleBytes(eol + 1);
+    handleBytes(eol);
   }
 
   private void handleResponse(Response response, boolean push) {

@@ -190,6 +190,10 @@ final class ReadableBuffer {
     return offset;
   }
 
+  void skip(int n) {
+      offset += n;
+  }
+
   boolean skipEOL() {
     while (readableBytes() > 0) {
       byte b;
