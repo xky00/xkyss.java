@@ -186,8 +186,12 @@ final class ReadableBuffer {
     }
   }
 
-  int offset() {
+  int getOffset() {
     return offset;
+  }
+
+  int getMark() {
+    return mark;
   }
 
   void skip(int n) {

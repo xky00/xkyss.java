@@ -45,6 +45,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
   // parser state machine state
   private boolean eol = true;
   private int bytesNeeded = 0;
+  private int lengthNeeded = 0;
   private boolean verbatim = false;
 
   @Override
@@ -62,7 +63,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
         final byte type = buffer.readByte();
 
         // locate the eol and handle as a C string
-        final int start = buffer.offset();
+        final int start = buffer.getOffset();
         final int eol = buffer.findLineEnd();
 
         // not found at all
@@ -145,22 +146,24 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private void handleBytes(int eol) {
-    int length = eol - buffer.offset() + 1;
+    int length = eol - buffer.getOffset() + 1;
     handleResponse(new Counter(1, length), false);
   }
 
   private void handleSimpleError(int eol) {
-    int length = eol - buffer.offset() + 1;
+    int length = eol - buffer.getOffset() + 1;
     handleResponse(new Counter(1, length), false);
   }
 
   private void handleNumber(byte type, int eol) {
-    int length = eol - buffer.offset() + 1;
+    int length = eol - buffer.getOffset() + 1;
     handleResponse(new Counter(1, length), false);
   }
 
   private long handleLength(int eol) {
+    final int offset = buffer.getOffset();
     final long integer = buffer.readLong(eol);
+    lengthNeeded = buffer.getOffset() - offset + 1;
 
     // special cases
     // redis multi cannot have more than 2GB elements
@@ -222,7 +225,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private void handleSimpleString(int start, int eol) {
-    int length = eol - buffer.offset() + 1;
+    int length = eol - buffer.getOffset() + 1;
+    lengthNeeded = 1; // "+"
     handleResponse(new Counter(1, length), false);
   }
 
@@ -333,7 +337,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
           if (stack.empty()) {
             // if (m.type() != ResponseType.ATTRIBUTE) {
             //   // handle the multi to the listener
-            final int offset = buffer.offset();
+            final int offset = buffer.getOffset();
             buffer.reset(0);
             handler.handle(buffer.readBytes(offset + counter.length()));
             buffer.reset(offset);
@@ -356,10 +360,12 @@ public final class RESPBufferParser implements Handler<Buffer> {
         // there's nothing on the stack
         // so we can handle the response directly
         // to the listener
-        final int offset = buffer.offset();
-        buffer.reset(0);
-        handler.handle(buffer.readBytes(offset + counter.length()));
+        final int mark = buffer.getMark();
+        final int offset = buffer.getOffset();
+        buffer.reset(mark - lengthNeeded);
+        handler.handle(buffer.readBytes(lengthNeeded + counter.length()));
         buffer.reset(-1);
+        lengthNeeded = 0;
       }
     }
   }

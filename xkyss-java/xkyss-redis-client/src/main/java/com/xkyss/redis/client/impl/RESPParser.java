@@ -62,7 +62,7 @@ public final class RESPParser implements Handler<Buffer> {
         final byte type = buffer.readByte();
 
         // locate the eol and handle as a C string
-        final int start = buffer.offset();
+        final int start = buffer.getOffset();
         final int eol = buffer.findLineEnd();
 
         // not found at all
