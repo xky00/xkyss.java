@@ -1,5 +1,6 @@
 package com.xkyss.redis.client.impl;
 
+import com.xkyss.redis.client.Response;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Assertions;
@@ -364,6 +365,31 @@ public class BufferParserTest {
             public void handle(Buffer buffer) {
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
+                testContext.completeNow();
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer(s));
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void testParseArray2() throws InterruptedException {
+        VertxTestContext testContext = new VertxTestContext();
+        String s = "*2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n";
+
+        final RESPParser parser = new RESPParser(new ParserHandler() {
+            @Override
+            public void handle(Response buffer) {
+                logger.info(buffer.toString());
+                // Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
+                testContext.completeNow();
             }
 
             @Override

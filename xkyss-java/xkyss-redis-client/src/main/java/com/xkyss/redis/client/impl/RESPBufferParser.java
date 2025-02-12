@@ -128,7 +128,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
         } else {
           // fixed length parsing && read the required bytes
           //handleResponse(BulkType.create(buffer.readBytes(bytesNeeded), verbatim), false);
-          handleResponse(bytesNeeded + 2, false);
+          handleResponse(new Counter(bytesNeeded + 2), false);
           // clear the verbatim
           verbatim = false;
         }
@@ -171,7 +171,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
     if (integer < 0) {
       if (integer == -1L) {
         // this is a NULL array
-        handleResponse(0, false);
+        handleResponse(new Counter(0), false);
         return -1;
       }
       // other negative values are not valid
@@ -251,7 +251,9 @@ public final class RESPBufferParser implements Handler<Buffer> {
       if (len == 0L) {
         handleResponse(type == '%' ? MultiType.EMPTY_MAP : MultiType.EMPTY_MULTI, false);
       } else {
-        handleResponse(MultiType.create(len, type == '%'), true);
+        boolean asMap = type == '%';
+        Counter counter = new Counter(asMap ? (int) (len * 2) : (int) len);
+        handleResponse(counter, true);
       }
     }
   }
@@ -306,18 +308,18 @@ public final class RESPBufferParser implements Handler<Buffer> {
     }
   }
 
-  private void handleResponse(int length, boolean push) {
-    final Multi multi = stack.peek();
+  private void handleResponse(Counter counter, boolean push) {
+    final Counter multi = stack.peek();
     // verify if there are multi's on the stack
     if (multi != null) {
       // add the parsed response to the multi
-      // multi.add(response);
+      multi.add(counter);
       // push the given response to the stack
       if (push) {
-        // stack.push(response);
+        stack.push(counter);
       } else {
         // break the chain and verify end condition
-        Multi m = multi;
+        Counter m = multi;
         // clean up complete messages
         while (m.complete()) {
           stack.pop();
@@ -325,10 +327,13 @@ public final class RESPBufferParser implements Handler<Buffer> {
           // in case of chaining we need to take into account
           // if the stack is empty or not
           if (stack.empty()) {
-            if (m.type() != ResponseType.ATTRIBUTE) {
-              // handle the multi to the listener
-              handler.handle(null);
-            }
+            // if (m.type() != ResponseType.ATTRIBUTE) {
+            //   // handle the multi to the listener
+            final int offset = buffer.offset();
+            buffer.reset(0);
+            handler.handle(buffer.readBytes(offset + counter.size()));
+            buffer.reset(offset);
+            // }
             return;
           }
           // peek into the next entry
@@ -342,16 +347,49 @@ public final class RESPBufferParser implements Handler<Buffer> {
       }
     } else {
       if (push) {
-        // stack.push(response);
+        stack.push(counter);
       } else {
         // there's nothing on the stack
         // so we can handle the response directly
         // to the listener
         final int offset = buffer.offset();
         buffer.reset(0);
-        handler.handle(buffer.readBytes(offset + length));
+        handler.handle(buffer.readBytes(offset + counter.size()));
         buffer.reset(-1);
       }
+    }
+  }
+
+  static class Counter {
+    // 记录总大小
+    private final int size;
+    // 记录当前大小
+    int count;
+    // 记录长度
+    int length;
+
+    Counter(int size) {
+      this.size = size;
+    }
+
+    int size() {
+      return this.size;
+    }
+
+    int count() {
+      return this.count;
+    }
+
+    int length() {
+      return this.length;
+    }
+
+    boolean complete() {
+      return count == size;
+    }
+
+    void add(Counter c) {
+      this.count ++;
     }
   }
 }
