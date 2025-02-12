@@ -1,6 +1,5 @@
 package com.xkyss.redis.client.impl;
 
-import com.xkyss.redis.client.Response;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.junit5.VertxTestContext;
 import org.junit.jupiter.api.Assertions;
@@ -223,6 +222,31 @@ public class BufferParserTest {
 
         parser.handle(Buffer.buffer("=15\r\n"));
         parser.handle(Buffer.buffer("txt:Some string\r\n"));
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void testParseBulkErrors() throws InterruptedException {
+
+        VertxTestContext testContext = new VertxTestContext();
+
+        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+            @Override
+            public void handle(Buffer buffer) {
+                logger.info(buffer.toString());
+                Assertions.assertArrayEquals("!21\r\nSYNTAX invalid syntax\r\n".getBytes(), buffer.getBytes());
+                testContext.completeNow();
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer("!21\r\n"));
+        parser.handle(Buffer.buffer("SYNTAX invalid syntax\r\n"));
 
         Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
     }

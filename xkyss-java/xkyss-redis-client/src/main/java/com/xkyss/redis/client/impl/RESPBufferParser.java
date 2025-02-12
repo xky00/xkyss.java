@@ -82,10 +82,10 @@ public final class RESPBufferParser implements Handler<Buffer> {
             handleSimpleString(start, eol);
             break;
           case '-': // Simple Errors
-            handleSimpleErrors(eol);
+            handleSimpleError(eol);
             break;
           case '!':
-            handleError(eol);
+            handleBulkError(eol);
             break;
           case ':': // Integers
           case ',': // Doubles
@@ -144,14 +144,18 @@ public final class RESPBufferParser implements Handler<Buffer> {
     }
   }
 
-  private void handleSimpleErrors(int eol) {
+  private void handleBytes(int len) {
     buffer.reset();
-    handler.handle(buffer.readBytes(1+eol));
+    handler.handle(buffer.readBytes(len));
+    buffer.mark();
+  }
+
+  private void handleSimpleError(int eol) {
+    handleBytes(eol + 1);
   }
 
   private void handleNumber(byte type, int eol) {
-    buffer.reset();
-    handler.handle(buffer.readBytes(1+eol));
+    handleBytes(eol + 1);
   }
 
   private long handleLength(int eol) {
@@ -207,9 +211,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
     switch (value) {
       case 't':
       case 'f':
-        buffer.reset();
-        handler.handle(buffer.readBytes(1+eol));
-        buffer.mark();
+        handleBytes(eol + 1);
         break;
       default:
         handler.fail(ErrorType.create("Invalid boolean value: " + ((char) value)));
@@ -217,12 +219,11 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private void handleSimpleString(int start, int eol) {
-    buffer.reset();
-    handler.handle(buffer.readBytes(start+eol));
+    handleBytes(eol + start);
   }
 
-  private void handleError(int eol) {
-    handleResponse(ErrorType.create(buffer.readLine(eol)), false);
+  private void handleBulkError(int eol) {
+    handleBulk(eol, false);
   }
 
   private void handleBulk(int eol, boolean verbatim) {
@@ -256,8 +257,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private void handleNull(int eol) {
-    buffer.reset();
-    handler.handle(buffer.readBytes(1+eol));
+    handleBytes(eol + 1);
   }
 
   private void handleResponse(Response response, boolean push) {
