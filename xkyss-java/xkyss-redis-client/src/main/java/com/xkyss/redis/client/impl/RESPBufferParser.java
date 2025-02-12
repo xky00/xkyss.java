@@ -92,27 +92,27 @@ public final class RESPBufferParser implements Handler<Buffer> {
           case '(': // Big numbers
             handleNumber(type, eol);
             break;
-          case '=':
+          case '=': // Verbatim strings
             handleBulk(eol, true);
             break;
-          case '$':
+          case '$': // Bulk strings
             handleBulk(eol, false);
             break;
-          case '*':
-          case '%':
-          case '~':
+          case '*': // Arrays
+          case '%': // Maps
+          case '~': // Sets
             handleMulti(type, eol);
             break;
-          case '_':
+          case '_': // Nulls
             handleNull(eol);
             break;
-          case '#':
+          case '#': // Booleans
             handleBoolean(eol);
             break;
-          case '|':
+          case '|': // Attributes
             handleAttribute(eol);
             break;
-          case '>':
+          case '>': // Pushes
             handlePush(eol);
             break;
           default:
@@ -189,7 +189,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
         // push always have 1 entry
         handler.fail(ErrorType.create("ILLEGAL_STATE Redis Push must have at least 1 element"));
       } else {
-        handleResponse(PushType.create(len), true);
+        handleResponse(new Counter((int) len), true);
       }
     }
   }
@@ -365,8 +365,6 @@ public final class RESPBufferParser implements Handler<Buffer> {
     private final int size;
     // 记录当前大小
     int count;
-    // 记录长度
-    int length;
 
     Counter(int size) {
       this.size = size;
@@ -378,10 +376,6 @@ public final class RESPBufferParser implements Handler<Buffer> {
 
     int count() {
       return this.count;
-    }
-
-    int length() {
-      return this.length;
     }
 
     boolean complete() {

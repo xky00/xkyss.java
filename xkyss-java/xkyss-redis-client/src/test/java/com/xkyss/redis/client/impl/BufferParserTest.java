@@ -402,4 +402,53 @@ public class BufferParserTest {
 
         Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
     }
+
+    @Test
+    public void testParseSet() throws InterruptedException {
+        VertxTestContext testContext = new VertxTestContext();
+        String s = "~2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n";
+
+        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+            @Override
+            public void handle(Buffer buffer) {
+                logger.info(buffer.toString());
+                Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
+                testContext.completeNow();
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer(s));
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void testParsePush() throws InterruptedException {
+        VertxTestContext testContext = new VertxTestContext();
+        String s = ">2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n";
+
+        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+            @Override
+            public void handle(Buffer buffer) {
+                logger.info(buffer.toString());
+                Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
+                testContext.completeNow();
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer(s));
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
+
 }
