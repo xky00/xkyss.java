@@ -128,7 +128,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
         } else {
           // fixed length parsing && read the required bytes
           //handleResponse(BulkType.create(buffer.readBytes(bytesNeeded), verbatim), false);
-          handleResponse(new Counter(bytesNeeded + 2), false);
+          handleResponse(new Counter(1, bytesNeeded + 2), false);
           // clear the verbatim
           verbatim = false;
         }
@@ -201,7 +201,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
         // push always have 1 entry
         handler.fail(ErrorType.create("ILLEGAL_STATE Redis Push must have at least 1 element"));
       } else {
-        handleResponse(AttributeType.create(len), true);
+        handleResponse(new Counter((int) len * 2), true);
+        // handleResponse(AttributeType.create(len), true);
       }
     }
   }
@@ -219,7 +220,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private void handleSimpleString(int start, int eol) {
-    handleBytes(eol + start);
+    // handleBytes(eol + start);
+    handleResponse(new Counter(1, eol), false);
   }
 
   private void handleBulkError(int eol) {
@@ -252,7 +254,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
         handleResponse(type == '%' ? MultiType.EMPTY_MAP : MultiType.EMPTY_MULTI, false);
       } else {
         boolean asMap = type == '%';
-        Counter counter = new Counter(asMap ? (int) (len * 2) : (int) len);
+        Counter counter = new Counter(asMap ? (int) (len * 2) : (int) len, eol + 1);
         handleResponse(counter, true);
       }
     }
@@ -331,7 +333,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
             //   // handle the multi to the listener
             final int offset = buffer.offset();
             buffer.reset(0);
-            handler.handle(buffer.readBytes(offset + counter.size()));
+            handler.handle(buffer.readBytes(offset + counter.length()));
             buffer.reset(offset);
             // }
             return;
@@ -354,7 +356,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
         // to the listener
         final int offset = buffer.offset();
         buffer.reset(0);
-        handler.handle(buffer.readBytes(offset + counter.size()));
+        handler.handle(buffer.readBytes(offset + counter.length()));
         buffer.reset(-1);
       }
     }
@@ -364,10 +366,17 @@ public final class RESPBufferParser implements Handler<Buffer> {
     // 记录总大小
     private final int size;
     // 记录当前大小
-    int count;
+    int count = 0;
+    // 记录长度
+    int length = 0;
 
     Counter(int size) {
       this.size = size;
+    }
+
+    Counter(int size, int length) {
+      this.size = size;
+      this.length = length;
     }
 
     int size() {
@@ -378,12 +387,17 @@ public final class RESPBufferParser implements Handler<Buffer> {
       return this.count;
     }
 
+    int length() {
+      return this.length;
+    }
+
     boolean complete() {
       return count == size;
     }
 
     void add(Counter c) {
-      this.count ++;
+      this.count++;
+      this.length += c.length;
     }
   }
 }
