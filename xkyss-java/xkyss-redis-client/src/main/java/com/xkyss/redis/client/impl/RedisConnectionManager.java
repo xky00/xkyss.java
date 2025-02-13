@@ -17,6 +17,7 @@ package com.xkyss.redis.client.impl;
 
 import com.xkyss.redis.client.*;
 import io.vertx.core.*;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.impl.ContextInternal;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.logging.Logger;
@@ -207,8 +208,11 @@ class RedisConnectionManager {
       connection.exceptionHandler(DEFAULT_EXCEPTION_HANDLER);
 
       // parser utility
+      Handler<Buffer> parser = options.getDecodeWithBuffer()
+          ? new RESPBufferParser(connection, options.getMaxNestedArrays())
+          : new RESPParser(connection, options.getMaxNestedArrays());
       netSocket
-        .handler(new RESPParser(connection, options.getMaxNestedArrays()))
+        .handler(parser)
         .closeHandler(connection::end)
         .exceptionHandler(connection::fail);
 

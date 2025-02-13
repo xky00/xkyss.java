@@ -32,6 +32,7 @@ public abstract class RedisConnectOptions {
   private boolean protocolNegotiation;
   private ProtocolVersion preferredProtocolVersion;
   private int maxWaitingHandlers;
+  private boolean decodeWithBuffer;
 
   public RedisConnectOptions() {
     maxNestedArrays = 32;
@@ -47,6 +48,7 @@ public abstract class RedisConnectOptions {
     setProtocolNegotiation(options.isProtocolNegotiation());
     setPreferredProtocolVersion(options.getPreferredProtocolVersion());
     setMaxWaitingHandlers(options.getMaxWaitingHandlers());
+    setDecodeWithBuffer(false);
   }
 
   public RedisConnectOptions(RedisConnectOptions other) {
@@ -57,6 +59,7 @@ public abstract class RedisConnectOptions {
     setProtocolNegotiation(other.isProtocolNegotiation());
     setPreferredProtocolVersion(other.getPreferredProtocolVersion());
     setMaxWaitingHandlers(other.getMaxWaitingHandlers());
+    setDecodeWithBuffer(other.getDecodeWithBuffer());
   }
 
   public RedisConnectOptions(JsonObject json) {
@@ -150,6 +153,27 @@ public abstract class RedisConnectOptions {
    */
   public RedisConnectOptions setPassword(String password) {
     this.password = password;
+    return this;
+  }
+
+  /**
+   * Get the default decodeWithBuffer for cluster/sentinel connections, if not set it will try to
+   * extract it from the current default endpoint.
+   *
+   * @return decodeWithBuffer
+   */
+  public boolean getDecodeWithBuffer() {
+    return decodeWithBuffer;
+  }
+
+  /**
+   * Set the default decodeWithBuffer for cluster/sentinel connections.
+   *
+   * @param decodeWithBuffer the default decodeWithBuffer
+   * @return fluent self
+   */
+  public RedisConnectOptions setDecodeWithBuffer(boolean decodeWithBuffer) {
+    this.decodeWithBuffer = decodeWithBuffer;
     return this;
   }
 
