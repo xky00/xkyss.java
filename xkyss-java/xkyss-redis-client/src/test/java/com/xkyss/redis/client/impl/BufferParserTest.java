@@ -481,12 +481,13 @@ public class BufferParserTest {
     @Test
     public void testParseAttribute() throws InterruptedException {
         VertxTestContext testContext = new VertxTestContext();
+        final String s = "|1\r\n+key-popularity\r\n%2\r\n$1\r\na\r\n,0.1923\r\n$1\r\nb\r\n,0.0012\r\n";
 
         final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
             @Override
             public void handle(Buffer buffer) {
                 logger.info(buffer.toString());
-                // Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
+                Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
                 testContext.completeNow();
             }
 
@@ -496,15 +497,16 @@ public class BufferParserTest {
             }
         }, 16);
 
-        parser.handle(Buffer.buffer("|1\r\n"));
-        parser.handle(Buffer.buffer("+key-popularity\r\n"));
-        parser.handle(Buffer.buffer("%2\r\n"));
-        parser.handle(Buffer.buffer("$1\r\n"));
-        parser.handle(Buffer.buffer("a\r\n"));
-        parser.handle(Buffer.buffer(",0.1923\r\n"));
-        parser.handle(Buffer.buffer("$1\r\n"));
-        parser.handle(Buffer.buffer("b\r\n"));
-        parser.handle(Buffer.buffer(",0.0012\r\n"));
+        parser.handle(Buffer.buffer(s));
+        // parser.handle(Buffer.buffer("|1\r\n"));
+        // parser.handle(Buffer.buffer("+key-popularity\r\n"));
+        // parser.handle(Buffer.buffer("%2\r\n"));
+        // parser.handle(Buffer.buffer("$1\r\n"));
+        // parser.handle(Buffer.buffer("a\r\n"));
+        // parser.handle(Buffer.buffer(",0.1923\r\n"));
+        // parser.handle(Buffer.buffer("$1\r\n"));
+        // parser.handle(Buffer.buffer("b\r\n"));
+        // parser.handle(Buffer.buffer(",0.0012\r\n"));
 
         Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
     }

@@ -22,7 +22,6 @@ import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 
 final class ReadableBuffer {
-
   enum NumericType {
     INTEGER,
     DECIMAL,
@@ -35,14 +34,15 @@ final class ReadableBuffer {
 
   private Buffer buffer;
   private int offset;
-
   private int mark;
+  private int start;
 
   void append(Buffer chunk) {
     // either the buffer is null or all read
     if (buffer == null || Math.min(mark, offset) == buffer.length()) {
       buffer = chunk;
       offset = 0;
+      start = 0;
       return;
     }
 
@@ -192,6 +192,18 @@ final class ReadableBuffer {
 
   int getMark() {
     return mark;
+  }
+
+  void setMark(int mark) {
+    this.mark = mark;
+  }
+
+  int getStart() {
+    return this.start;
+  }
+
+  void setStart(int start) {
+    this.start = start;
   }
 
   void skip(int n) {

@@ -125,11 +125,14 @@ public final class RESPBufferParser implements Handler<Buffer> {
         // empty string
         if (bytesNeeded == 0) {
           // special case as we don't need to allocate objects for this
-          handleResponse(BulkType.EMPTY, false);
+          // handleResponse(BulkType.EMPTY, false);
         } else {
           // fixed length parsing && read the required bytes
           //handleResponse(BulkType.create(buffer.readBytes(bytesNeeded), verbatim), false);
-          handleResponse(new Counter(1, bytesNeeded + 2), false);
+          buffer.readBytes(bytesNeeded);
+          buffer.skip(2); // \r\n
+          handleResponse(null, false);
+          buffer.skip(-2); // \r\n
           // clear the verbatim
           verbatim = false;
         }
@@ -145,19 +148,29 @@ public final class RESPBufferParser implements Handler<Buffer> {
     }
   }
 
-  private void handleBytes(int eol) {
-    int length = eol - buffer.getOffset() + 1;
-    handleResponse(new Counter(1, length), false);
-  }
-
   private void handleSimpleError(int eol) {
-    int length = eol - buffer.getOffset() + 1;
-    handleResponse(new Counter(1, length), false);
+    buffer.readLine(eol);
+    handleResponse(null, false);
   }
 
   private void handleNumber(byte type, int eol) {
-    int length = eol - buffer.getOffset() + 1;
-    handleResponse(new Counter(1, length), false);
+    switch (type) {
+      case ':':
+        buffer.readNumber(eol, ReadableBuffer.NumericType.INTEGER);
+        handleResponse(null, false);
+        break;
+      case ',':
+        buffer.readNumber(eol, ReadableBuffer.NumericType.DECIMAL);
+        handleResponse(null, false);
+        break;
+      case '(':
+        buffer.readNumber(eol, ReadableBuffer.NumericType.BIGINTEGER);
+        handleResponse(null, false);
+        break;
+      default:
+        handler.fail(new NumberFormatException("Invalid REDIS format: [" + (char) type + "]"));
+        break;
+    }
   }
 
   private long handleLength(int eol) {
@@ -175,8 +188,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
     if (integer < 0) {
       if (integer == -1L) {
         // this is a NULL array
-        buffer.reset();
-        handleResponse(new Counter(1, 5), false);
+        handleResponse(null, false);
         return -1;
       }
       // other negative values are not valid
@@ -217,7 +229,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
     switch (value) {
       case 't':
       case 'f':
-        handleBytes(eol);
+        buffer.skipEOL();
+        handleResponse(null, false);
         break;
       default:
         handler.fail(ErrorType.create("Invalid boolean value: " + ((char) value)));
@@ -225,9 +238,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private void handleSimpleString(int start, int eol) {
-    int length = eol - buffer.getOffset() + 1;
-    lengthNeeded = 1; // "+"
-    handleResponse(new Counter(1, length), false);
+    buffer.readLine(eol);
+    handleResponse(null, false);
   }
 
   private void handleBulkError(int eol) {
@@ -257,63 +269,18 @@ public final class RESPBufferParser implements Handler<Buffer> {
     if (len >= 0L) {
       // empty arrays can be cached and require no further processing
       if (len == 0L) {
-        handleResponse(type == '%' ? MultiType.EMPTY_MAP : MultiType.EMPTY_MULTI, false);
+        // handleResponse(type == '%' ? MultiType.EMPTY_MAP : MultiType.EMPTY_MULTI, false);
       } else {
         boolean asMap = type == '%';
-        Counter counter = new Counter(asMap ? (int) (len * 2) : (int) len, eol + 1);
+        Counter counter = new Counter(asMap ? (int) (len * 2) : (int) len);
         handleResponse(counter, true);
       }
     }
   }
 
   private void handleNull(int eol) {
-    handleBytes(eol);
-  }
-
-  private void handleResponse(Response response, boolean push) {
-    final Multi multi = stack.peek();
-    // verify if there are multi's on the stack
-    if (multi != null) {
-      // add the parsed response to the multi
-      multi.add(response);
-      // push the given response to the stack
-      if (push) {
-        stack.push(response);
-      } else {
-        // break the chain and verify end condition
-        Multi m = multi;
-        // clean up complete messages
-        while (m.complete()) {
-          stack.pop();
-
-          // in case of chaining we need to take into account
-          // if the stack is empty or not
-          if (stack.empty()) {
-            if (m.type() != ResponseType.ATTRIBUTE) {
-              // handle the multi to the listener
-              handler.handle(null);
-            }
-            return;
-          }
-          // peek into the next entry
-          m = stack.peek();
-
-          if (m == null) {
-            handler.fail(ErrorType.create("ILLEGAL_STATE Multi can't be null"));
-            return;
-          }
-        }
-      }
-    } else {
-      if (push) {
-        stack.push(response);
-      } else {
-        // there's nothing on the stack
-        // so we can handle the response directly
-        // to the listener
-        handler.handle(null);
-      }
-    }
+    buffer.skipEOL();
+    handleResponse(null, false);
   }
 
   private void handleResponse(Counter counter, boolean push) {
@@ -337,10 +304,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
           if (stack.empty()) {
             // if (m.type() != ResponseType.ATTRIBUTE) {
             //   // handle the multi to the listener
-            final int offset = buffer.getOffset();
-            buffer.reset(0);
-            handler.handle(buffer.readBytes(offset + counter.length()));
-            buffer.reset(offset);
+            handleCallback();
             // }
             return;
           }
@@ -360,14 +324,19 @@ public final class RESPBufferParser implements Handler<Buffer> {
         // there's nothing on the stack
         // so we can handle the response directly
         // to the listener
-        final int mark = buffer.getMark();
-        final int offset = buffer.getOffset();
-        buffer.reset(mark - lengthNeeded);
-        handler.handle(buffer.readBytes(lengthNeeded + counter.length()));
-        buffer.reset(-1);
-        lengthNeeded = 0;
+        handleCallback();
       }
     }
+  }
+
+  private void handleCallback() {
+    int offset = buffer.getOffset();
+    int start = buffer.getStart();
+    int mark = buffer.getMark();
+    buffer.reset(start);
+    handler.handle(buffer.readBytes(offset-start));
+    buffer.setStart(offset);
+    buffer.setMark(mark);
   }
 
   static class Counter {
@@ -375,16 +344,9 @@ public final class RESPBufferParser implements Handler<Buffer> {
     private final int size;
     // 记录当前大小
     int count = 0;
-    // 记录长度
-    int length = 0;
 
     Counter(int size) {
       this.size = size;
-    }
-
-    Counter(int size, int length) {
-      this.size = size;
-      this.length = length;
     }
 
     int size() {
@@ -395,17 +357,12 @@ public final class RESPBufferParser implements Handler<Buffer> {
       return this.count;
     }
 
-    int length() {
-      return this.length;
-    }
-
     boolean complete() {
       return count == size;
     }
 
     void add(Counter c) {
       this.count++;
-      this.length += c.length;
     }
   }
 }
