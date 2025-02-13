@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.xkyss</groupId>
         <artifactId>xkyss</artifactId>
-        <version>1.24.1</version>
+        <version>1.25.1</version>
     </parent>
 
     <properties>
@@ -51,6 +51,16 @@
             <dependency>
                 <groupId>com.xkyss</groupId>
                 <artifactId>xkyss-mocky</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xkyss</groupId>
+                <artifactId>xkyss-jsql</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xkyss</groupId>
+                <artifactId>xkyss-redis-client</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
