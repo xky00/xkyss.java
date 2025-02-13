@@ -266,7 +266,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
     if (len >= 0L) {
       // empty arrays can be cached and require no further processing
       if (len == 0L) {
-        // handleResponse(type == '%' ? MultiType.EMPTY_MAP : MultiType.EMPTY_MULTI, false);
+        handleResponse(Tagged.MULTI, false);
       } else {
         boolean asMap = type == '%';
         Counter counter = new Counter(asMap ? (int) (len * 2) : (int) len, ResponseType.MULTI);

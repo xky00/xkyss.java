@@ -57,6 +57,7 @@ public class RedisOptions {
   private long hashSlotCacheTTL;
   private TracingPolicy tracingPolicy;
   private boolean autoFailover;
+  private boolean decodeWithBuffer;
 
   /**
    * Creates a default configuration object using redis server defaults
@@ -76,6 +77,7 @@ public class RedisOptions {
     useReplicas = RedisReplicas.NEVER;
     protocolNegotiation = true;
     hashSlotCacheTTL = 1000;
+    decodeWithBuffer = false;
   }
 
   /**
@@ -101,6 +103,7 @@ public class RedisOptions {
     this.hashSlotCacheTTL = other.hashSlotCacheTTL;
     this.tracingPolicy = other.tracingPolicy;
     this.autoFailover = other.autoFailover;
+    this.decodeWithBuffer = other.decodeWithBuffer;
   }
 
   /**
@@ -771,6 +774,15 @@ public class RedisOptions {
    */
   public RedisOptions setAutoFailover(boolean autoFailover) {
     this.autoFailover = autoFailover;
+    return this;
+  }
+
+  public boolean getDecodeWithBuffer() {
+    return decodeWithBuffer;
+  }
+
+  public RedisOptions setDecodeWithBuffer(boolean decodeWithBuffer) {
+    this.decodeWithBuffer = decodeWithBuffer;
     return this;
   }
 

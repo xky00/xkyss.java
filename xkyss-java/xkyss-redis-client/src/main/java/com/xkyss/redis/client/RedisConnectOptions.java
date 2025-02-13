@@ -48,7 +48,7 @@ public abstract class RedisConnectOptions {
     setProtocolNegotiation(options.isProtocolNegotiation());
     setPreferredProtocolVersion(options.getPreferredProtocolVersion());
     setMaxWaitingHandlers(options.getMaxWaitingHandlers());
-    setDecodeWithBuffer(false);
+    setDecodeWithBuffer(options.getDecodeWithBuffer());
   }
 
   public RedisConnectOptions(RedisConnectOptions other) {

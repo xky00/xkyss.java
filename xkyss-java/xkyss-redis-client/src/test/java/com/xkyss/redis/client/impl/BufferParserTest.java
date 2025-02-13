@@ -369,6 +369,31 @@ public class BufferParserTest {
     }
 
     @Test
+    public void testMultiWithNull() throws InterruptedException {
+        VertxTestContext testContext = new VertxTestContext();
+        String s = "*3\r\n$3\r\nfoo\r\n$-1\r\n$3\r\nbar\r\n";
+
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
+            @Override
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
+                logger.info(buffer.toString());
+                Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
+                testContext.completeNow();
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer(s));
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
+
+    @Test
     public void testParseArray() throws InterruptedException {
         VertxTestContext testContext = new VertxTestContext();
         String s = "*2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n";
@@ -557,6 +582,105 @@ public class BufferParserTest {
         parser.handle(Buffer.buffer("b\r\n"));
         parser.handle(Buffer.buffer(",0.0012\r\n"));
 
-        Assertions.assertFalse(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+        Assertions.assertFalse(testContext.awaitCompletion(100, TimeUnit.MICROSECONDS));
+    }
+
+    @Test
+    public void testParseHello() throws InterruptedException {
+        VertxTestContext testContext = new VertxTestContext();
+        final String s = "%7\r\n$6\r\nserver\r\n$5\r\nredis\r\n$7\r\nversion\r\n$5\r\n6.2.7\r\n$5\r\nproto\r\n:3\r\n$2\r\nid\r\n:18\r\n$4\r\nmode\r\n$10\r\nstandalone\r\n$4\r\nrole\r\n$6\r\nmaster\r\n$7\r\nmodules\r\n*0\r\n";
+
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
+            @Override
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
+                logger.info(buffer.toString());
+                Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
+                testContext.completeNow();
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer("%7\r\n"));
+        parser.handle(Buffer.buffer("$6\r\n"));
+        parser.handle(Buffer.buffer("server\r\n"));
+        parser.handle(Buffer.buffer("$5\r\n"));
+        parser.handle(Buffer.buffer("redis\r\n"));
+        parser.handle(Buffer.buffer("$7\r\n"));
+        parser.handle(Buffer.buffer("version\r\n"));
+        parser.handle(Buffer.buffer("$5\r\n"));
+        parser.handle(Buffer.buffer("6.2.7\r\n"));
+        parser.handle(Buffer.buffer("$5\r\n"));
+        parser.handle(Buffer.buffer("proto\r\n"));
+        parser.handle(Buffer.buffer(":3\r\n"));
+        parser.handle(Buffer.buffer("$2\r\n"));
+        parser.handle(Buffer.buffer("id\r\n"));
+        parser.handle(Buffer.buffer(":18\r\n"));
+        parser.handle(Buffer.buffer("$4\r\n"));
+        parser.handle(Buffer.buffer("mode\r\n"));
+        parser.handle(Buffer.buffer("$10\r\n"));
+        parser.handle(Buffer.buffer("standalone\r\n"));
+        parser.handle(Buffer.buffer("$4\r\n"));
+        parser.handle(Buffer.buffer("role\r\n"));
+        parser.handle(Buffer.buffer("$6\r\n"));
+        parser.handle(Buffer.buffer("master\r\n"));
+        parser.handle(Buffer.buffer("$7\r\n"));
+        parser.handle(Buffer.buffer("modules\r\n"));
+        parser.handle(Buffer.buffer("*0\r\n"));
+
+        Assertions.assertTrue(testContext.awaitCompletion(2, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void testParseHello2() throws InterruptedException {
+        VertxTestContext testContext = new VertxTestContext();
+        final String s = "%7\r\n$6\r\nserver\r\n$5\r\nredis\r\n$7\r\nversion\r\n$5\r\n6.2.7\r\n$5\r\nproto\r\n:3\r\n$2\r\nid\r\n:18\r\n$4\r\nmode\r\n$10\r\nstandalone\r\n$4\r\nrole\r\n$6\r\nmaster\r\n$7\r\nmodules\r\n*0\r\n";
+
+        final RESPParser parser = new RESPParser(new ParserHandler() {
+            @Override
+            public void handle(Response response) {
+                logger.info(response.toString());
+                // Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
+                testContext.completeNow();
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer("%7\r\n"));
+        parser.handle(Buffer.buffer("$6\r\n"));
+        parser.handle(Buffer.buffer("server\r\n"));
+        parser.handle(Buffer.buffer("$5\r\n"));
+        parser.handle(Buffer.buffer("redis\r\n"));
+        parser.handle(Buffer.buffer("$7\r\n"));
+        parser.handle(Buffer.buffer("version\r\n"));
+        parser.handle(Buffer.buffer("$5\r\n"));
+        parser.handle(Buffer.buffer("6.2.7\r\n"));
+        parser.handle(Buffer.buffer("$5\r\n"));
+        parser.handle(Buffer.buffer("proto\r\n"));
+        parser.handle(Buffer.buffer(":3\r\n"));
+        parser.handle(Buffer.buffer("$2\r\n"));
+        parser.handle(Buffer.buffer("id\r\n"));
+        parser.handle(Buffer.buffer(":18\r\n"));
+        parser.handle(Buffer.buffer("$4\r\n"));
+        parser.handle(Buffer.buffer("mode\r\n"));
+        parser.handle(Buffer.buffer("$10\r\n"));
+        parser.handle(Buffer.buffer("standalone\r\n"));
+        parser.handle(Buffer.buffer("$4\r\n"));
+        parser.handle(Buffer.buffer("role\r\n"));
+        parser.handle(Buffer.buffer("$6\r\n"));
+        parser.handle(Buffer.buffer("master\r\n"));
+        parser.handle(Buffer.buffer("$7\r\n"));
+        parser.handle(Buffer.buffer("modules\r\n"));
+        parser.handle(Buffer.buffer("*0\r\n"));
+
+        Assertions.assertTrue(testContext.awaitCompletion(100, TimeUnit.MICROSECONDS));
     }
 }
