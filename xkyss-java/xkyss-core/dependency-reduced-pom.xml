@@ -3,7 +3,7 @@
   <parent>
     <artifactId>xkyss</artifactId>
     <groupId>com.xkyss</groupId>
-    <version>1.24.1</version>
+    <version>1.25.1</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>xkyss-core</artifactId>
@@ -112,6 +112,30 @@
       <version>5.9.0</version>
       <scope>test</scope>
       <exclusions>
+        <exclusion>
+          <artifactId>junit-jupiter-api</artifactId>
+          <groupId>org.junit.jupiter</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>junit-jupiter-params</artifactId>
+          <groupId>org.junit.jupiter</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>junit-jupiter-engine</artifactId>
+          <groupId>org.junit.jupiter</groupId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-junit5</artifactId>
+      <version>4.5.12</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <artifactId>vertx-core</artifactId>
+          <groupId>io.vertx</groupId>
+        </exclusion>
         <exclusion>
           <artifactId>junit-jupiter-api</artifactId>
           <groupId>org.junit.jupiter</groupId>

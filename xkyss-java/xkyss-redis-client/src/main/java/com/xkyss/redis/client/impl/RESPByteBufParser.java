@@ -17,11 +17,15 @@ package com.xkyss.redis.client.impl;
 
 import com.xkyss.redis.client.Response;
 import com.xkyss.redis.client.ResponseType;
-import com.xkyss.redis.client.impl.types.*;
+import com.xkyss.redis.client.impl.types.ErrorType;
+import com.xkyss.redis.client.impl.types.Multi;
+import com.xkyss.redis.client.impl.types.Tagged;
+import com.xkyss.redis.client.impl.types.Wrapper;
+import io.netty.buffer.ByteBuf;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 
-public final class RESPBufferParser implements Handler<Buffer> {
+public final class RESPByteBufParser implements Handler<ParserHandler> {
 
   public static final String VERSION = "3";
 
@@ -29,7 +33,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
   private static final long MAX_STRING_LENGTH = 536870912;
 
   // the callback when a full response message has been decoded
-  private final ParserHandler handler;
+  private ParserHandler handler;
   // a composite buffer to allow buffer concatenation as if it was
   // a long stream
   private final ReadableBuffer buffer = new ReadableBuffer();
@@ -37,8 +41,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
   // nesting while parsing
   private final ArrayStack stack;
 
-  public RESPBufferParser(ParserHandler handler, int maxStack) {
-    this.handler = handler;
+  public RESPByteBufParser(ByteBuf buf, int maxStack) {
+    this.buffer.append(Buffer.buffer(buf));
     this.stack = new ArrayStack(maxStack);
   }
 
@@ -48,9 +52,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
   private boolean verbatim = false;
 
   @Override
-  public void handle(Buffer chunk) {
-    // add the chunk to the buffer
-    buffer.append(chunk);
+  public void handle(ParserHandler handler) {
+    this.handler = handler;
 
     while (buffer.readableBytes() >= (eol ? 3 : bytesNeeded != -1 ? bytesNeeded + 2 : 0)) {
       // setup a rollback point

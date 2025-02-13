@@ -28,4 +28,9 @@ public class Wrapper implements Response {
     public String toString() {
         return buffer.toString();
     }
+
+    @Override
+    public int size() {
+        return buffer.length();
+    }
 }
