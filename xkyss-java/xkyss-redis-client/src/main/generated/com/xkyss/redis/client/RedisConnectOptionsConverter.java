@@ -33,6 +33,11 @@ public class RedisConnectOptionsConverter {
             });
           }
           break;
+        case "decodeWithBuffer":
+          if (member.getValue() instanceof Boolean) {
+            obj.setDecodeWithBuffer((Boolean)member.getValue());
+          }
+          break;
         case "endpoint":
           break;
         case "endpoints":
@@ -79,6 +84,7 @@ public class RedisConnectOptionsConverter {
   }
 
    static void toJson(RedisConnectOptions obj, java.util.Map<String, Object> json) {
+    json.put("decodeWithBuffer", obj.getDecodeWithBuffer());
     if (obj.getEndpoint() != null) {
       json.put("endpoint", obj.getEndpoint());
     }

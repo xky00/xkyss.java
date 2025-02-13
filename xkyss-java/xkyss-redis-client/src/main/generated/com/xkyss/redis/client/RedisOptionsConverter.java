@@ -38,6 +38,11 @@ public class RedisOptionsConverter {
             });
           }
           break;
+        case "decodeWithBuffer":
+          if (member.getValue() instanceof Boolean) {
+            obj.setDecodeWithBuffer((Boolean)member.getValue());
+          }
+          break;
         case "endpoint":
           if (member.getValue() instanceof String) {
             obj.setEndpoint((String)member.getValue());
@@ -158,6 +163,7 @@ public class RedisOptionsConverter {
 
    static void toJson(RedisOptions obj, java.util.Map<String, Object> json) {
     json.put("autoFailover", obj.isAutoFailover());
+    json.put("decodeWithBuffer", obj.getDecodeWithBuffer());
     if (obj.getEndpoint() != null) {
       json.put("endpoint", obj.getEndpoint());
     }
