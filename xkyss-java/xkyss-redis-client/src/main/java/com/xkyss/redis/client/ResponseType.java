@@ -22,6 +22,7 @@ import io.vertx.codegen.annotations.VertxGen;
  */
 @VertxGen
 public enum ResponseType {
+  NULL,
   /**
    * C String simple String.
    */

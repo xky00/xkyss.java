@@ -29,7 +29,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
   private static final long MAX_STRING_LENGTH = 536870912;
 
   // the callback when a full response message has been decoded
-  private final BufferParserHandler handler;
+  private final ParserHandler handler;
   // a composite buffer to allow buffer concatenation as if it was
   // a long stream
   private final ReadableBuffer buffer = new ReadableBuffer();
@@ -37,7 +37,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
   // nesting while parsing
   private final ArrayStack stack;
 
-  RESPBufferParser(BufferParserHandler handler, int maxStack) {
+  RESPBufferParser(ParserHandler handler, int maxStack) {
     this.handler = handler;
     this.stack = new ArrayStack(maxStack);
   }
@@ -45,7 +45,6 @@ public final class RESPBufferParser implements Handler<Buffer> {
   // parser state machine state
   private boolean eol = true;
   private int bytesNeeded = 0;
-  private int lengthNeeded = 0;
   private boolean verbatim = false;
 
   @Override
@@ -125,13 +124,13 @@ public final class RESPBufferParser implements Handler<Buffer> {
         // empty string
         if (bytesNeeded == 0) {
           // special case as we don't need to allocate objects for this
-          // handleResponse(BulkType.EMPTY, false);
+          handleResponse(Tagged.BULK, false);
         } else {
           // fixed length parsing && read the required bytes
           //handleResponse(BulkType.create(buffer.readBytes(bytesNeeded), verbatim), false);
           buffer.readBytes(bytesNeeded);
           buffer.skip(2); // \r\n
-          handleResponse(null, false);
+          handleResponse(Tagged.BULK, false);
           buffer.skip(-2); // \r\n
           // clear the verbatim
           verbatim = false;
@@ -150,22 +149,22 @@ public final class RESPBufferParser implements Handler<Buffer> {
 
   private void handleSimpleError(int eol) {
     buffer.readLine(eol);
-    handleResponse(null, false);
+    handleResponse(Tagged.ERROR, false);
   }
 
   private void handleNumber(byte type, int eol) {
     switch (type) {
       case ':':
         buffer.readNumber(eol, ReadableBuffer.NumericType.INTEGER);
-        handleResponse(null, false);
+        handleResponse(Tagged.NUMBER, false);
         break;
       case ',':
         buffer.readNumber(eol, ReadableBuffer.NumericType.DECIMAL);
-        handleResponse(null, false);
+        handleResponse(Tagged.NUMBER, false);
         break;
       case '(':
         buffer.readNumber(eol, ReadableBuffer.NumericType.BIGINTEGER);
-        handleResponse(null, false);
+        handleResponse(Tagged.NUMBER, false);
         break;
       default:
         handler.fail(new NumberFormatException("Invalid REDIS format: [" + (char) type + "]"));
@@ -174,9 +173,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private long handleLength(int eol) {
-    final int offset = buffer.getOffset();
     final long integer = buffer.readLong(eol);
-    lengthNeeded = buffer.getOffset() - offset + 1;
 
     // special cases
     // redis multi cannot have more than 2GB elements
@@ -188,7 +185,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
     if (integer < 0) {
       if (integer == -1L) {
         // this is a NULL array
-        handleResponse(null, false);
+        handleResponse(Tagged.NULL, false);
         return -1;
       }
       // other negative values are not valid
@@ -206,7 +203,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
         // push always have 1 entry
         handler.fail(ErrorType.create("ILLEGAL_STATE Redis Push must have at least 1 element"));
       } else {
-        handleResponse(new Counter((int) len), true);
+        handleResponse(new Counter((int) len, ResponseType.PUSH), true);
       }
     }
   }
@@ -218,7 +215,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
         // push always have 1 entry
         handler.fail(ErrorType.create("ILLEGAL_STATE Redis Push must have at least 1 element"));
       } else {
-        handleResponse(new Counter((int) len * 2), true);
+        handleResponse(new Counter((int) len * 2, ResponseType.ATTRIBUTE), true);
         // handleResponse(AttributeType.create(len), true);
       }
     }
@@ -230,7 +227,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
       case 't':
       case 'f':
         buffer.skipEOL();
-        handleResponse(null, false);
+        handleResponse(Tagged.BOOLEAN, false);
         break;
       default:
         handler.fail(ErrorType.create("Invalid boolean value: " + ((char) value)));
@@ -239,7 +236,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
 
   private void handleSimpleString(int start, int eol) {
     buffer.readLine(eol);
-    handleResponse(null, false);
+    handleResponse(Tagged.SIMPLE, false);
   }
 
   private void handleBulkError(int eol) {
@@ -272,7 +269,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
         // handleResponse(type == '%' ? MultiType.EMPTY_MAP : MultiType.EMPTY_MULTI, false);
       } else {
         boolean asMap = type == '%';
-        Counter counter = new Counter(asMap ? (int) (len * 2) : (int) len);
+        Counter counter = new Counter(asMap ? (int) (len * 2) : (int) len, ResponseType.MULTI);
         handleResponse(counter, true);
       }
     }
@@ -280,21 +277,21 @@ public final class RESPBufferParser implements Handler<Buffer> {
 
   private void handleNull(int eol) {
     buffer.skipEOL();
-    handleResponse(null, false);
+    handleResponse(Tagged.NULL, false);
   }
 
-  private void handleResponse(Counter counter, boolean push) {
-    final Counter multi = stack.peek();
+  private void handleResponse(Response response, boolean push) {
+    final Multi multi = stack.peek();
     // verify if there are multi's on the stack
     if (multi != null) {
       // add the parsed response to the multi
-      multi.add(counter);
+      multi.add(response);
       // push the given response to the stack
       if (push) {
-        stack.push(counter);
+        stack.push(response);
       } else {
         // break the chain and verify end condition
-        Counter m = multi;
+        Multi m = multi;
         // clean up complete messages
         while (m.complete()) {
           stack.pop();
@@ -304,7 +301,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
           if (stack.empty()) {
             // if (m.type() != ResponseType.ATTRIBUTE) {
             //   // handle the multi to the listener
-            handleCallback();
+            handleCallback(response);
             // }
             return;
           }
@@ -319,50 +316,52 @@ public final class RESPBufferParser implements Handler<Buffer> {
       }
     } else {
       if (push) {
-        stack.push(counter);
+        stack.push(response);
       } else {
         // there's nothing on the stack
         // so we can handle the response directly
         // to the listener
-        handleCallback();
+        handleCallback(response);
       }
     }
   }
 
-  private void handleCallback() {
+  private void handleCallback(Response response) {
     int offset = buffer.getOffset();
     int start = buffer.getStart();
     int mark = buffer.getMark();
     buffer.reset(start);
-    handler.handle(buffer.readBytes(offset-start));
+    handler.handle(new Wrapper(response.type(), buffer.readBytes(offset-start)));
     buffer.setStart(offset);
     buffer.setMark(mark);
   }
 
-  static class Counter {
-    // 记录总大小
+  static class Counter implements Multi {
+    // 总大小
     private final int size;
-    // 记录当前大小
+    // 类型
+    private final ResponseType type;
+    // 当前大小
     int count = 0;
 
-    Counter(int size) {
+    Counter(int size, ResponseType type) {
       this.size = size;
+      this.type = type;
     }
 
-    int size() {
-      return this.size;
-    }
-
-    int count() {
-      return this.count;
-    }
-
-    boolean complete() {
-      return count == size;
-    }
-
-    void add(Counter c) {
+    @Override
+    public void add(Response reply) {
       this.count++;
+    }
+
+    @Override
+    public boolean complete() {
+      return this.count == this.size;
+    }
+
+    @Override
+    public ResponseType type() {
+      return type;
     }
   }
 }

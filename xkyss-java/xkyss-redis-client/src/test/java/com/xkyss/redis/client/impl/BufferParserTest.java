@@ -20,9 +20,10 @@ public class BufferParserTest {
 
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals("+PONG\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -44,9 +45,10 @@ public class BufferParserTest {
 
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals("+PONG\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -77,9 +79,10 @@ public class BufferParserTest {
 
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals("-ERROR\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -101,9 +104,10 @@ public class BufferParserTest {
 
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals("-ERROR\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -135,9 +139,10 @@ public class BufferParserTest {
 
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals(":1000\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -159,9 +164,10 @@ public class BufferParserTest {
 
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals(",1000.123\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -183,9 +189,10 @@ public class BufferParserTest {
 
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals("(3492890328409238509324850943850943825024385\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -207,9 +214,10 @@ public class BufferParserTest {
 
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals("=15\r\ntxt:Some string\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -232,9 +240,10 @@ public class BufferParserTest {
 
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals("!21\r\nSYNTAX invalid syntax\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -257,9 +266,10 @@ public class BufferParserTest {
 
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals("$6\r\nfoobar\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -281,9 +291,10 @@ public class BufferParserTest {
     public void testParseNullBulk() throws InterruptedException {
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals("$-1\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -305,9 +316,10 @@ public class BufferParserTest {
 
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals("_\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -329,9 +341,10 @@ public class BufferParserTest {
         final AtomicInteger counter = new AtomicInteger();
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 int c = counter.incrementAndGet();
                 if (c == 1) {
@@ -360,9 +373,10 @@ public class BufferParserTest {
         VertxTestContext testContext = new VertxTestContext();
         String s = "*2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n";
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -408,9 +422,10 @@ public class BufferParserTest {
         VertxTestContext testContext = new VertxTestContext();
         String s = "~2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n";
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -432,9 +447,10 @@ public class BufferParserTest {
         VertxTestContext testContext = new VertxTestContext();
         String s = ">2\r\n$3\r\nfoo\r\n$3\r\nbar\r\n";
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -455,9 +471,10 @@ public class BufferParserTest {
     public void testParseMap() throws InterruptedException {
         VertxTestContext testContext = new VertxTestContext();
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals("%2\r\n+first\r\n:1\r\n+second\r\n:2\r\n".getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -483,9 +500,10 @@ public class BufferParserTest {
         VertxTestContext testContext = new VertxTestContext();
         final String s = "|1\r\n+key-popularity\r\n%2\r\n$1\r\na\r\n,0.1923\r\n$1\r\nb\r\n,0.0012\r\n";
 
-        final RESPBufferParser parser = new RESPBufferParser(new BufferParserHandler() {
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
             @Override
-            public void handle(Buffer buffer) {
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
                 logger.info(buffer.toString());
                 Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
                 testContext.completeNow();
@@ -541,5 +559,4 @@ public class BufferParserTest {
 
         Assertions.assertFalse(testContext.awaitCompletion(1, TimeUnit.SECONDS));
     }
-
 }
