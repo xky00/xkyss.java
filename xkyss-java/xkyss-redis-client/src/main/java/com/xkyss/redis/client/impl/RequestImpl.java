@@ -192,6 +192,7 @@ public final class RequestImpl implements RequestInternal {
     return encode().toString();
   }
 
+  @Override
   public boolean valid() {
     int arity = cmd.getArity();
     int arglen = args.size() + 1;

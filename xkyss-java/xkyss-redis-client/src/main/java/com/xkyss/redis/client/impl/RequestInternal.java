@@ -9,6 +9,8 @@ interface RequestInternal extends Request {
 
     Buffer encode();
 
+    boolean valid();
+
     default Request arg(byte[] arg) {
         throw new UnsupportedOperationException("Not supported.");
     }

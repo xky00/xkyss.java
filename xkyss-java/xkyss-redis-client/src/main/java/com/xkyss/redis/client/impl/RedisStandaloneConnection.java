@@ -196,7 +196,7 @@ public class RedisStandaloneConnection implements RedisConnectionInternal, Parse
       return;
     }
 
-    if (!((RequestImpl) request).valid()) {
+    if (!((RequestInternal) request).valid()) {
       promise.fail("Redis command is not valid, check https://redis.io/commands: " + request);
       return;
     }
