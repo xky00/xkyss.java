@@ -13,6 +13,11 @@ public final class BufferRequest implements RequestInternal {
     }
 
     @Override
+    public String toString() {
+        return buffer.toString();
+    }
+
+    @Override
     public Command command() {
         if (command == null) {
             ReadableBuffer rb = new ReadableBuffer();

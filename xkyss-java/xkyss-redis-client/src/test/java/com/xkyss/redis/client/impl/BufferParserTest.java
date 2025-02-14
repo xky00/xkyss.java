@@ -683,4 +683,61 @@ public class BufferParserTest {
 
         Assertions.assertTrue(testContext.awaitCompletion(100, TimeUnit.MICROSECONDS));
     }
+
+    @Test
+    public void testParseInfoKeyspace() throws InterruptedException {
+        VertxTestContext testContext = new VertxTestContext();
+        final String s = "=81\r\n# Keyspace\r\ndb0:keys=18,expires=0,avg_ttl=0\r\ndb2:keys=1,expires=0,avg_ttl=0\r\n\r\n";
+
+        final RESPBufferParser parser = new RESPBufferParser(new ParserHandler() {
+            @Override
+            public void handle(Response response) {
+                Buffer buffer = response.toBuffer();
+                logger.info(response.toString());
+                Assertions.assertArrayEquals(s.getBytes(), buffer.getBytes());
+                testContext.completeNow();
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer("=81\r\n"));
+        parser.handle(Buffer.buffer("txt:# Keyspace\r\n")); // 14 + 2 :16
+        parser.handle(Buffer.buffer("db0:keys=18,expires=0,avg_ttl=0\r\n")); // 31 + 2 :49
+        parser.handle(Buffer.buffer("db2:keys=1,expires=0,avg_ttl=0\r\n")); // 30 + 2 :81
+        parser.handle(Buffer.buffer("\r\n")); // BulkString tail
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void testParseInfoKeyspace2() throws InterruptedException {
+        VertxTestContext testContext = new VertxTestContext();
+        final String s = "=81\r\ntxt:# Keyspace\r\ndb0:keys=18,expires=0,avg_ttl=0\r\ndb2:keys=1,expires=0,avg_ttl=0\r\n\r\n";
+
+        final RESPParser parser = new RESPParser(new ParserHandler() {
+            @Override
+            public void handle(Response response) {
+                logger.info(response.toString());
+                // Assertions.assertArrayEquals(s.getBytes(), response.getBytes());
+                testContext.completeNow();
+            }
+
+            @Override
+            public void fail(Throwable t) {
+                testContext.failNow(t);
+            }
+        }, 16);
+
+        parser.handle(Buffer.buffer("=81\r\n"));
+        parser.handle(Buffer.buffer("txt:# Keyspace\r\n")); // 14 + 2 :16
+        parser.handle(Buffer.buffer("db0:keys=18,expires=0,avg_ttl=0\r\n")); // 31 + 2 :49
+        parser.handle(Buffer.buffer("db2:keys=1,expires=0,avg_ttl=0\r\n")); // 30 + 2 :81
+        parser.handle(Buffer.buffer("\r\n")); // BulkString tail
+
+        Assertions.assertTrue(testContext.awaitCompletion(1, TimeUnit.SECONDS));
+    }
 }
