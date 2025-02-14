@@ -148,22 +148,26 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private void handleSimpleError(int eol) {
-    buffer.readLine(eol);
+    // buffer.readLine(eol);
+    buffer.setOffset(eol + 1);
     handleResponse(Tagged.ERROR, false);
   }
 
   private void handleNumber(byte type, int eol) {
     switch (type) {
       case ':':
-        buffer.readNumber(eol, ReadableBuffer.NumericType.INTEGER);
+        // buffer.readNumber(eol, ReadableBuffer.NumericType.INTEGER);
+        buffer.setOffset(eol + 1);
         handleResponse(Tagged.NUMBER, false);
         break;
       case ',':
-        buffer.readNumber(eol, ReadableBuffer.NumericType.DECIMAL);
+        // buffer.readNumber(eol, ReadableBuffer.NumericType.DECIMAL);
+        buffer.setOffset(eol + 1);
         handleResponse(Tagged.NUMBER, false);
         break;
       case '(':
-        buffer.readNumber(eol, ReadableBuffer.NumericType.BIGINTEGER);
+        // buffer.readNumber(eol, ReadableBuffer.NumericType.BIGINTEGER);
+        buffer.setOffset(eol + 1);
         handleResponse(Tagged.NUMBER, false);
         break;
       default:
@@ -226,7 +230,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
     switch (value) {
       case 't':
       case 'f':
-        buffer.skipEOL();
+        // buffer.skipEOL();
+        buffer.skip(2); // \r\n
         handleResponse(Tagged.BOOLEAN, false);
         break;
       default:
@@ -235,7 +240,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private void handleSimpleString(int start, int eol) {
-    buffer.readLine(eol);
+    // buffer.readLine(eol);
+    buffer.setOffset(eol + 1);
     handleResponse(Tagged.SIMPLE, false);
   }
 
@@ -276,7 +282,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
   }
 
   private void handleNull(int eol) {
-    buffer.skipEOL();
+    // buffer.skipEOL();
+    buffer.setOffset(eol + 1);
     handleResponse(Tagged.NULL, false);
   }
 

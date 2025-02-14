@@ -190,6 +190,10 @@ final class ReadableBuffer {
     return offset;
   }
 
+  void setOffset(int offset) {
+    this.offset = offset;
+  }
+
   int getMark() {
     return mark;
   }
