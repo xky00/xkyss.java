@@ -208,7 +208,7 @@ public class RedisStandaloneConnection implements RedisConnectionInternal, Parse
 
     final boolean voidCmd = cmd.isPubSub();
     // encode the message to a buffer
-    final Buffer message = ((RequestImpl) request).encode();
+    final Buffer message = ((RequestInternal) request).encode();
     // offer the handler to the waiting queue if not void command
     if (!voidCmd) {
       // we might have switch thread/context

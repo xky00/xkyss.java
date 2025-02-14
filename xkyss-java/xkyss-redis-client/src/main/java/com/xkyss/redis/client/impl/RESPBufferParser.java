@@ -128,8 +128,8 @@ public final class RESPBufferParser implements Handler<Buffer> {
         } else {
           // fixed length parsing && read the required bytes
           //handleResponse(BulkType.create(buffer.readBytes(bytesNeeded), verbatim), false);
-          buffer.readBytes(bytesNeeded);
-          buffer.skip(2); // \r\n
+          // buffer.readBytes(bytesNeeded);
+          buffer.skip(bytesNeeded + 2); // \r\n
           handleResponse(Tagged.BULK, false);
           buffer.skip(-2); // \r\n
           // clear the verbatim
@@ -231,7 +231,7 @@ public final class RESPBufferParser implements Handler<Buffer> {
       case 't':
       case 'f':
         // buffer.skipEOL();
-        buffer.skip(2); // \r\n
+        buffer.setOffset(eol + 1);
         handleResponse(Tagged.BOOLEAN, false);
         break;
       default:

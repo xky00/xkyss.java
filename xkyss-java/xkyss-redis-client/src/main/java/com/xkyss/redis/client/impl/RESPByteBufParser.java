@@ -131,8 +131,8 @@ public final class RESPByteBufParser implements Handler<ParserHandler> {
         } else {
           // fixed length parsing && read the required bytes
           //handleResponse(BulkType.create(buffer.readBytes(bytesNeeded), verbatim), false);
-          buffer.readBytes(bytesNeeded);
-          buffer.skip(2); // \r\n
+          // buffer.readBytes(bytesNeeded);
+          buffer.skip(bytesNeeded + 2); // \r\n
           handleResponse(Tagged.BULK, false);
           buffer.skip(-2); // \r\n
           // clear the verbatim
@@ -151,22 +151,26 @@ public final class RESPByteBufParser implements Handler<ParserHandler> {
   }
 
   private void handleSimpleError(int eol) {
-    buffer.readLine(eol);
+    // buffer.readLine(eol);
+    buffer.setOffset(eol + 1);
     handleResponse(Tagged.ERROR, false);
   }
 
   private void handleNumber(byte type, int eol) {
     switch (type) {
       case ':':
-        buffer.readNumber(eol, ReadableBuffer.NumericType.INTEGER);
+        // buffer.readNumber(eol, ReadableBuffer.NumericType.INTEGER);
+        buffer.setOffset(eol + 1);
         handleResponse(Tagged.NUMBER, false);
         break;
       case ',':
-        buffer.readNumber(eol, ReadableBuffer.NumericType.DECIMAL);
+        // buffer.readNumber(eol, ReadableBuffer.NumericType.DECIMAL);
+        buffer.setOffset(eol + 1);
         handleResponse(Tagged.NUMBER, false);
         break;
       case '(':
-        buffer.readNumber(eol, ReadableBuffer.NumericType.BIGINTEGER);
+        // buffer.readNumber(eol, ReadableBuffer.NumericType.BIGINTEGER);
+        buffer.setOffset(eol + 1);
         handleResponse(Tagged.NUMBER, false);
         break;
       default:
@@ -229,7 +233,8 @@ public final class RESPByteBufParser implements Handler<ParserHandler> {
     switch (value) {
       case 't':
       case 'f':
-        buffer.skipEOL();
+        // buffer.skipEOL();
+        buffer.setOffset(eol + 1);
         handleResponse(Tagged.BOOLEAN, false);
         break;
       default:
@@ -238,7 +243,8 @@ public final class RESPByteBufParser implements Handler<ParserHandler> {
   }
 
   private void handleSimpleString(int start, int eol) {
-    buffer.readLine(eol);
+    // buffer.readLine(eol);
+    buffer.setOffset(eol + 1);
     handleResponse(Tagged.SIMPLE, false);
   }
 
@@ -279,7 +285,8 @@ public final class RESPByteBufParser implements Handler<ParserHandler> {
   }
 
   private void handleNull(int eol) {
-    buffer.skipEOL();
+    // buffer.skipEOL();
+    buffer.setOffset(eol + 1);
     handleResponse(Tagged.NULL, false);
   }
 

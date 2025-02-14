@@ -15,6 +15,7 @@
  */
 package com.xkyss.redis.client;
 
+import com.xkyss.redis.client.impl.BufferRequest;
 import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.GenIgnore;
 import io.vertx.codegen.annotations.VertxGen;
@@ -66,6 +67,10 @@ public interface Request {
   @GenIgnore(GenIgnore.PERMITTED_TYPE)
   static Request cmd(Command command, Object... args) {
     return new RequestImpl(command, args);
+  }
+
+  static Request of(Buffer buffer) {
+    return new BufferRequest(buffer);
   }
 
   /**

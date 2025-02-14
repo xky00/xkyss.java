@@ -26,7 +26,7 @@ import java.util.*;
 
 import static com.xkyss.redis.client.impl.RESPEncoder.numToBytes;
 
-public final class RequestImpl implements Request {
+public final class RequestImpl implements RequestInternal {
 
   private static final byte[] EMPTY_BULK = "$0\r\n\r\n".getBytes(StandardCharsets.ISO_8859_1);
   private static final byte[] EMPTY_BYTES = new byte[0];
@@ -142,11 +142,13 @@ public final class RequestImpl implements Request {
     return this;
   }
 
-  Buffer encode() {
+  @Override
+  public Buffer encode() {
     return encode(Buffer.buffer());
   }
 
-  Buffer encode(Buffer buffer) {
+  @Override
+  public Buffer encode(Buffer buffer) {
     buffer
       // array header
       .appendByte((byte) '*')
