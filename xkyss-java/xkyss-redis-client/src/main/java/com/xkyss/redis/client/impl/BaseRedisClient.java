@@ -3,6 +3,7 @@ package com.xkyss.redis.client.impl;
 import com.xkyss.redis.client.*;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.Future;
+import io.vertx.core.Promise;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.impl.logging.Logger;
@@ -69,5 +70,10 @@ public abstract class BaseRedisClient implements Redis {
             .eventually(e ->
                 conn.close().onFailure(LOG::warn)));
     }
+  }
+
+  protected Future<RedisConnection> getConnection(String connectionString, Request setup) {
+    return connectionManager.getConnection(connectionString, setup)
+        .map(pooled -> pooled);
   }
 }
